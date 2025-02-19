@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safety Calendar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            background: transparent;
+        }
+
+        .container {
+            max-width: 100% !important;
+            margin: 0;
+            padding: 0 15px;
+        }
+
+        /* Remove the outer calendar container styling */
+        .calendar-container {
+            padding: 0;
+            background: transparent;
+            border-radius: 0;
+            box-shadow: none;
+            margin: 10px 0;
+        }
+
+        .stats-card {
+            background: linear-gradient(145deg, #ffffff, #f8faff);
+            border: 1px solid rgba(13,110,253,0.1);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .month-card {
+            background: linear-gradient(145deg, #ffffff, #f5f7fa);
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            height: 280px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(13,110,253,0.1);
+        }
+
+        .month-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .month-card.current-month {
+            border: 2px solid #0d6efd;
+            box-shadow: 0 0 15px rgba(13,110,253,0.2);
+        }
+
+        .month-header {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            padding: 5px 8px;
+            border-radius: 12px 12px 0 0;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .activity-item {
+            padding: 4px 8px;
+            margin: 4px;
+            background-color: rgba(59,130,246,0.05);
+            border-radius: 8px;
+            font-size: 0.75rem;
+            position: relative;
+            border-left: none;
+        }
+
+        /* Group color styling */
+        .activity-item.group-1 { border: 1px solid #0d6efd; background-color: rgba(13,110,253,0.05); }
+        .activity-item.group-2 { border: 1px solid #dc3545; background-color: rgba(220,53,69,0.05); }
+        .activity-item.group-3 { border: 1px solid #ffc107; background-color: rgba(255,193,7,0.05); }
+        .activity-item.group-4 { border: 1px solid #198754; background-color: rgba(25,135,84,0.05); }
+
+        /* Program color styling */
+        .activity-item.program-1 { box-shadow: inset 4px 0 0 #0d6efd; }
+        .activity-item.program-2 { box-shadow: inset 4px 0 0 #dc3545; }
+        .activity-item.program-3 { box-shadow: inset 4px 0 0 #ffc107; }
+        .activity-item.program-4 { box-shadow: inset 4px 0 0 #198754; }
+
+        .status-completed {
+            color: #198754;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .status-completed::after {
+            content: '✓';
+            margin-left: 4px;
+            font-size: 1rem;
+        }
+
+        .status-cancelled {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .filters-section {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #0d6efd, #0b5ed7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .activities-table {
+            margin-top: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            padding: 20px;
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+
+        .form-select {
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            font-size: 0.95rem;
+        }
+
+        .form-select:focus {
+            box-shadow: 0 0 0 0.25rem rgba(13,110,253,0.25);
+        }
+
+        .month-activities {
+            height: calc(100% - 32px);
+            overflow-y: auto;
+            padding: 5px;
+        }
+
+        #calendarView .col-md-3 {
+            width: 16.666%;
+            padding: 0 6px;
+        }
+
+        .activity-item .text-muted {
+            font-size: 0.65rem;
+            line-height: 1.2;
+        }
+
+        .activity-item > div {
+            margin-bottom: 2px;
+        }
+
+        /* New Programs Summary Table Styles */
+        .programs-summary {
+            margin-top: 30px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            padding: 20px;
+        }
+
+        .program-row {
+            background: linear-gradient(145deg, #ffffff, #f8faff);
+            transition: all 0.2s ease;
+        }
+
+        .program-row:hover {
+            background: rgba(59,130,246,0.05);
+        }
+
+        .group-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            background: #3b82f6;
+            color: white;
+            font-size: 0.85rem;
+            margin: 2px;
+        }
+
+        /* Enhanced current month styling */
+        .month-card.current-month {
+            border: 3px solid #198754;
+            box-shadow: 0 0 20px rgba(25, 135, 84, 0.3);
+            transform: scale(1.02);
+        }
+
+        .month-card.current-month .month-header {
+            background: linear-gradient(135deg, #198754, #157347);
+            font-weight: 700;
+        }
+
+        .month-card.current-month::before {
+            content: '•';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #198754;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(25, 135, 84, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(25, 135, 84, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(25, 135, 84, 0);
+            }
+        }
+
+        /* Group badges color coding */
+        .group-badge-1 { background: #0d6efd; }
+        .group-badge-2 { background: #dc3545; }
+        .group-badge-3 { background: #ffc107; color: #000; }
+        .group-badge-4 { background: #198754; }
+
+        /* Year Filter Buttons Styling */
+        .year-buttons {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .year-btn {
+            padding: 6px 12px;
+            border: 2px solid #3b82f6;
+            background: white;
+            color: #3b82f6;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .year-btn:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .year-btn.active {
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Sequence badge styling */
+        .sequence-badge {
+            display: inline-flex;
+            align-items: center;
+            margin: 2px;
+            font-size: 0.85rem;
+        }
+
+        .sequence-month {
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 4px 0 0 4px;
+            color: #495057;
+        }
+
+        .sequence-group {
+            padding: 2px 6px;
+            border-radius: 0 4px 4px 0;
+            color: white;
+        }
+
+        .sequence-group-1 { background: #0d6efd; }
+        .sequence-group-2 { background: #dc3545; }
+        .sequence-group-3 { background: #ffc107; color: black; }
+        .sequence-group-4 { background: #198754; }
+
+        /* Increase table text size */
+        .table {
+            font-size: 0.95rem;
+        }
+
+        /* Increase filter labels and select boxes */
+        .form-label {
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="calendar-container">
+            
+            <!-- Filters Section -->
+            <div class="filters-section">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Year:</label>
+                        <div id="yearButtons" class="year-buttons">
+                            <!-- Years will be populated dynamically -->
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Area:</label>
+                        <select id="areaSelect" class="form-select">
+                            <option value="">All Areas</option>
+                            <!-- Areas will be populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Group:</label>
+                        <select id="groupSelect" class="form-select">
+                            <option value="">All Groups</option>
+                            <!-- Groups will be populated dynamically -->
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Section -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <div class="stats-card text-center">
+                        <h6>Total Activities</h6>
+                        <div id="totalActivities" class="stat-number">0</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stats-card text-center">
+                        <h6>Completed</h6>
+                        <div id="completedActivities" class="stat-number">0</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stats-card text-center">
+                        <h6>Programs</h6>
+                        <div id="totalPrograms" class="stat-number">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar View -->
+            <div id="calendarView" class="row">
+                <!-- Calendar content will be populated here -->
+            </div>
+
+            <!-- Add Programs Summary Table before the Activities Table -->
+            <div class="programs-summary">
+                <h4 class="mb-4">Programs Summary</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="table-header">
+                            <tr>
+                                <th>Safety Program</th>
+                                <th>Groups Sequence</th>
+                                <th>Total Groups</th>
+                                <th>Completion Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody id="programsSummary">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Add Programs Distribution Summary -->
+            <div class="programs-summary">
+                <h4 class="mb-4">Programs Distribution</h4>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="table-header">
+                            <tr>
+                                <th>Programs</th>
+                                <th>Group 1</th>
+                                <th>Group 2</th>
+                                <th>Group 3</th>
+                                <th>Group 4</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="programsDistribution">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Add Activities Table after Calendar View -->
+            <div class="activities-table">
+                <h4 class="mb-4">Activities Summary</h4>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-header">
+                            <tr>
+                                <th>Group</th>
+                                <th>Total Activities</th>
+                                <th>Completed</th>
+                                <th>Pending</th>
+                                <th>Completion Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activitiesSummary">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="safetycalendar.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentMonth = new Date().toLocaleString('default', { month: 'long' });
+            let filteredData = [...data];
+            
+            // Initialize filters
+            const years = [...new Set(data.map(item => item.Year))].sort();
+            const areas = [...new Set(data.map(item => item.Area).filter(Boolean))].sort();
+            const groups = [...new Set(data.map(item => item.Group))].sort();
+
+            // Populate year buttons
+            const yearButtons = document.getElementById('yearButtons');
+            const currentYear = new Date().getFullYear().toString();
+            
+            years.forEach(year => {
+                const button = document.createElement('button');
+                button.className = `year-btn ${year === currentYear ? 'active' : ''}`;
+                button.textContent = year;
+                button.onclick = () => {
+                    document.querySelectorAll('.year-btn').forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    updateFilters();
+                };
+                yearButtons.appendChild(button);
+            });
+
+            // Populate other filters
+            populateSelect('areaSelect', areas);
+            populateSelect('groupSelect', groups);
+
+            function updateFilters() {
+                const selectedYear = document.querySelector('.year-btn.active')?.textContent;
+                const selectedArea = document.getElementById('areaSelect').value;
+                const selectedGroup = document.getElementById('groupSelect').value;
+
+                // Update filtered data based on all three filters
+                filteredData = data.filter(item => {
+                    const yearMatch = !selectedYear || item.Year === selectedYear;
+                    const areaMatch = !selectedArea || item.Area === selectedArea;
+                    const groupMatch = !selectedGroup || item.Group === selectedGroup;
+                    return yearMatch && areaMatch && groupMatch;
+                });
+
+                renderCalendar();
+            }
+
+            function populateSelect(elementId, values) {
+                const select = document.getElementById(elementId);
+                values.forEach(value => {
+                    const option = document.createElement('option');
+                    option.value = value;
+                    option.textContent = value;
+                    select.appendChild(option);
+                });
+            }
+
+            function updateStatistics(filteredData) {
+                document.getElementById('totalActivities').textContent = filteredData.length;
+                document.getElementById('completedActivities').textContent = 
+                    filteredData.filter(item => item.Status.toLowerCase() === 'completed').length;
+                document.getElementById('totalPrograms').textContent = 
+                    new Set(filteredData.map(item => item['Safety Program'])).size;
+            }
+
+            function updateActivitiesSummary() {
+                const summaryTable = document.getElementById('activitiesSummary');
+                const groups = [...new Set(filteredData.map(item => item.Group))].sort();
+                
+                summaryTable.innerHTML = groups.map(group => {
+                    const groupActivities = filteredData.filter(item => item.Group === group);
+                    const completed = groupActivities.filter(item => 
+                        item.Status.toLowerCase() === 'completed').length;
+                    const total = groupActivities.length;
+                    const completionRate = ((completed / total) * 100).toFixed(1);
+                    
+                    return `
+                        <tr>
+                            <td>Group ${group}</td>
+                            <td>${total}</td>
+                            <td>${completed}</td>
+                            <td>${total - completed}</td>
+                            <td>
+                                <div class="progress" style="height: 20px;">
+                                    <div class="progress-bar bg-success" 
+                                         role="progressbar" 
+                                         style="width: ${completionRate}%"
+                                         aria-valuenow="${completionRate}" 
+                                         aria-valuemin="0" 
+                                         aria-valuemax="100">
+                                        ${completionRate}%
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            function updateProgramsSummary() {
+                const summaryTable = document.getElementById('programsSummary');
+                const programs = [...new Set(filteredData.map(item => item['Safety Program']))].sort();
+                
+                summaryTable.innerHTML = programs.map(program => {
+                    const programActivities = filteredData.filter(item => item['Safety Program'] === program);
+                    
+                    // Sort activities by month order
+                    const monthOrder = ['January', 'February', 'March', 'April', 'May', 'June',
+                                      'July', 'August', 'September', 'October', 'November', 'December'];
+                    
+                    const sortedActivities = programActivities.sort((a, b) => {
+                        return monthOrder.indexOf(a.Month) - monthOrder.indexOf(b.Month);
+                    });
+
+                    const completed = programActivities.filter(item => 
+                        item.Status.toLowerCase() === 'completed').length;
+                    const completionRate = ((completed / programActivities.length) * 100).toFixed(1);
+                    
+                    // Create sequence badges with month and group
+                    const sequenceBadges = sortedActivities.map(activity => `
+                        <span class="sequence-badge">
+                            <span class="sequence-month">${activity.Month.substring(0,3)}</span>
+                            <span class="sequence-group sequence-group-${activity.Group}">G${activity.Group}</span>
+                        </span>
+                    `).join(' ');
+
+                    return `
+                        <tr class="program-row">
+                            <td>${program}</td>
+                            <td>${sequenceBadges}</td>
+                            <td>${new Set(programActivities.map(a => a.Group)).size}</td>
+                            <td>
+                                <div class="progress" style="height: 20px;">
+                                    <div class="progress-bar bg-success" 
+                                         role="progressbar" 
+                                         style="width: ${completionRate}%"
+                                         aria-valuenow="${completionRate}" 
+                                         aria-valuemin="0" 
+                                         aria-valuemax="100">
+                                        ${completionRate}%
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            function updateProgramsDistribution() {
+                const distributionTable = document.getElementById('programsDistribution');
+                const programs = [...new Set(filteredData.map(item => item['Safety Program']))].sort();
+                const groups = [1, 2, 3, 4];
+                
+                distributionTable.innerHTML = programs.map(program => {
+                    // Count occurrences for each group
+                    const groupCounts = groups.map(group => {
+                        const count = filteredData.filter(item => 
+                            item['Safety Program'] === program && 
+                            item.Group === group.toString()
+                        ).length;
+                        return `<td>${count || '-'}</td>`;
+                    }).join('');
+
+                    // Calculate total for this program
+                    const totalCount = filteredData.filter(item => 
+                        item['Safety Program'] === program
+                    ).length;
+
+                    return `
+                        <tr>
+                            <td>${program}</td>
+                            ${groupCounts}
+                            <td><strong>${totalCount}</strong></td>
+                        </tr>
+                    `;
+                }).join('');
+
+                // Add a total row
+                const totalRow = `
+                    <tr class="table-secondary">
+                        <td><strong>Total</strong></td>
+                        ${groups.map(group => {
+                            const groupTotal = filteredData.filter(item => 
+                                item.Group === group.toString()
+                            ).length;
+                            return `<td><strong>${groupTotal || '-'}</strong></td>`;
+                        }).join('')}
+                        <td><strong>${filteredData.length}</strong></td>
+                    </tr>
+                `;
+                
+                distributionTable.innerHTML += totalRow;
+            }
+
+            function renderCalendar() {
+                const calendarView = document.getElementById('calendarView');
+                calendarView.innerHTML = '';
+
+                const currentDate = new Date();
+                const currentMonth = currentDate.toLocaleString('default', { month: 'long' });
+                const currentYear = currentDate.getFullYear().toString();
+                const selectedYear = document.querySelector('.year-btn.active')?.textContent;
+
+                const months = [
+                    'January', 'February', 'March', 'April',
+                    'May', 'June', 'July', 'August',
+                    'September', 'October', 'November', 'December'
+                ];
+
+                months.forEach(month => {
+                    const monthActivities = filteredData.filter(item => item.Month === month);
+                    const monthCol = document.createElement('div');
+                    monthCol.className = 'col-md-3';
+                    
+                    const monthCard = document.createElement('div');
+                    monthCard.className = `month-card ${
+                        month === currentMonth && selectedYear === currentYear ? 'current-month' : ''
+                    }`;
+                    monthCard.style.position = 'relative';
+                    
+                    monthCard.innerHTML = `
+                        <div class="month-header">
+                            ${month}
+                        </div>
+                        <div class="month-activities">
+                            ${monthActivities.map(activity => `
+                                <div class="activity-item group-${activity.Group} program-${getProgramClass(activity['Safety Program'])}">
+                                    <div class="d-flex justify-content-between">
+                                        <strong>Group ${activity.Group}</strong>
+                                        <span class="status-${activity.Status.toLowerCase()}">${activity.Status}</span>
+                                    </div>
+                                    <div>${activity['Safety Program']}</div>
+                                    <div class="text-muted small">
+                                        ${activity.Area ? `Area: ${activity.Area}` : ''}
+                                        ${activity.Topics ? `<br>Topics: ${activity.Topics}` : ''}
+                                        ${activity['Date Conducted'] ? `<br>Date: ${activity['Date Conducted']}` : ''}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    
+                    monthCol.appendChild(monthCard);
+                    calendarView.appendChild(monthCol);
+                });
+
+                updateStatistics(filteredData);
+                updateActivitiesSummary();
+                updateProgramsSummary();
+                updateProgramsDistribution();
+            }
+
+            // Add helper function to assign program classes
+            function getProgramClass(programName) {
+                const programs = [...new Set(data.map(item => item['Safety Program']))].sort();
+                const index = programs.indexOf(programName);
+                return (index % 4) + 1; // Returns 1-4 based on program index
+            }
+
+            // Add event listeners for area and group selects
+            document.getElementById('areaSelect').addEventListener('change', updateFilters);
+            document.getElementById('groupSelect').addEventListener('change', updateFilters);
+
+            // Initial render with current year
+            updateFilters();
+        });
+    </script>
+</body>
+</html>

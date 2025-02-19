@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Safety Cross - Monthly</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        h1, h2 {
+            color: #007bff;
+            text-align: center;
+        }
+        /* Table uses an 11-column grid in our example; adjust as needed */
+        table {
+            table-layout: fixed;
+            width: 440px; /* 11 columns * 40px each */
+            margin: 10px auto 40px auto; /* Added vertical margins */
+            padding: 20px 0; /* Added vertical padding */
+        }
+        /* Each cell is a square box (40px by 40px) */
+        th, td {
+            width: 40px;
+            height: 75px; /* Reduced from 88px to 40px */
+            border: 1px solid #ffffff;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 16px; /* Reduced from 25px to 16px */
+        }
+        td {
+            cursor: pointer;
+        }
+        /* Active cells for the cross layout */
+        .cross-cell {
+            background-color: #ffe6e6;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        /* Inactive cells */
+        .inactive-cell {
+            background-color: #ffffff;
+            cursor: default;
+        }
+        /* Additional indicator styling */
+        .today {
+            font-weight: bold;
+            background-color: yellow !important;
+        }
+        .past {
+            background-color: white !important;
+        }
+        .future {
+            background-color: green !important;
+            color: white;
+        }
+        .has-data {
+            background-color: red !important;
+            color: white !important;
+        }
+        /* Enhanced border styles for cells on the edge of the cross shape */
+        .border-top-enhance {
+            border-top: 2px solid #000 !important;
+        }
+        .border-bottom-enhance {
+            border-bottom: 2px solid #000 !important;
+        }
+        .border-left-enhance {
+            border-left: 2px solid #000 !important;
+        }
+        .border-right-enhance {
+            border-right: 2px solid #000 !important;
+        }
+        .cross-table {
+            table-layout: fixed;
+            width: 200px; /* Adjust as desired */
+            margin: auto;
+            margin-bottom: 1rem;
+        }
+        /* Add this rule to center the month-year header */
+        #calendar h2 {
+            text-align: center;
+        }
+        img {
+            max-width: 100%; /* Ensure images scale with the container */
+            height: auto; /* Maintain aspect ratio */
+        }
+        /* Interactive effects */
+        .cross-cell:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        /* Ripple effect */
+        .cross-cell::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+            pointer-events: none;
+        }
+        .cross-cell:active::after {
+            width: 100px;
+            height: 100px;
+        }
+        /* State transitions */
+        .today, .past, .future, .has-data {
+            transition: all 0.3s ease;
+        }
+        /* Pulse animation for today */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .today {
+            animation: pulse 2s infinite;
+        }
+        /* Modal animations */
+        .modal.fade .modal-dialog {
+            transition: transform 0.3s ease-out;
+        }
+        .modal.show .modal-dialog {
+            transform: none;
+        }
+        /* Calendar container adjustments */
+        #calendar {
+            padding: 10px 0; /* Reduced from 20px to 10px */
+            min-height: 300px; /* Reduced from 420px to 300px */
+            overflow: visible;
+        }
+        /* Adjust container padding */
+        .container.my-3 {
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+        /* Reduce margin between elements */
+        .mb-3 {
+            margin-bottom: 0.5rem !important;
+        }
+        .mb-4 {
+            margin-bottom: 1rem !important;
+        }
+        /* Adjust month navigation buttons */
+        .btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+        }
+        /* Reduce title size */
+        h2 {
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container my-3">
+        <!-- Month Navigation and Title Row -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <button class="btn btn-outline-primary" onclick="prevMonth()">Previous Month</button>
+            <h2 class="m-0" id="monthYearTitle"></h2>
+            <button class="btn btn-outline-primary" onclick="nextMonth()">Next Month</button>
+        </div>
+        
+        <!-- Calendar Container - Moved up -->
+        <div id="calendar" class="container mb-4"></div>
+        
+        <!-- Monthly Summary Card -->
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Monthly Summary</h5>
+                <div id="monthSummary" class="row">
+                    <!-- Summary will be injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Markup for Incident Details -->
+    <div class="modal fade" id="incidentModal" tabindex="-1" aria-labelledby="incidentModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="incidentModalLabel">Incident Details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="incidentModalBody">
+            <!-- Incident details will be injected here -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Load the data first, then the calendar logic. -->
+    <script src="data.js"></script>
+    <script src="calendar.js"></script>
+
+    <!-- Add Bootstrap JS Bundle (ensure it comes after your other scripts if necessary) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

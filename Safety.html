@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MS Section SAFETY PAGE</title>
+  <!-- Bootstrap CSS for a modern, responsive design -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Roboto+Slab:wght@700&display=swap" rel="stylesheet">
+  <style>
+    /* CSS Reset */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(
+            rgb(255, 255, 255), /* Adjust opacity here (0.7 = 70% opacity) */
+            rgba(255, 255, 255, 0.486)
+        ),
+        url('images/your-background-image.jpg') no-repeat center center fixed;
+        background-size: cover;
+    }
+    /* Reduce the font size and adjust padding for a more compact tab display */
+    .nav-link {
+      font-weight: bold;
+      color: #141314 !important;
+      font-size: 0.75rem; /* Reduced from 0.9rem */
+      padding: 0.5rem 0.75rem; /* Reduced padding */
+      margin: 0.1rem 0; /* Reduced margin */
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    .nav-link:hover {
+      background-color: #e9ecef;
+      transform: scale(1); /* Reset scale to 1 */
+    }
+    .btn {
+      width: 100%;
+      margin-bottom: 15px;
+      transition: transform 0.2s;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+    /* Optionally reduce the header size in the sidebar */
+    .sidebar h5 {
+      font-size: 0.9rem;
+    }
+    .tab-content {
+      padding: 5px;
+      border: 1px solid #e5e6de;
+      border-radius: 5px;
+      background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white background for tab content */
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    /* Slightly smaller heading sizes */
+    h2 {
+      margin-top: 20px;
+      color: #007bff;
+      font-size: 1.5rem; /* Reduced h2 size */
+    }
+    h3 {
+      color: #343a40;
+      font-size: 1.25rem; /* Reduced h3 size */
+    }
+    .iframe-container {
+      width: 100%; /* Set width to 100% of the parent */
+      height: 0; /* Set height to 0 initially */
+      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+      position: relative; /* Position relative for absolute positioning of iframe */
+      overflow: hidden; /* Hide overflow */
+    }
+    iframe {
+      position: absolute; /* Position absolute to fill the container */
+      top: 0;
+      left: 0;
+      width: 100%; /* Fill the container */
+      height: 100%; /* Fill the container */
+      border: none;
+      transform: scale(0.8); /* Scale iframe content to 80% */
+      transform-origin: top left; /* Set origin for scaling */
+    }
+    /* Updated iframe styling within the container */
+    .iframe-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 125%;  /* increased due to 1/0.8 scaling */
+      height: 125%; /* increased due to 1/0.8 scaling */
+      border: none;
+      transform: scale(0.8); /* scales the inner HTML to 80% */
+      transform-origin: top left;
+    }
+
+    /* Enhanced Navigation Styling */
+    .sidebar {
+      background: linear-gradient(145deg, #d1da88, #fbfdff) !important;
+      box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+      border-right: 2px solid rgba(0,0,0,0.1);
+      width: 180px; /* Add fixed width */
+    }
+
+    .nav-link {
+      font-weight: bold;
+      color: #141314 !important;
+      font-size: 0.75rem; /* Reduced from 0.9rem */
+      padding: 0.5rem 0.75rem; /* Reduced padding */
+      margin: 0.1rem 0; /* Reduced margin */
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+      background: linear-gradient(145deg, #007bff, #0056b3);
+      color: white !important;
+      transform: translateX(5px);
+    }
+
+    .nav-link.active {
+      background: linear-gradient(145deg, #007bff, #0056b3);
+      color: white !important;
+      box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+    }
+
+    /* Enhanced Content Area */
+    .tab-content {
+      padding: 1px;
+      border-radius: 15px;
+      background-color: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .tab-pane {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.4s ease-out;
+    }
+
+    .tab-pane.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Enhanced Headings */
+    h2 {
+      margin: 20px 0;
+      color: #2c3e50;
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: center;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(90deg, #007bff, #00ff88);
+      border-radius: 3px;
+    }
+
+    h3 {
+      color: #34495e;
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    /* Enhanced iframe container */
+    .iframe-container {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .iframe-container:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Enhanced Buttons */
+    .btn {
+      background: linear-gradient(145deg, #007bff, #0056b3);
+      border: none;
+      border-radius: 8px;
+      padding: 12px 25px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 20px rgba(0,123,255,0.3);
+    }
+
+    /* Card Style for Content Sections */
+    .content-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+    }
+
+    .content-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    }
+
+    /* Responsive Design Improvements */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+      }
+
+      .sidebar.show {
+        transform: translateY(0);
+      }
+
+      .nav-link {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+      }
+    }
+
+    .page-title {
+      font-family: 'Roboto Slab', serif;
+      font-size: 2.5rem;
+      color: #2c3e50;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    /* DateTime Display */
+    #datetime-display {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 5px 10px;
+      border-radius: 6px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      font-size: 0.7rem;
+      z-index: 1000;
+      backdrop-filter: blur(3px);
+    }
+
+    /* Construction Notice */
+    .construction-notice {
+      background: linear-gradient(135deg, #fff3cd, #ffe5d0);
+      color: #856404;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 15px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    }
+
+    .construction-notice i {
+      font-size: 1.5rem;
+    }
+
+    /* Notification Styles */
+    .notification-center {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      max-width: 350px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .notification-bell {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #007bff;
+      color: white;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      z-index: 1001;
+      transition: all 0.3s ease;
+    }
+
+    .notification-bell:hover {
+      transform: scale(1.1);
+    }
+
+    .notification-bell .badge {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: #dc3545;
+      border-radius: 50%;
+      padding: 5px 8px;
+      font-size: 0.7rem;
+    }
+
+    .notification-panel {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      padding: 15px;
+      margin-bottom: 60px;
+      display: none;
+    }
+
+    .notification-item {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      transition: all 0.3s ease;
+    }
+
+    .notification-item:hover {
+      background: #f8f9fa;
+    }
+
+    .notification-item .date {
+      font-size: 0.8rem;
+      color: #6c757d;
+    }
+
+    .notification-item .title {
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    .notification-item .content {
+      font-size: 0.9rem;
+      color: #4a5568;
+    }
+
+    .notification-item.unread {
+      border-left: 3px solid #007bff;
+      background: #f8f9fa;
+    }
+
+    /* Adjust icon size in nav links */
+    .nav-link i {
+      font-size: 0.9rem; /* Reduce icon size */
+      margin-right: 5px; /* Reduce spacing after icon */
+    }
+
+    /* Update main content area to reflect new sidebar width */
+    main.col-md-10 {
+      width: calc(100% - 180px);
+    }
+
+    /* Add these styles to your existing CSS */
+    .nav-link .card {
+      color: inherit;
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+
+    .nav-link:hover {
+      text-decoration: none;
+    }
+
+    .nav-link .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    /* Updated homepage card styles */
+    .homepage-card {
+      margin-bottom: 10px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      border: none;
+      background: rgba(255, 255, 255, 0.733);
+      padding: 15px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Hexagon Shape Style */
+    .homepage-card::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+      z-index: 1;
+      transition: all 0.4s ease;
+    }
+
+    .homepage-card .card-body {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .homepage-card i {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      background: linear-gradient(45deg, #2193b0, #6dd5ed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: all 0.4s ease;
+    }
+
+    .homepage-card .card-title {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #2193b0;
+      margin-top: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.4s ease;
+    }
+
+    /* Hover Effects */
+    .homepage-card:hover {
+      transform: translateY(-5px) rotate(3deg);
+    }
+
+    .homepage-card:hover::before {
+      background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%);
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    }
+
+    .homepage-card:hover i {
+      background: linear-gradient(45deg, #ffffff, #f8f9fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transform: scale(1.2);
+    }
+
+    .homepage-card:hover .card-title {
+      color: #ffffff;
+    }
+
+    /* Coming Soon Card Style */
+    .homepage-card.coming-soon::after {
+      content: "\F6C4";
+      font-family: "bootstrap-icons";
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      font-size: 1rem;
+      color: #ffd700;
+      z-index: 3;
+      animation: spin 4s linear infinite;
+    }
+
+    /* Adjust row layout for better spacing */
+    #homepage .row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 20px;
+      padding: 10px;
+    }
+
+    #homepage .row > div {
+      flex: 0 0 auto;
+      width: calc(33.333% - 20px);
+      min-width: 160px;
+    }
+
+    /* Welcome text animation */
+    .homepage-title {
+      background: linear-gradient(45deg, #1a73e8, #34a853);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 40px;
+      font-weight: 800;
+      font-size: 2.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .coming-soon {
+      position: relative;
+    }
+
+    .coming-soon::after {
+      content: "\F6C4"; /* Bootstrap icon code for gear */
+      font-family: "bootstrap-icons";
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.2rem;
+      color: #ffc107;
+      animation: spin 4s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Horizontal Navigation Styles */
+    .horizontal-nav {
+      background: linear-gradient(145deg, #d1da88, #fbfdff) !important;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      border-bottom: 2px solid rgba(0,0,0,0.1);
+      padding: 10px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .horizontal-nav .nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .horizontal-nav .nav-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      padding: 5px 10px;
+      margin: 0 5px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .horizontal-nav .nav-link i {
+      font-size: 1.2rem;
+      margin-bottom: 3px;
+    }
+
+    .horizontal-nav .nav-link.active {
+      background: linear-gradient(145deg, #007bff, #0056b3);
+      color: white !important;
+      box-shadow: 0 4px 15px rgba(0,123,255,0.3);
+    }
+
+    /* Remove original sidebar styles */
+    .sidebar {
+      display: none;
+    }
+
+    /* Adjust main content to full width */
+    main.col-md-10 {
+      width: 100%;
+    }
+
+    /* Homepage specific styles */
+    #homepage .content-card {
+      background-image: linear-gradient(
+          rgba(255, 255, 255, 0.7), /* Adjust opacity here */
+          rgba(255, 255, 255, 0.7)
+      ),
+      url('images/your-background-image.jpg');
+      background-size: 100% 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      min-height: 60vh;
+      width: 90%;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Updated homepage card styles */
+    .homepage-card {
+      margin-bottom: 5px;
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      border: none;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 8px;
+      padding: 8px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .homepage-card i {
+      font-size: 1.4rem; /* Reduced icon size */
+      margin-bottom: 3px;
+      background: linear-gradient(45deg, #1a73e8, #34a853);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      transition: all 0.3s ease;
+    }
+
+    .homepage-card .card-title {
+      font-size: 0.7rem; /* Reduced title size */
+      font-weight: 600;
+      color: #1a73e8;
+      margin-top: 3px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Adjust iframe container */
+    .iframe-container {
+      height: 300px; /* Reduced height */
+      margin-bottom: 15px;
+    }
+
+    /* Homepage image styles */
+    .homepage-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.562);
+      transition: transform 0.3s ease;
+      margin-left: 0;
+    }
+
+    /* Adjust card container spacing */
+    #homepage .col-md-9 {
+      padding-left: 40px; /* Keep the spacing from image */
+    }
+
+    /* Update card grid layout for 4 columns */
+    #homepage .row > div[class*='col-'] {
+      width: calc(25% - 15px); /* Change to 25% for 4 columns */
+      min-width: 140px; /* Slightly reduced min-width for 4 columns */
+    }
+
+    /* Adjust row layout for 4 columns */
+    #homepage .row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 15px;
+      padding: 10px;
+    }
+
+    #homepage .row > div {
+      flex: 0 0 auto;
+      width: calc(25% - 15px);
+      min-width: 140px;
+    }
+
+    /* Adjust homepage card sizes */
+    .homepage-card {
+      height: 90px; /* Slightly increased height for better proportions */
+      margin-bottom: 10px; /* Slightly increased margin for better spacing */
+    }
+
+    /* Homepage image styles */
+    .homepage-image {
+      max-width: 500%;
+      height: auto;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(202, 50, 50, 0.1);
+      transition: transform 0.3s ease;
+      margin-left: 0;
+    }
+
+    /* Homepage card layout */
+    #homepage .row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr); /* 4 columns */
+      gap: 5px;
+      padding: 15px;
+    }
+
+    #homepage .row > div {
+      width: 100%;
+    }
+
+    /* Remove the previous flex settings */
+    #homepage .row > div[class*='col-'] {
+      width: auto;
+      min-width: unset;
+    }
+
+    /* Adjust card sizes */
+    .homepage-card {
+      height: 90px;
+      margin-bottom: 10px;
+    }
+
+    /* Ensure cards maintain consistent width */
+    .homepage-card .card-body {
+      padding: 10px;
+    }
+
+    /* Maintain image positioning */
+    .homepage-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+      margin-left: 0;
+    }
+
+    /* Adjust card container spacing */
+    #homepage .col-md-9 {
+      padding-left: 40px;
+    }
+
+    /* Enhanced image styling */
+    .col-md-3 {
+      width: 300px; /* Fixed width instead of percentage */
+      padding: 0;
+      background: transparent;
+      flex-shrink: 0; /* Prevent container from shrinking */
+    }
+
+    .homepage-image {
+      width: 300px; /* Fixed width */
+      height: 300px; /* Fixed height to maintain aspect ratio */
+      border-radius: 15px;
+      box-shadow: none;
+      transition: transform 0.4s ease;
+      margin-left: 0;
+      background: transparent;
+      object-fit: contain; /* Maintains aspect ratio */
+      transform: scale(1.3);
+      filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.877));
+      min-width: 300px; /* Ensure minimum width */
+      min-height: 300px; /* Ensure minimum height */
+    }
+
+    .homepage-image:hover {
+      transform: scale(1.35);
+    }
+
+    /* Welcome Text Styles */
+    .welcome-text {
+      padding: 20px;
+      text-align: center; /* Center align all text */
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Center align flex items */
+      justify-content: center;
+    }
+
+    .homepage-title {
+      background: linear-gradient(45deg, #1a73e8, #34a853);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+      font-weight: 800;
+      font-size: 2.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-align: center; /* Ensure text is centered */
+    }
+
+    .section-title {
+      color: #2c3e50;
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-align: center;
+    }
+
+    .safety-title {
+      color: #34495e;
+      font-size: 2rem;
+      font-weight: 600;
+      background: linear-gradient(45deg, #2193b0, #6dd5ed);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+    }
+
+    /* Adjust container width */
+    .col-md-2 {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- DateTime Display -->
+  <div id="datetime-display">
+    <i class="bi bi-clock"></i> <span id="current-datetime"></span>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Title Section First -->
+      <div class="d-flex align-items-center justify-content-center my-3">
+        <img src="images/Logo.jpg" alt="Section Logo" style="height: 60px; margin-right: 15px;">
+        <h2 class="text-center mb-0">MS Section Safety Dashboard</h2>
+        <img src="images/CompanyLogo.jpg" alt="Company Logo" style="height: 60px; margin-left: 15px;">
+      </div>
+
+      <!-- Horizontal Navigation Below Title -->
+      <div class="horizontal-nav">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link active" data-bs-toggle="tab" href="#homepage">
+              <i class="bi bi-house"></i> Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#safetyCalendar">
+              <i class="bi bi-calendar2-week"></i> Safety Calendar
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#safetyAudit">
+              <i class="bi bi-clipboard-check"></i> Safety Audit
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#safetyCross">
+              <i class="bi bi-plus-square-fill"></i>
+              Safety Cross
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#incidentMonitoring">
+              <i class="bi bi-exclamation-triangle"></i> Incident Monitoring
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#kyMonitoring">
+              <i class="bi bi-bar-chart-line"></i> KY Monitoring
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#fourRKY">
+              <i class="bi bi-graph-up"></i> 4RKY Monitoring
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#safetyHandbook">
+              <i class="bi bi-journal-bookmark"></i> Safety Handbook
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#safetyDeclaration">
+              <i class="bi bi-check-square"></i> Safety Declaration
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#reEducationStatus">
+              <i class="bi bi-mortarboard"></i> Re-education Status
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Main Content Area -->
+      <main class="col-md-10 ms-sm-auto col-lg-10 px-4">
+        <div class="tab-content">
+          <!-- Homepage tab -->
+          <div class="tab-pane fade show active" id="homepage">
+            <div class="content-card">
+              <div class="row">
+                <!-- Image Column -->
+                <div class="col-md-3 d-flex align-items-center">
+                  <img src="images/safety-image.png" alt="Safety Image" class="homepage-image">
+                </div>
+                
+                <!-- Welcome Text Column -->
+                <div class="col-md-2 welcome-text">
+                  <h1 class="homepage-title">Welcome to</h1>
+                  <h2 class="section-title">MS Section</h2>
+                  <h3 class="safety-title">Safety Dashboard</h3>
+                </div>
+
+                <!-- Cards Column -->
+                <div class="col-md-7 ps-4">
+                  <div class="row g-2">
+                    <!-- First Row -->
+                    <!-- Safety Calendar tile -->
+                    <div class="col-md-4">
+                      <a class="nav-link" data-bs-toggle="tab" href="#safetyCalendar">
+                        <div class="card homepage-card text-center">
+                          <div class="card-body">
+                            <i class="bi bi-calendar-check"></i>
+                            <h5 class="card-title">Safety Calendar</h5>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+
+                    <!-- Safety Audit tile -->
+                    <div class="col-md-4">
+                      <a class="nav-link" data-bs-toggle="tab" href="#safetyAudit">
+                        <div class="card homepage-card text-center">
+                          <div class="card-body">
+                            <i class="bi bi-shield-check"></i>
+                            <h5 class="card-title">Safety Audit</h5>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+
+                    <!-- Safety Cross tile -->
+                    <div class="col-md-4">
+                      <a class="nav-link" data-bs-toggle="tab" href="#safetyCross">
+                        <div class="card homepage-card text-center">
+                          <div class="card-body">
+                            <i class="bi bi-plus-square-fill"></i>
+                            <h5 class="card-title">Safety Cross</h5>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+
+                    <!-- Incident Monitoring tile -->
+                    <div class="col-md-4">
+                      <a class="nav-link" data-bs-toggle="tab" href="#incidentMonitoring">
+                        <div class="card homepage-card text-center">
+                          <div class="card-body">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                            <h5 class="card-title">Incident Monitoring</h5>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+
+                    <!-- Second Row -->
+                    <!-- KY Monitoring tile -->
+                    <div class="col-md-4">
+                      <a class="nav-link" data-bs-toggle="tab" href="#kyMonitoring">
+                        <div class="card homepage-card text-center">
+                          <div class="card-body">
+                            <i class="bi bi-graph-up-arrow"></i>
+                            <h5 class="card-title">KY Monitoring</h5>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+
+                    <!-- 4RKY Monitoring tile -->
+                    <div class="col-md-4">
+                      <a class="nav-link" data-bs-toggle="tab" href="#fourRKY">
+                        <div class="card homepage-card text-center coming-soon">
+                          <div class="card-body">
+                            <i class="bi bi-graph-up"></i>
+                            <h5 class="card-title">4RKY Monitoring</h5>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+
+                    <!-- Safety Handbook tile -->
+                    <div class="col-md-4">
+                      <a class="nav-link" data-bs-toggle="tab" href="#safetyHandbook">
+                        <div class="card homepage-card text-center">
+                          <div class="card-body">
+                            <i class="bi bi-book-half"></i>
+                            <h5 class="card-title">Handbook</h5>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+
+                    <!-- Safety Declaration tile -->
+                    <div class="col-md-4">
+                      <a class="nav-link" data-bs-toggle="tab" href="#safetyDeclaration">
+                        <div class="card homepage-card text-center coming-soon">
+                          <div class="card-body">
+                            <i class="bi bi-file-earmark-check-fill"></i>
+                            <h5 class="card-title">Declaration</h5>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+
+                    <!-- Re-education Status tile -->
+                    <div class="col-md-4">
+                      <a class="nav-link" data-bs-toggle="tab" href="#reEducationStatus">
+                        <div class="card homepage-card text-center">
+                          <div class="card-body">
+                            <i class="bi bi-mortarboard"></i>
+                            <h5 class="card-title">Re-education</h5>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Safety Cross tab -->
+          <div class="tab-pane fade" id="safetyCross">
+            <div class="content-card">
+              <div class="iframe-container">
+                <iframe src="Pages/safety_cross.html" title="Safety Cross"></iframe>
+              </div>
+            </div>
+          </div>
+
+          <!-- Incident Monitoring tab -->
+          <div class="tab-pane fade" id="incidentMonitoring">
+            <div class="content-card">
+              <div class="iframe-container">
+                <iframe src="Pages/Incident Monitoring.html" title="Incident Monitoring"></iframe>
+              </div>
+            </div>
+          </div>
+          
+          <!-- KY Monitoring tab -->
+          <div class="tab-pane fade" id="kyMonitoring">
+            <div class="content-card">
+              <div class="iframe-container">
+                <iframe src="Pages/ky_monitoring.html" title="KY Monitoring"></iframe>
+              </div>
+            </div>
+          </div>
+
+          <!-- Safety Audit tab -->
+          <div class="tab-pane fade" id="safetyAudit">
+            <div class="content-card">
+              <div class="iframe-container">
+                <iframe src="Pages/safety_audit_monitoring.html" title="Safety Audit Monitoring"></iframe>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4RKY Monitoring tab -->
+          <div class="tab-pane fade" id="fourRKY">
+            <div class="construction-notice">
+              <i class="bi bi-cone-striped"></i>
+              <div>
+                <strong>Under Construction</strong>
+                <p class="mb-0">4RKY Monitoring system is being developed. Please check back later.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Safety Calendar tab -->
+          <div class="tab-pane fade" id="safetyCalendar">
+            <div class="content-card">
+              <div class="iframe-container">
+                <iframe src="Pages/safety_calendar.html" title="Safety Calendar"></iframe>
+              </div>
+            </div>
+          </div>
+
+          <!-- Remaining tabs... -->
+          <div class="tab-pane fade" id="safetyHandbook">
+            <div class="content-card">
+              <div class="iframe-container">
+                <iframe src="Pages/safety_handbook.html" title="Safety Handbook"></iframe>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="safetyDeclaration">
+            <div class="construction-notice">
+              <i class="bi bi-cone-striped"></i>
+              <div>
+                <strong>Under Construction</strong>
+                <p class="mb-0">Declaration system is being implemented. Please check back later.</p>
+              </div>
+            </div>
+            <h3>Safety Declaration</h3>
+            <p>View current rankings and declarations from the safety exam.</p>
+            <div class="iframe-container">
+              <iframe src="Pages/safety_declaration.html" title="Safety Declaration"></iframe>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="reEducationStatus">
+            <div class="content-card">
+              <div class="construction-notice">
+                <i class="bi bi-cone-striped"></i>
+                <div>
+                  <strong>Under Construction</strong>
+                  <p class="mb-0">Re-education status tracking system is being developed. Please check back later.</p>
+                </div>
+              </div>
+              <h3>Re-education Status</h3>
+              <p>Track progress for re-education and training sessions.</p>
+              <div class="iframe-container">
+                <iframe src="Pages/re_education_status.html" title="Re-education Status"></iframe>
+              </div>
+              <button class="btn btn-primary" onclick="alert('Details for Re-education Status')">View Details</button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Notification System -->
+  <div class="notification-bell" onclick="toggleNotifications()">
+    <i class="bi bi-bell-fill"></i>
+    <span class="badge" id="notification-count">5</span>
+  </div>
+
+  <div class="notification-center">
+    <div class="notification-panel" id="notification-panel">
+      <h5 class="mb-3">Notifications</h5>
+      <div class="notification-list">
+        
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS Bundle with Popper for modal functionality -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Initialize all tab panes
+      var tabPanes = document.querySelectorAll('.tab-pane');
+      tabPanes.forEach(function(pane) {
+        var iframe = pane.querySelector('iframe');
+        if (iframe) {
+          iframe.setAttribute('data-original-src', iframe.getAttribute('src'));
+          iframe.setAttribute('src', '');
+        }
+      });
+
+      // Load homepage content initially
+      var homepagePane = document.querySelector('#homepage');
+      if (homepagePane) {
+        var homepageIframe = homepagePane.querySelector('iframe');
+        if (homepageIframe) {
+          homepageIframe.src = homepageIframe.getAttribute('data-original-src');
+        }
+      }
+
+      // Define the mapping between pages and tab IDs
+      const pageToTabMap = {
+        '/Pages/Homepage.html': 'homepage',
+        '/Pages/safety_cross.html': 'safetyCross',
+        '/Pages/Incident Monitoring.html': 'incidentMonitoring',
+        '/Pages/ky_monitoring.html': 'kyMonitoring',
+        '/Pages/safety_audit_monitoring.html': 'safetyAudit',
+        '/Pages/4rky_monitoring.html': 'fourRKY',
+        '/Pages/safety_calendar.html': 'safetyCalendar',
+        '/Pages/safety_handbook.html': 'safetyHandbook',
+        '/Pages/safety_declaration.html': 'safetyDeclaration',
+        '/Pages/re_education_status.html': 'reEducationStatus'
+      };
+
+      // Handle iframe navigation
+      document.querySelectorAll('iframe').forEach(function(iframe) {
+        iframe.addEventListener('load', function() {
+          try {
+            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+            
+            iframeDoc.addEventListener('click', function(e) {
+              if (e.target.tagName === 'A') {
+                e.preventDefault(); // Prevent default navigation
+                const href = e.target.getAttribute('href');
+                
+                // Find the matching tab ID from the href
+                for (const [page, tabId] of Object.entries(pageToTabMap)) {
+                  if (href.includes(page)) {
+                    // Activate the corresponding tab
+                    const tabElement = document.querySelector(`a[href="#${tabId}"]`);
+                    if (tabElement) {
+                      const tab = new bootstrap.Tab(tabElement);
+                      tab.show();
+                    }
+                    break;
+                  }
+                }
+              }
+            });
+          } catch (error) {
+            console.log('Cannot access iframe content:', error);
+          }
+        });
+      });
+
+      // Tab switching code
+      var tabElements = document.querySelectorAll('[data-bs-toggle="tab"]');
+      tabElements.forEach(function(tabElement) {
+        tabElement.addEventListener('show.bs.tab', function(event) {
+          var previousTab = document.querySelector('.tab-pane.active');
+          if (previousTab) {
+            var previousIframe = previousTab.querySelector('iframe');
+            if (previousIframe) {
+              previousIframe.src = '';
+            }
+          }
+
+          var targetSelector = event.target.getAttribute('href');
+          var targetPane = document.querySelector(targetSelector);
+          if (targetPane) {
+            var iframe = targetPane.querySelector('iframe');
+            if (iframe) {
+              iframe.src = iframe.getAttribute('data-original-src');
+            }
+          }
+        });
+      });
+
+      // Add click event listeners for "Coming Soon" tabs
+      const comingSoonTabs = ['#fourRKY', '#safetyDeclaration', '#reEducationStatus'];
+      
+      comingSoonTabs.forEach(tabSelector => {
+        const tabElement = document.querySelector(`a[href="${tabSelector}"]`);
+        if (tabElement) {
+          tabElement.addEventListener('click', function(e) {
+            e.preventDefault(); // Prevent default tab switching
+            
+            // Show a sweet alert or custom modal for "Coming Soon"
+            Swal.fire({
+              icon: 'info',
+              title: 'Coming Soon',
+              text: 'This feature is currently under development. Please check back later.',
+              confirmButtonText: 'OK',
+              confirmButtonColor: '#007bff',
+              backdrop: `
+                rgba(0,123,255,0.1)
+                left top
+                no-repeat
+              `
+            });
+          });
+        }
+      });
+
+    });
+
+    function updateDateTime() {
+      const now = new Date();
+      const options = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit'
+      };
+      document.getElementById('current-datetime').textContent = 
+        now.toLocaleDateString('en-US', options);
+    }
+
+    // Update time every second
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+
+    // Notification System
+    function toggleNotifications() {
+      const panel = document.getElementById('notification-panel');
+      panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+      
+      // Mark notifications as read when opened
+      const unreadItems = document.querySelectorAll('.notification-item.unread');
+      unreadItems.forEach(item => {
+        item.classList.remove('unread');
+      });
+      updateNotificationCount();
+    }
+
+    function updateNotificationCount() {
+      const unreadCount = document.querySelectorAll('.notification-item.unread').length;
+      const badge = document.getElementById('notification-count');
+      badge.textContent = unreadCount;
+      badge.style.display = unreadCount > 0 ? 'block' : 'none';
+    }
+
+    // Close notification panel when clicking outside
+    document.addEventListener('click', function(event) {
+      const panel = document.getElementById('notification-panel');
+      const bell = document.querySelector('.notification-bell');
+      if (!panel.contains(event.target) && !bell.contains(event.target)) {
+        panel.style.display = 'none';
+      }
+    });
+
+    // Function to add new notification
+    function addNotification(title, content, isUnread = true) {
+      const notificationList = document.querySelector('.notification-list');
+      const newNotification = document.createElement('div');
+      newNotification.className = `notification-item ${isUnread ? 'unread' : ''}`;
+      
+      // Get today's date in a readable format
+      const today = new Date().toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      });
+
+      newNotification.innerHTML = `
+        <div class="date">Today</div>
+        <div class="title">${title}</div>
+        <div class="content">${content}</div>
+      `;
+      notificationList.insertBefore(newNotification, notificationList.firstChild);
+      updateNotificationCount();
+    }
+
+    // Example of how to add a new notification programmatically
+    addNotification('Safety Handbook', 'added', true);
+    addNotification('Incident Monitoring', 'Contents was updated', true);
+    addNotification('KY Monitoring', 'Contents was added', true);
+    addNotification('Safety Cross', 'Contents was added', true);
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add click event to all homepage cards
+      const homepageCards = document.querySelectorAll('#homepage .nav-link');
+      homepageCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+          const targetTabId = this.getAttribute('href');
+          
+          // List of tabs that are coming soon
+          const comingSoonTabs = ['#fourRKY', '#safetyDeclaration', '#reEducationStatus'];
+          
+          // Check if the clicked tab is in the coming soon list
+          if (comingSoonTabs.includes(targetTabId)) {
+            e.preventDefault(); // Prevent default link behavior
+            
+            // Show SweetAlert for coming soon tabs
+            Swal.fire({
+              icon: 'info',
+              title: 'Coming Soon',
+              text: 'This feature is currently under development. Please check back later.',
+              confirmButtonText: 'OK',
+              confirmButtonColor: '#007bff',
+              backdrop: `
+                rgba(0,123,255,0.1)
+                left top
+                no-repeat
+              `
+            });
+            return;
+          }
+          
+          // For other tabs, proceed with normal tab switching
+          e.preventDefault(); // Prevent default link behavior
+          
+          // Find the corresponding tab and activate it
+          const tabTrigger = document.querySelector(`a[href="${targetTabId}"]`);
+          if (tabTrigger) {
+            const tab = new bootstrap.Tab(tabTrigger);
+            tab.show();
+            
+            // Load iframe if exists
+            const targetPane = document.querySelector(targetTabId);
+            const iframe = targetPane.querySelector('iframe');
+            if (iframe && !iframe.src) {
+              iframe.src = iframe.getAttribute('data-original-src');
+            }
+          }
+        });
+      });
+
+      // Optional: Add hover effect to cards
+      const cards = document.querySelectorAll('.homepage-card');
+      cards.forEach(card => {
+        card.addEventListener('mousedown', function() {
+          this.style.transform = 'scale(0.95)';
+        });
+        card.addEventListener('mouseup', function() {
+          this.style.transform = 'scale(1)';
+        });
+      });
+    });
+  </script>
+
+  <!-- Add SweetAlert2 library for nice alerts -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>

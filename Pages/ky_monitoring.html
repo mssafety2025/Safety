@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>KY Monitoring</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #b7cfe7 0%, #f0f4f8 100%);
+        }
+        h1, h2 {
+            color: #2c3e50;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        .btn {
+            border-radius: 20px;
+            padding: 0.5rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .chart-container {
+            position: relative;
+            padding: 1rem;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .close-btn:hover {
+            background: #c0392b;
+            transform: rotate(90deg);
+        }
+        .stats-card {
+            background: white;
+            border-radius: 10px;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .stats-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .stats-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .stats-label {
+            font-size: 0.875rem;
+        }
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+
+        <!-- Add summary cards -->
+        <div class="row mb-4">
+            <div class="col-md-3 col-sm-6">
+                <div class="stats-card text-center">
+                    <i class="bi bi-people-fill stats-icon text-primary"></i>
+                    <div class="stats-value" id="totalEmployees">0</div>
+                    <div class="stats-label text-muted">Total Employees</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="stats-card text-center">
+                    <i class="bi bi-check-circle-fill stats-icon text-success"></i>
+                    <div class="stats-value" id="compliantCount">0</div>
+                    <div class="stats-label text-muted">100% Compliant</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="stats-card text-center">
+                    <i class="bi bi-check-square-fill stats-icon text-info"></i>
+                    <div class="stats-value" id="partiallyCompliant">0</div>
+                    <div class="stats-label text-muted">95-99% Compliant</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-sm-6">
+                <div class="stats-card text-center">
+                    <i class="bi bi-x-circle-fill stats-icon text-danger"></i>
+                    <div class="stats-value" id="nonCompliant">0</div>
+                    <div class="stats-label text-muted">&lt;95% Compliant</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Month Selector for Detailed (Monthly) Analysis for Charts 1 & 2 -->
+        <div class="mb-4">
+            <div id="detailedMonthSelector" class="mb-3 d-flex flex-wrap justify-content-center">
+                <!-- Buttons will be inserted dynamically -->
+            </div>
+        </div>
+
+        <!-- Row for Chart 1 and Chart 2 in two columns -->
+        <div class="row">
+            <!-- Chart 1: Average Compliance per Group (Monthly) -->
+            <div class="col-md-6 mb-5">
+                <h2 class="text-center">Compliance per Group</h2>
+                <canvas id="barChart" width="400" height="250"></canvas>
+            </div>
+
+            <!-- Chart 2: Personnel Compliance (Monthly) as a Pie Chart with side summary -->
+            <div class="col-md-6 mb-5">
+                <h2 class="text-center">Personnel Compliance</h2>
+                <p class="text-center">Click on a slice to view the names in that category.</p>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <canvas id="personnelChart" width="400" height="250"></canvas>
+                    </div>
+                    <div class="col-sm-4" id="below95Summary">
+                        <!-- Summary table will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart 3: Overall Compliance (All Months Combined) -->
+        <div class="mb-5">
+            <h2 class="text-center">Overall Compliance (YTD)</h2>
+            <div class="row">
+                <!-- Overall Chart Canvas -->
+                <div class="col-md-8">
+                    <canvas id="monthlyChart" width="600" height="400"></canvas>
+                </div>
+                <!-- New Monthly Compliance Table -->
+                <div class="col-md-4">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Target</th>
+                                    <th>Actual</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="complianceTable">
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add loading overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+
+    <!-- Add this after the container div and before the loading overlay -->
+    <div class="modal fade" id="personnelListContainer" tabindex="-1" aria-labelledby="personnelListTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 600px;">
+            <div class="modal-content">
+                <div class="modal-header py-2">
+                    <h5 class="modal-title fs-6" id="personnelListTitle">Personnel List</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-2">
+                    <div id="personnelListContent" style="max-height: 400px; overflow-y: auto;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js Plugin Data Labels -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    
+    <!-- Include the data -->
+    <script src="ky.js"></script>
+    
+    <!-- Compute metrics and display charts -->
+    <script>
+        // Register the Data Labels plugin
+        Chart.register(ChartDataLabels);
+
+        // List of months
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+        // Global variables for tracking the selected month for Charts 1 & 2
+        let currentSelectedMonth = months[new Date().getMonth()];
+        let currentBelow95 = [];
+        let currentBetween95And100 = [];
+        let currentFullyCompliant = [];
+
+        // Define colors for grouping (Chart 1)
+        const groupColors = {
+            "1": "rgba(54, 162, 235, 0.6)",  // Blue
+            "2": "rgba(255, 99, 132, 0.6)",   // Red
+            "3": "rgba(255, 206, 86, 0.6)",   // Yellow
+            "4": "rgba(75, 192, 192, 0.6)"    // Green
+        };
+        const groupBorderColors = {
+            "1": "rgba(54, 162, 235, 1)",
+            "2": "rgba(255, 99, 132, 1)",
+            "3": "rgba(255, 206, 86, 1)",
+            "4": "rgba(75, 192, 192, 1)"
+        };
+
+        // ---------------------------
+        // Chart 1: Average Compliance per Group (Monthly)
+        const ctxBar = document.getElementById('barChart').getContext('2d');
+        const chart1 = new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: ["Group 1", "Group 2", "Group 3", "Group 4"],
+                datasets: [{
+                    label: 'Average Compliance (%)',
+                    data: [0, 0, 0, 0],
+                    backgroundColor: [
+                        groupColors["1"],
+                        groupColors["2"],
+                        groupColors["3"],
+                        groupColors["4"]
+                    ],
+                    borderColor: [
+                        groupBorderColors["1"],
+                        groupBorderColors["2"],
+                        groupBorderColors["3"],
+                        groupBorderColors["4"]
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true
+                    },
+                    datalabels: {
+                        display: true,
+                        color: 'black',
+                        formatter: function(value) {
+                            return value === 0 ? '' : value;
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Groups'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                        }
+                    }
+                }
+            }
+        });
+
+        // Function to update Chart 1 based on the selected month.
+        function updateChart1(selectedMonth) {
+            const sums = [0, 0, 0, 0],
+                  counts = [0, 0, 0, 0];
+            data.forEach(record => {
+                const group = record.Group;
+                const valueStr = record[selectedMonth];
+                if (valueStr && valueStr.trim() !== "") {
+                    const value = parseFloat(valueStr.replace('%', ''));
+                    if (!isNaN(value)) {
+                        const idx = parseInt(group) - 1;
+                        sums[idx] += value;
+                        counts[idx]++;
+                    }
+                }
+            });
+            const averages = sums.map((sum, i) =>
+                counts[i] > 0 ? +(sum / counts[i]).toFixed(1) : 0
+            );
+            chart1.data.datasets[0].data = averages;
+            chart1.update();
+        }
+
+        // ---------------------------
+        // Chart 2: Personnel Compliance (Monthly) as a Pie Chart
+        const ctxPersonnel = document.getElementById('personnelChart').getContext('2d');
+        const chart2 = new Chart(ctxPersonnel, {
+            type: 'pie',
+            data: {
+                labels: ["< 95%", "≥95% and <100%", "100 %"],
+                datasets: [{
+                    label: 'Personnel Count',
+                    data: [0, 0, 0],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.6)',  // Red for <95%
+                        'rgba(255, 206, 86, 0.6)',   // Yellow for between 95% and 100%
+                        'rgba(54, 162, 235, 0.6)'    // Blue for 100%
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Personnel Compliance (Monthly)'
+                    },
+                    legend: {
+                        position: 'top'
+                    },
+                    datalabels: {
+                        display: true,
+                        color: 'black',
+                        formatter: function(value) {
+                            return value === 0 ? '' : value;
+                        }
+                    }
+                },
+                onClick: (event, activeElements) => {
+                    if (activeElements.length > 0) {
+                        const index = activeElements[0].index;
+                        let records = [];
+                        let title = "";
+                        if (index === 0) {
+                            records = currentBelow95;
+                            title = "Personnel with <95% Compliance";
+                        } else if (index === 1) {
+                            records = currentBetween95And100;
+                            title = "Personnel with ≥95% and <100% Compliance";
+                        } else if (index === 2) {
+                            records = currentFullyCompliant;
+                            title = "Personnel with 100% Compliance";
+                        }
+                        
+                        // Update modal title and content
+                        document.getElementById("personnelListTitle").textContent = title;
+                        document.getElementById("personnelListContent").innerHTML = buildPersonnelTable(records);
+                        
+                        // Show the modal using Bootstrap
+                        const modal = new bootstrap.Modal(document.getElementById('personnelListContainer'));
+                        modal.show();
+                    }
+                }
+            }
+        });
+
+        // Function to update Chart 2 based on the selected month with three divisions:
+        function updateChart2(selectedMonth) {
+            // Reset the arrays
+            currentBelow95 = [];
+            currentBetween95And100 = [];
+            currentFullyCompliant = [];
+            
+            data.forEach(record => {
+                const valueStr = record[selectedMonth];
+                if (valueStr && valueStr.trim() !== "") {
+                    const value = parseFloat(valueStr.replace('%', ''));
+                    if (!isNaN(value)) {
+                        if (value === 100) {
+                            currentFullyCompliant.push(record);
+                        } else if (value >= 95) {
+                            // This covers values from 95 (inclusive) but less than 100.
+                            currentBetween95And100.push(record);
+                        } else {
+                            currentBelow95.push(record);
+                        }
+                    }
+                }
+            });
+            // Update pie chart dataset with counts from the three arrays:
+            const counts = [currentBelow95.length, currentBetween95And100.length, currentFullyCompliant.length];
+            chart2.data.datasets[0].data = counts;
+            chart2.update();
+        }
+
+        // ---------------------------
+        // Utility: Build an HTML table (4 columns) grouping personnel by Group (1-4)
+        function buildPersonnelTable(records) {
+            // Create an object holding group arrays.
+            const groups = { "1": [], "2": [], "3": [], "4": [] };
+            records.forEach(record => {
+                // Assumes 'Group' is present in the record.
+                const grp = record.Group.toString();
+                if (groups[grp]) {
+                    groups[grp].push(record.Name);
+                }
+            });
+            
+            // Begin creating a table with borders, cell padding, and a decreased font size.
+            let html = '<table style="width:100%; border-collapse: collapse; font-size: 12px;" border="1"><thead><tr>';
+            // Create table header: one column per group with counts appended.
+            for (let i = 1; i <= 4; i++) {
+                const count = groups[i.toString()].length;
+                html += `<th style="padding: 8px; background-color: #f2f2f2; border: 1px solid #ccc;">Group ${i} (${count})</th>`;
+            }
+            html += '</tr></thead><tbody>';
+            
+            // Determine the maximum number of rows needed.
+            let maxRows = 0;
+            for (let i = 1; i <= 4; i++) {
+                maxRows = Math.max(maxRows, groups[i.toString()].length);
+            }
+            
+            // Build table rows so that each group displays its names under its column.
+            for (let r = 0; r < maxRows; r++) {
+                html += '<tr>';
+                for (let i = 1; i <= 4; i++) {
+                    // If a name exists for this group and row, display it; otherwise leave blank.
+                    const cellData = groups[i.toString()][r] || '';
+                    html += `<td style="padding: 5px; text-align: center; border: 1px solid #ccc;">${cellData}</td>`;
+                }
+                html += '</tr>';
+            }
+            
+            html += '</tbody></table>';
+            return html;
+        }
+
+        // Initialize Charts 1 & 2 with default month (Jan)
+        updateChart1(currentSelectedMonth);
+        updateChart2(currentSelectedMonth);
+
+        // Create month buttons for the detailed (monthly) analysis for Charts 1 & 2.
+        const detailedMonthSelector = document.getElementById('detailedMonthSelector');
+        months.forEach(function (month) {
+            const btn = document.createElement('button');
+            btn.setAttribute('type', 'button');
+            btn.classList.add('me-2', 'mb-2', 'btn');
+            if(month === currentSelectedMonth) {
+                btn.classList.add('btn-primary');
+            } else {
+                btn.classList.add('btn-secondary');
+            }
+            btn.textContent = month;
+            btn.addEventListener('click', function () {
+                // Update button styles
+                Array.from(detailedMonthSelector.children).forEach(child => {
+                    child.classList.remove('btn-primary');
+                    child.classList.add('btn-secondary');
+                });
+                btn.classList.remove('btn-secondary');
+                btn.classList.add('btn-primary');
+
+                // Update all visualizations
+                onMonthChange(month);
+            });
+            detailedMonthSelector.appendChild(btn);
+        });
+
+        // ---------------------------
+        // Chart 3: Overall Compliance (All Months Combined)
+        const overallMonthlyCompliance = {};
+        months.forEach(m => {
+            overallMonthlyCompliance[m] = { sum: 0, count: 0 };
+        });
+
+        data.forEach(record => {
+            months.forEach(m => {
+                const valStr = record[m];
+                if (valStr && valStr.trim() !== "") {
+                    const val = parseFloat(valStr.replace('%', ''));
+                    if (!isNaN(val)) {
+                        overallMonthlyCompliance[m].sum += val;
+                        overallMonthlyCompliance[m].count++;
+                    }
+                }
+            });
+        });
+
+        const overallPercentages = [];
+        months.forEach(m => {
+            const { sum, count } = overallMonthlyCompliance[m];
+            const average = count > 0 ? sum / count : 0;
+            overallPercentages.push(+average.toFixed(1));
+        });
+
+        const ctxMonthly = document.getElementById('monthlyChart').getContext('2d');
+        new Chart(ctxMonthly, {
+            type: 'bar',
+            data: {
+                labels: months,
+                datasets: [{
+                    label: '',  // Set to an empty string to remove the displayed label
+                    data: overallPercentages,
+                    backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: false,
+                plugins: {
+                    legend: {
+                        display: false  // Hide the legend if you don't want the label to appear
+                    },
+                    title: {
+                        display: true,
+                        
+                    },
+                    datalabels: {
+                        display: true,
+                        color: 'black',
+                        formatter: function(value) {
+                            return value === 0 ? '' : value;
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Month'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Compliance (%)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Update the table population logic
+        function updateComplianceTable(overallPercentages) {
+            const tableBody = document.getElementById('complianceTable');
+            tableBody.innerHTML = '';
+            
+            // Get current month index (0-11) and current date
+            const currentDate = new Date();
+            const currentMonthIndex = currentDate.getMonth();
+            
+            overallPercentages.forEach((percentage, index) => {
+                // Only show months up to current month
+                if (index <= currentMonthIndex) {
+                    const row = document.createElement('tr');
+                    
+                    // Only show status and coloring for completed months (not the current month)
+                    const isCurrentMonth = index === currentMonthIndex;
+                    const status = isCurrentMonth ? 
+                        '<i class="bi bi-hourglass-split text-warning"></i>' : 
+                        (percentage >= 95 
+                            ? '<i class="bi bi-check-circle-fill text-success"></i>' 
+                            : '<i class="bi bi-x-circle-fill text-danger"></i>');
+                    
+                    row.innerHTML = `
+                        <td>${months[index]}</td>
+                        <td>95%</td>
+                        <td class="${isCurrentMonth ? '' : (percentage >= 95 ? 'text-success' : 'text-danger')} fw-bold">
+                            ${percentage.toFixed(1)}%
+                        </td>
+                        <td class="text-center">${status}</td>
+                    `;
+                    tableBody.appendChild(row);
+                }
+            });
+        }
+
+        // Add this line after creating the chart
+        updateComplianceTable(overallPercentages);
+
+        // Utility: Function to show personnel details for <95% compliance for a specific month.
+        function showBelow95Details(month) {
+            const filteredRecords = data.filter(record => {
+                const valueStr = record[month];
+                if (valueStr && valueStr.trim() !== "") {
+                    const value = parseFloat(valueStr.replace('%', ''));
+                    return !isNaN(value) && value < 95;
+                }
+                return false;
+            });
+            document.getElementById("personnelListTitle").textContent = `Personnel with <95% Compliance for ${month}`;
+            document.getElementById("personnelListContent").innerHTML = buildPersonnelTable(filteredRecords) || "No names to show";
+            document.getElementById("personnelListContainer").style.display = 'block';
+        }
+
+        // Updated function to update the summary table for personnel with <95% compliance,
+        // making the count clickable to display personnel names if count > 0.
+        function updateBelow95Summary() {
+            let html = '<table style="width:100%; border-collapse: collapse; font-size: 12px;" border="1">';
+            html += '<thead><tr>';
+            html += '<th style="padding: 4px; background-color: #f2f2f2; border: 1px solid #ccc;">Month</th>';
+            html += '<th style="padding: 4px; background-color: #f2f2f2; border: 1px solid #ccc;">Count (&lt;95%)</th>';
+            html += '</tr></thead><tbody>';
+
+            // Get the index of the current month (0 for Jan, 1 for Feb, etc.)
+            let latestIndex = new Date().getMonth();  
+            // Loop from January (index 0) up to the current month.
+            for (let i = 0; i <= latestIndex; i++) {
+                let month = months[i];
+                let count = 0;
+                data.forEach(record => {
+                    const valueStr = record[month];
+                    if (valueStr && valueStr.trim() !== "") {
+                        const value = parseFloat(valueStr.replace('%', ''));
+                        if (!isNaN(value) && value < 95) {
+                            count++;
+                        }
+                    }
+                });
+                html += `<tr>
+                          <td style="padding:4px; text-align:center; border: 1px solid #ccc;">${month}</td>
+                          <td style="padding:4px; text-align:center; border: 1px solid #ccc;">`;
+                // If count > 0, make the number clickable to show details.
+                if (count > 0) {
+                    html += `<a href="#" onclick="showBelow95Details('${month}'); return false;">${count}</a>`
+                }
+                html += '</td></tr>';
+            }
+            html += '</tbody></table>';
+            return html;
+        }
+
+        // Add this after all charts are initialized and data is loaded
+        document.getElementById('loadingOverlay').style.display = 'none';
+
+        // For better handling, you can wrap this in a function:
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        // Add this at the end of your script, after all chart initializations
+        hideLoading();
+
+        // Function to update summary statistics
+        function updateSummaryStats(selectedMonth) {
+            let totalEmps = 0;
+            let compliant = 0;
+            let partiallyComp = 0;
+            let nonComp = 0;
+
+            data.forEach(record => {
+                const valueStr = record[selectedMonth];
+                if (valueStr && valueStr.trim() !== "") {
+                    const value = parseFloat(valueStr.replace('%', ''));
+                    if (!isNaN(value)) {
+                        totalEmps++;
+                        if (value === 100) {
+                            compliant++;
+                        } else if (value >= 95) {
+                            partiallyComp++;
+                        } else {
+                            nonComp++;
+                        }
+                    }
+                }
+            });
+
+            document.getElementById('totalEmployees').textContent = totalEmps;
+            document.getElementById('compliantCount').textContent = compliant;
+            document.getElementById('partiallyCompliant').textContent = partiallyComp;
+            document.getElementById('nonCompliant').textContent = nonComp;
+        }
+
+        // Function to handle month changes
+        function onMonthChange(month) {
+            currentSelectedMonth = month;
+            updateChart1(month);
+            updateChart2(month);
+            updateSummaryStats(month);
+        }
+
+        // Initialize summary stats with default month
+        updateSummaryStats(currentSelectedMonth);
+    </script>
+</body>
+</html>

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Safety Handbook</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        h1 {
+            color: #007bff;
+        }
+        .card {
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        img {
+            max-width: 100%; /* Ensure images scale with the container */
+            height: auto; /* Maintain aspect ratio */
+        }
+        .pdf-container {
+            width: 100%;
+            height: 800px; /* Adjust height as needed */
+            margin: 20px 0;
+        }
+        .toc-container {
+            max-height: 600px;
+            overflow-y: auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        .chapter-container {
+            border-bottom: 1px solid #eee;
+        }
+        .chapter-header {
+            cursor: pointer;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            margin-top: 5px;
+        }
+        .chapter-header:hover {
+            background-color: #e9ecef;
+        }
+        .chapter-content {
+            padding-left: 15px;
+        }
+        .toc-item {
+            padding: 4px 0;
+            transition: all 0.2s;
+        }
+        .toc-item:hover {
+            padding-left: 15px;
+        }
+        .ps-4 {
+            padding-left: 1.5rem !important;
+        }
+        .toc-item a {
+            color: #333;
+            text-decoration: none;
+            display: block;
+        }
+        .toc-item a:hover {
+            color: #007bff;
+        }
+        .section-number {
+            color: #007bff;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .float-end {
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center mb-4">THPAL Safety Handbook</h2>
+        <p class="text-center">Access and review detailed safety guidelines and procedures.</p>
+        
+        <div class="text-center mt-4 mb-4">
+            <a href="../Handbook/Handbook.pdf" 
+               class="btn btn-primary btn-lg" 
+               target="_blank">
+                <i class="bi bi-box-arrow-up-right"></i> Open Full Safety Handbook
+            </a>
+        </div>
+
+        <div class="toc-container">
+            <h3 class="text-center mb-4"><i class="bi bi-list-ul"></i> Table of Contents</h3>
+            
+            <!-- Preface -->
+            <div class="toc-item">
+                <a href="../Handbook/Handbook.pdf#page=9" target="_blank">
+                    <span class="section-number">Preface</span>
+                </a>
+            </div>
+
+            <!-- Chapter 0 -->
+            <div class="chapter-container">
+                <div class="toc-item chapter-header" onclick="toggleChapter(this)">
+                    <span class="section-number">Chapter 0:</span> General Information
+                    <i class="bi bi-chevron-down float-end"></i>
+                </div>
+                <div class="chapter-content" style="display: none;">
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=10" target="_blank">
+                            <span class="section-number">1.</span> Introduction
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=11" target="_blank">
+                            <span class="section-number">2.</span> THPAL Safety and Health Policy Statement
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=12" target="_blank">
+                            <span class="section-number">3.</span> Environmental Policy
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=13" target="_blank">
+                            <span class="section-number">4.</span> General Provision
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter I -->
+            <div class="chapter-container">
+                <div class="toc-item chapter-header" onclick="toggleChapter(this)">
+                    <span class="section-number">Chapter I:</span> General Plant Rules
+                    <i class="bi bi-chevron-down float-end"></i>
+                </div>
+                <div class="chapter-content" style="display: none;">
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=15" target="_blank">
+                            <span class="section-number">1.</span> General Rules
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=19" target="_blank">
+                            <span class="section-number">2.</span> Gate Control Policy
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=21" target="_blank">
+                            <span class="section-number">3.</span> THPAL Plant Site Visitors
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=21" target="_blank">
+                            <span class="section-number">4.</span> Housekeeping
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=22" target="_blank">
+                            <span class="section-number">5.</span> Paging System
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=22" target="_blank">
+                            <span class="section-number">6.</span> Prevention of Drunk Driving
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter II -->
+            <div class="chapter-container">
+                <div class="toc-item chapter-header" onclick="toggleChapter(this)">
+                    <span class="section-number">Chapter II:</span> Basic Safety Rule
+                    <i class="bi bi-chevron-down float-end"></i>
+                </div>
+                <div class="chapter-content" style="display: none;">
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=23" target="_blank">
+                            <span class="section-number">1.</span> Risk Management
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=31" target="_blank">
+                            <span class="section-number">2.</span> PPE Rule
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=49" target="_blank">
+                            <span class="section-number">3.</span> Work Permit System
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=52" target="_blank">
+                            <span class="section-number">4.</span> Isolation Policy
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=55" target="_blank">
+                            <span class="section-number">5.</span> Lock Out/Tag Out Program
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=62" target="_blank">
+                            <span class="section-number">6.</span> Hot Works
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=66" target="_blank">
+                            <span class="section-number">7.</span> Basic Rules for Tools
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=67" target="_blank">
+                            <span class="section-number">8.</span> Basic Electrical Rules
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=69" target="_blank">
+                            <span class="section-number">9.</span> Basic Mechanical Rules
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=71" target="_blank">
+                            <span class="section-number">10.</span> Safety Signage and Barricades
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=81" target="_blank">
+                            <span class="section-number">11.</span> High Power Tools/Risk of High Power
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=82" target="_blank">
+                            <span class="section-number">12.</span> Management at Changing Point
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter III -->
+            <div class="chapter-container">
+                <div class="toc-item chapter-header" onclick="toggleChapter(this)">
+                    <span class="section-number">Chapter III:</span> Rules for Special Work and Tools/Equipment
+                    <i class="bi bi-chevron-down float-end"></i>
+                </div>
+                <div class="chapter-content" style="display: none;">
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=84" target="_blank">
+                            <span class="section-number">1.</span> Pallet Utilization and Management
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=86" target="_blank">
+                            <span class="section-number">2.</span> Working at Heights
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=96" target="_blank">
+                            <span class="section-number">3.</span> Scaffolding Activity
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=97" target="_blank">
+                            <span class="section-number">4.</span> Working Near Vehicle or Equipment
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=100" target="_blank">
+                            <span class="section-number">5.</span> The Use of Hoses
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=103" target="_blank">
+                            <span class="section-number">6.</span> Manual Lifting
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=110" target="_blank">
+                            <span class="section-number">7.</span> Lifting and Slinging
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=112" target="_blank">
+                            <span class="section-number">8.</span> Handling Chemicals and Compressed Gas
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=119" target="_blank">
+                            <span class="section-number">9.</span> Using Cutter and Sharp Tools
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=128" target="_blank">
+                            <span class="section-number">10.</span> RAM Sources Management
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=145" target="_blank">
+                            <span class="section-number">11.</span> Confined Space Entry Clearance Policy
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=148" target="_blank">
+                            <span class="section-number">12.</span> Guidelines for Works Within Areas with Solvent Naphtha
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=152" target="_blank">
+                            <span class="section-number">13.</span> Prevention of Heat Illness
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter IV -->
+            <div class="chapter-container">
+                <div class="toc-item chapter-header" onclick="toggleChapter(this)">
+                    <span class="section-number">Chapter IV:</span> Special Caution in Each Area
+                    <i class="bi bi-chevron-down float-end"></i>
+                </div>
+                <div class="chapter-content" style="display: none;">
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=156" target="_blank">
+                            <span class="section-number">1.</span> Ore Preparation and Chromite Area
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=156" target="_blank">
+                            <span class="section-number">2.</span> High Pressure Acid Leach Operations Area
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=157" target="_blank">
+                            <span class="section-number">3.</span> Pre-Neutralization and Countercurrent Decantation Area
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=157" target="_blank">
+                            <span class="section-number">4.</span> Neutralization Area
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=157" target="_blank">
+                            <span class="section-number">5.</span> Zinc Removal Area and Sulphurization Area
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=158" target="_blank">
+                            <span class="section-number">6.</span> Final Neutralization Area, Slaked Lime Charging, and Dry Stacking Area
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=158" target="_blank">
+                            <span class="section-number">7.</span> H2S Plant
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=159" target="_blank">
+                            <span class="section-number">8.</span> Limestone Processing Area
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=160" target="_blank">
+                            <span class="section-number">9.</span> Flocculant and Caustic Soda Area
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=160" target="_blank">
+                            <span class="section-number">10.</span> Scandium Plant Area
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=160" target="_blank">
+                            <span class="section-number">11.</span> Power Station, Utility and Coal Storage Area
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=161" target="_blank">
+                            <span class="section-number">12.</span> Laboratory Analysis Area
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=162" target="_blank">
+                            <span class="section-number">13.</span> Wharf Area
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=163" target="_blank">
+                            <span class="section-number">14.</span> TSF Area
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=163" target="_blank">
+                            <span class="section-number">15.</span> Workshop and Warehouse Area
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="chapter-container">
+                <div class="toc-item chapter-header" onclick="toggleChapter(this)">
+                    <span class="section-number">Chapter V:</span> Vehicle Management and Traffic Rules
+                    <i class="bi bi-chevron-down float-end"></i>
+                </div>
+                <div class="chapter-content" style="display: none;">
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=164" target="_blank">
+                            <span class="section-number">1.</span> Road Map
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=165" target="_blank">
+                            <span class="section-number">2.</span> Vehicle/Mobile Equipment
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=171" target="_blank">
+                            <span class="section-number">3.</span> Traffic Rules for Bicycle
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=173" target="_blank">
+                            <span class="section-number">4.</span> Traffic Rule for Walking
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter VI -->
+            <div class="chapter-container">
+                <div class="toc-item chapter-header" onclick="toggleChapter(this)">
+                    <span class="section-number">Chapter VI:</span> Health Management
+                    <i class="bi bi-chevron-down float-end"></i>
+                </div>
+                <div class="chapter-content" style="display: none;">
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=175" target="_blank">
+                            <span class="section-number">1.</span> THPAL Health Examination Policy
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=177" target="_blank">
+                            <span class="section-number">2.</span> Hearing Loss Prevention Program
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=178" target="_blank">
+                            <span class="section-number">3.</span> COVID-19 Prevention
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=180" target="_blank">
+                            <span class="section-number">4.</span> Drug-Free Workplace Program
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=181" target="_blank">
+                            <span class="section-number">5.</span> Mental Health Policy and Program
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=182" target="_blank">
+                            <span class="section-number">6.</span> Breastfeeding Policy
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=183" target="_blank">
+                            <span class="section-number">7.</span> Contractors' Check up at the THPAL Clinic
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter VII -->
+            <div class="chapter-container">
+                <div class="toc-item chapter-header" onclick="toggleChapter(this)">
+                    <span class="section-number">Chapter VII:</span> Environmental Management
+                    <i class="bi bi-chevron-down float-end"></i>
+                </div>
+                <div class="chapter-content" style="display: none;">
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=184" target="_blank">
+                            <span class="section-number">1.</span> Overview of Environmental Management System
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=184" target="_blank">
+                            <span class="section-number">2.</span> Air Management
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=188" target="_blank">
+                            <span class="section-number">3.</span> Water Management
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=191" target="_blank">
+                            <span class="section-number">4.</span> Waste Management
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter VIII -->
+            <div class="chapter-container">
+                <div class="toc-item chapter-header" onclick="toggleChapter(this)">
+                    <span class="section-number">Chapter VIII:</span> Emergency Preparedness Program
+                    <i class="bi bi-chevron-down float-end"></i>
+                </div>
+                <div class="chapter-content" style="display: none;">
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=192" target="_blank">
+                            <span class="section-number">1.</span> Emergency Response Team
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=193" target="_blank">
+                            <span class="section-number">2.</span> Emergency Drill
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=196" target="_blank">
+                            <span class="section-number">3.</span> Management of All Safety Equipment
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter IX -->
+            <div class="chapter-container">
+                <div class="toc-item chapter-header" onclick="toggleChapter(this)">
+                    <span class="section-number">Chapter IX:</span> Accident/Incident/Report and Investigation
+                    <i class="bi bi-chevron-down float-end"></i>
+                </div>
+                <div class="chapter-content" style="display: none;">
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=203" target="_blank">
+                            <span class="section-number">1.</span> Introduction
+                        </a>
+                    </div>
+                    <div class="toc-item ps-4">
+                        <a href="../Handbook/Handbook.pdf#page=204" target="_blank">
+                            <span class="section-number">2.</span> Investigation
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleChapter(element) {
+            const content = element.nextElementSibling;
+            const icon = element.querySelector('.bi');
+            
+            if (content.style.display === "none") {
+                content.style.display = "block";
+                icon.classList.remove('bi-chevron-down');
+                icon.classList.add('bi-chevron-up');
+            } else {
+                content.style.display = "none";
+                icon.classList.remove('bi-chevron-up');
+                icon.classList.add('bi-chevron-down');
+            }
+        }
+    </script>
+</body>
+</html> 
