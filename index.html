@@ -72,32 +72,41 @@
       font-size: 1.25rem; /* Reduced h3 size */
     }
     .iframe-container {
-      width: 100%; /* Set width to 100% of the parent */
-      height: 0; /* Set height to 0 initially */
-      padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-      position: relative; /* Position relative for absolute positioning of iframe */
-      overflow: hidden; /* Hide overflow */
+      width: 100%;
+      height: 0;
+      padding-bottom: 80%; /* Increased height ratio */
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
     }
     iframe {
-      position: absolute; /* Position absolute to fill the container */
+      position: absolute;
       top: 0;
-      left: 0;
-      width: 100%; /* Fill the container */
-      height: 100%; /* Fill the container */
+      left: 50%; /* Position at 50% from the left */
+      width: 120%; /* Make iframe wider than container */
+      height: 100%;
       border: none;
-      transform: scale(0.8); /* Scale iframe content to 80% */
-      transform-origin: top left; /* Set origin for scaling */
+      transform: translateX(-50%) scale(0.85); /* Center using translateX and scale down */
+      transform-origin: center top;
     }
     /* Updated iframe styling within the container */
     .iframe-container iframe {
       position: absolute;
       top: 0;
-      left: 0;
-      width: 125%;  /* increased due to 1/0.8 scaling */
-      height: 125%; /* increased due to 1/0.8 scaling */
+      left: 50%; /* Position at 50% from the left */
+      width: 120%; /* Make iframe wider than container */
+      height: 100%;
       border: none;
-      transform: scale(0.8); /* scales the inner HTML to 80% */
-      transform-origin: top left;
+      transform: translateX(-50%) scale(0.85); /* Center using translateX and scale down */
+      transform-origin: center top;
+    }
+
+    /* Specific adjustment for safety cross iframe */
+    #safetyCross .iframe-container iframe {
+      width: 130%; /* Make it wider */
+      transform: translateX(-50%) scale(0.75); /* Center and scale appropriately */
     }
 
     /* Enhanced Navigation Styling */
@@ -257,16 +266,25 @@
 
     /* DateTime Display */
     #datetime-display {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      background: rgba(255, 255, 255, 0.7);
-      padding: 5px 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 8px 12px;
       border-radius: 6px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      font-size: 0.7rem;
+      font-size: 0.75rem;
       z-index: 1000;
       backdrop-filter: blur(3px);
+    }
+
+    #datetime-display span {
+      display: flex;
+      align-items: center;
+    }
+
+    #datetime-display i {
+      margin-right: 5px;
     }
 
     /* Construction Notice */
@@ -301,81 +319,63 @@
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background: #007bff;
+      background: linear-gradient(145deg, #007bff, #0056b3);
       color: white;
-      padding: 10px;
+      padding: 15px;
       border-radius: 50%;
       cursor: pointer;
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
       z-index: 1001;
       transition: all 0.3s ease;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .notification-bell:hover {
       transform: scale(1.1);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
     }
-
-    .notification-bell .badge {
-      position: absolute;
-      top: -5px;
-      right: -5px;
-      background: #dc3545;
-      border-radius: 50%;
-      padding: 5px 8px;
-      font-size: 0.7rem;
+    
+    .notification-bell i {
+      font-size: 1.2rem;
     }
-
-    .notification-panel {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      padding: 15px;
-      margin-bottom: 60px;
+    
+    /* Modal styling */
+    #suggestionsModal .modal-content {
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    
+    #suggestionsModal .modal-header {
+      background: linear-gradient(145deg, #007bff, #0056b3);
+      color: white;
+      border-radius: 15px 15px 0 0;
+    }
+    
+    #suggestionsModal .btn-close {
+      filter: brightness(0) invert(1);
+    }
+    
+    /* Google Form iframe styling */
+    #googleFormFrame {
+      border: none;
+      width: 600px;
+      height: 800px;
+      overflow: hidden;
+    }
+    
+    /* Remove old notification panel styles */
+    .notification-panel, .notification-center, .notification-list, .notification-item {
       display: none;
-    }
-
-    .notification-item {
-      padding: 10px;
-      border-bottom: 1px solid #eee;
-      transition: all 0.3s ease;
-    }
-
-    .notification-item:hover {
-      background: #f8f9fa;
-    }
-
-    .notification-item .date {
-      font-size: 0.8rem;
-      color: #6c757d;
-    }
-
-    .notification-item .title {
-      font-weight: 600;
-      color: #2c3e50;
-    }
-
-    .notification-item .content {
-      font-size: 0.9rem;
-      color: #4a5568;
-    }
-
-    .notification-item.unread {
-      border-left: 3px solid #007bff;
-      background: #f8f9fa;
-    }
-
-    /* Adjust icon size in nav links */
-    .nav-link i {
-      font-size: 0.9rem; /* Reduce icon size */
-      margin-right: 5px; /* Reduce spacing after icon */
     }
 
     /* Update main content area to reflect new sidebar width */
     main.col-md-10 {
       width: calc(100% - 180px);
-    }
-
-    /* Add these styles to your existing CSS */
+    }    /* Add these styles to your existing CSS */
     .nav-link .card {
       color: inherit;
       text-decoration: none;
@@ -527,10 +527,10 @@
 
     /* Horizontal Navigation Styles */
     .horizontal-nav {
-      background: linear-gradient(145deg, #d1da88, #fbfdff) !important;
+      background: linear-gradient(145deg, #b5c91e, #cff02c) !important;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
       border-bottom: 2px solid rgba(0,0,0,0.1);
-      padding: 10px 0;
+      padding: 15px 0;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -549,7 +549,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      font-size: 0.7rem;
+      font-size: 0.8rem;
       padding: 5px 10px;
       margin: 0 5px;
       border-radius: 8px;
@@ -810,12 +810,41 @@
       justify-content: center;
       align-items: center;
     }
+
+    /* Add to your existing style section */
+    .minor-links-section .btn {
+      padding: 8px 15px;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      background: white;
+      border: 1px solid #007bff;
+      margin-bottom: 10px;
+    }
+
+    .minor-links-section .btn:hover {
+      background: linear-gradient(145deg, #007bff, #0056b3);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,123,255,0.2);
+    }
+
+    .minor-links-section .btn i {
+      margin-right: 5px;
+    }
+
+    .minor-links-section h6 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding-left: 5px;
+      border-left: 3px solid #007bff;
+    }
   </style>
 </head>
 <body>
   <!-- DateTime Display -->
   <div id="datetime-display">
     <i class="bi bi-clock"></i> <span id="current-datetime"></span>
+    <span class="ms-3"><i class="bi bi-calendar-check"></i> Last Updated: <span id="last-updated">November 20, 2023</span></span>
   </div>
 
   <div class="container-fluid">
@@ -836,19 +865,18 @@
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#coreObjectives">
+              <i class="bi bi-bullseye"></i> Core Objectives
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" data-bs-toggle="tab" href="#safetyCalendar">
               <i class="bi bi-calendar2-week"></i> Safety Calendar
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#safetyAudit">
-              <i class="bi bi-clipboard-check"></i> Safety Audit
-            </a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" data-bs-toggle="tab" href="#safetyCross">
-              <i class="bi bi-plus-square-fill"></i>
-              Safety Cross
+              <i class="bi bi-plus-square-fill"></i> Safety Cross
             </a>
           </li>
           <li class="nav-item">
@@ -857,28 +885,13 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#kyMonitoring">
-              <i class="bi bi-bar-chart-line"></i> KY Monitoring
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#fourRKY">
-              <i class="bi bi-graph-up"></i> 4RKY Monitoring
-            </a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" data-bs-toggle="tab" href="#safetyHandbook">
               <i class="bi bi-journal-bookmark"></i> Safety Handbook
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#safetyDeclaration">
-              <i class="bi bi-check-square"></i> Safety Declaration
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" href="#reEducationStatus">
-              <i class="bi bi-mortarboard"></i> Re-education Status
+            <a class="nav-link" data-bs-toggle="tab" href="#safetyGroupOrg">
+              <i class="bi bi-diagram-3"></i> Safety Group Org
             </a>
           </li>
         </ul>
@@ -905,33 +918,33 @@
 
                 <!-- Cards Column -->
                 <div class="col-md-7 ps-4">
-                  <div class="row g-2">
-                    <!-- First Row -->
-                    <!-- Safety Calendar tile -->
+                  <!-- Main Links Section with Cards -->
+                  <div class="row g-2 mb-4">
+                    <!-- Core Objectives Card -->
+                    <div class="col-md-4">
+                      <a class="nav-link" data-bs-toggle="tab" href="#coreObjectives">
+                        <div class="card homepage-card text-center">
+                          <div class="card-body">
+                            <i class="bi bi-bullseye"></i>
+                            <h5 class="card-title">Core Objectives</h5>
+                          </div>
+                        </div>
+                      </a>
+                    </div>
+
+                    <!-- Safety Calendar Card -->
                     <div class="col-md-4">
                       <a class="nav-link" data-bs-toggle="tab" href="#safetyCalendar">
                         <div class="card homepage-card text-center">
                           <div class="card-body">
-                            <i class="bi bi-calendar-check"></i>
+                            <i class="bi bi-calendar2-week"></i>
                             <h5 class="card-title">Safety Calendar</h5>
                           </div>
                         </div>
                       </a>
                     </div>
 
-                    <!-- Safety Audit tile -->
-                    <div class="col-md-4">
-                      <a class="nav-link" data-bs-toggle="tab" href="#safetyAudit">
-                        <div class="card homepage-card text-center">
-                          <div class="card-body">
-                            <i class="bi bi-shield-check"></i>
-                            <h5 class="card-title">Safety Audit</h5>
-                          </div>
-                        </div>
-                      </a>
-                    </div>
-
-                    <!-- Safety Cross tile -->
+                    <!-- Safety Cross Card -->
                     <div class="col-md-4">
                       <a class="nav-link" data-bs-toggle="tab" href="#safetyCross">
                         <div class="card homepage-card text-center">
@@ -943,77 +956,67 @@
                       </a>
                     </div>
 
-                    <!-- Incident Monitoring tile -->
+                    <!-- Incident Monitoring Card -->
                     <div class="col-md-4">
                       <a class="nav-link" data-bs-toggle="tab" href="#incidentMonitoring">
                         <div class="card homepage-card text-center">
                           <div class="card-body">
-                            <i class="bi bi-exclamation-triangle-fill"></i>
+                            <i class="bi bi-exclamation-triangle"></i>
                             <h5 class="card-title">Incident Monitoring</h5>
                           </div>
                         </div>
                       </a>
                     </div>
 
-                    <!-- Second Row -->
-                    <!-- KY Monitoring tile -->
-                    <div class="col-md-4">
-                      <a class="nav-link" data-bs-toggle="tab" href="#kyMonitoring">
-                        <div class="card homepage-card text-center">
-                          <div class="card-body">
-                            <i class="bi bi-graph-up-arrow"></i>
-                            <h5 class="card-title">KY Monitoring</h5>
-                          </div>
-                        </div>
-                      </a>
-                    </div>
-
-                    <!-- 4RKY Monitoring tile -->
-                    <div class="col-md-4">
-                      <a class="nav-link" data-bs-toggle="tab" href="#fourRKY">
-                        <div class="card homepage-card text-center coming-soon">
-                          <div class="card-body">
-                            <i class="bi bi-graph-up"></i>
-                            <h5 class="card-title">4RKY Monitoring</h5>
-                          </div>
-                        </div>
-                      </a>
-                    </div>
-
-                    <!-- Safety Handbook tile -->
+                    <!-- Safety Handbook Card -->
                     <div class="col-md-4">
                       <a class="nav-link" data-bs-toggle="tab" href="#safetyHandbook">
                         <div class="card homepage-card text-center">
                           <div class="card-body">
-                            <i class="bi bi-book-half"></i>
-                            <h5 class="card-title">Handbook</h5>
+                            <i class="bi bi-journal-bookmark"></i>
+                            <h5 class="card-title">Safety Handbook</h5>
                           </div>
                         </div>
                       </a>
                     </div>
 
-                    <!-- Safety Declaration tile -->
+                    <!-- Safety Group Org Card -->
                     <div class="col-md-4">
-                      <a class="nav-link" data-bs-toggle="tab" href="#safetyDeclaration">
-                        <div class="card homepage-card text-center coming-soon">
-                          <div class="card-body">
-                            <i class="bi bi-file-earmark-check-fill"></i>
-                            <h5 class="card-title">Declaration</h5>
-                          </div>
-                        </div>
-                      </a>
-                    </div>
-
-                    <!-- Re-education Status tile -->
-                    <div class="col-md-4">
-                      <a class="nav-link" data-bs-toggle="tab" href="#reEducationStatus">
+                      <a class="nav-link" data-bs-toggle="tab" href="#safetyGroupOrg">
                         <div class="card homepage-card text-center">
                           <div class="card-body">
-                            <i class="bi bi-mortarboard"></i>
-                            <h5 class="card-title">Re-education</h5>
+                            <i class="bi bi-diagram-3"></i>
+                            <h5 class="card-title">Safety Group Org</h5>
                           </div>
                         </div>
                       </a>
+                    </div>
+                  </div>
+
+                  <!-- Minor Links Section with Buttons -->
+                  <div class="minor-links-section mt-4">
+                    <h6 class="text-muted mb-3">Additional Links</h6>
+                    <div class="row g-2">
+                      <div class="col-md-6">
+                        <a class="btn btn-outline-primary w-100" href="Pages/ky_monitoring.html" target="_blank">
+                          <i class="bi bi-graph-up-arrow"></i> KY Monitoring
+                        </a>
+                      </div>
+                      <div class="col-md-6">
+                        <a class="btn btn-outline-primary w-100 coming-soon" href="Pages/4rky_monitoring.html" target="_blank">
+                          <i class="bi bi-graph-up"></i> 4RKY Monitoring
+                        </a>
+                      </div>
+                      <div class="col-md-6">
+                        <a class="btn btn-outline-primary w-100" href="Pages/safety_audit_monitoring.html" target="_blank">
+                          <i class="bi bi-shield-check"></i> Safety Audit
+                        </a>
+                      </div>
+                      <div class="col-md-6">
+                        <a class="btn btn-outline-primary w-100" href="Pages/safety_declaration.html" target="_blank">
+                          <i class="bi bi-file-earmark-check-fill"></i> Safety Declaration
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1086,34 +1089,26 @@
             </div>
           </div>
           <div class="tab-pane fade" id="safetyDeclaration">
-            <div class="construction-notice">
-              <i class="bi bi-cone-striped"></i>
-              <div>
-                <strong>Under Construction</strong>
-                <p class="mb-0">Declaration system is being implemented. Please check back later.</p>
+            <div class="content-card">
+              <div class="iframe-container">
+                <iframe src="Pages/safety_declaration.html" title="Safety Declaration"></iframe>
               </div>
-            </div>
-            <h3>Safety Declaration</h3>
-            <p>View current rankings and declarations from the safety exam.</p>
-            <div class="iframe-container">
-              <iframe src="Pages/safety_declaration.html" title="Safety Declaration"></iframe>
             </div>
           </div>
-          <div class="tab-pane fade" id="reEducationStatus">
+          <div class="tab-pane fade" id="safetyGroupOrg">
             <div class="content-card">
-              <div class="construction-notice">
-                <i class="bi bi-cone-striped"></i>
-                <div>
-                  <strong>Under Construction</strong>
-                  <p class="mb-0">Re-education status tracking system is being developed. Please check back later.</p>
-                </div>
-              </div>
-              <h3>Re-education Status</h3>
-              <p>Track progress for re-education and training sessions.</p>
               <div class="iframe-container">
-                <iframe src="Pages/re_education_status.html" title="Re-education Status"></iframe>
+                <iframe src="Pages/safety_group_org.html" title="Safety Group Organization"></iframe>
               </div>
-              <button class="btn btn-primary" onclick="alert('Details for Re-education Status')">View Details</button>
+            </div>
+          </div>
+
+          <!-- Core Objectives tab -->
+          <div class="tab-pane fade" id="coreObjectives">
+            <div class="content-card">
+              <div class="iframe-container">
+                <iframe src="Pages/CoreObjectivesMonitoring.html" title="Core Objectives Monitoring"></iframe>
+              </div>
             </div>
           </div>
         </div>
@@ -1122,16 +1117,24 @@
   </div>
 
   <!-- Notification System -->
-  <div class="notification-bell" onclick="toggleNotifications()">
-    <i class="bi bi-bell-fill"></i>
-    <span class="badge" id="notification-count">5</span>
+  <div class="notification-bell" onclick="showSuggestionsModal()">
+    <i class="bi bi-chat-dots-fill"></i>
   </div>
 
-  <div class="notification-center">
-    <div class="notification-panel" id="notification-panel">
-      <h5 class="mb-3">Notifications</h5>
-      <div class="notification-list">
-        
+  <!-- Replace Notification Panel with Suggestions Modal -->
+  <div class="modal fade" id="suggestionsModal" tabindex="-1" aria-labelledby="suggestionsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title" id="suggestionsModalLabel">Suggestions & Comments</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body d-flex justify-content-center align-items-center">
+          <!-- Google Form Embed -->
+          <iframe id="googleFormFrame" src="https://docs.google.com/forms/d/e/1FAIpQLSfXupyZzaqpYc17hslASoyKxJIWaUgpf2dkl7Lc7bEod119FQ/viewform?embedded=true" 
+                  width="100%" height="600px" frameborder="0" marginheight="0" marginwidth="0">
+            Loading…
+          </iframe>
         </div>
       </div>
     </div>
@@ -1171,7 +1174,7 @@
         '/Pages/safety_calendar.html': 'safetyCalendar',
         '/Pages/safety_handbook.html': 'safetyHandbook',
         '/Pages/safety_declaration.html': 'safetyDeclaration',
-        '/Pages/re_education_status.html': 'reEducationStatus'
+        '/Pages/safety_group_org.html': 'safetyGroupOrg'
       };
 
       // Handle iframe navigation
@@ -1229,7 +1232,7 @@
       });
 
       // Add click event listeners for "Coming Soon" tabs
-      const comingSoonTabs = ['#fourRKY', '#safetyDeclaration', '#reEducationStatus'];
+      const comingSoonTabs = ['#fourRKY'];
       
       comingSoonTabs.forEach(tabSelector => {
         const tabElement = document.querySelector(`a[href="${tabSelector}"]`);
@@ -1269,68 +1272,27 @@
       };
       document.getElementById('current-datetime').textContent = 
         now.toLocaleDateString('en-US', options);
+      
+      // Add the last modified date
+      const lastModified = new Date(document.lastModified);
+      const lastModOptions = { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric'
+      };
+      document.getElementById('last-updated').textContent = 
+        lastModified.toLocaleDateString('en-US', lastModOptions);
     }
 
     // Update time every second
     updateDateTime();
     setInterval(updateDateTime, 1000);
 
-    // Notification System
-    function toggleNotifications() {
-      const panel = document.getElementById('notification-panel');
-      panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-      
-      // Mark notifications as read when opened
-      const unreadItems = document.querySelectorAll('.notification-item.unread');
-      unreadItems.forEach(item => {
-        item.classList.remove('unread');
-      });
-      updateNotificationCount();
+    // Replace notification functions with suggestions modal functions
+    function showSuggestionsModal() {
+      const suggestionsModal = new bootstrap.Modal(document.getElementById('suggestionsModal'));
+      suggestionsModal.show();
     }
-
-    function updateNotificationCount() {
-      const unreadCount = document.querySelectorAll('.notification-item.unread').length;
-      const badge = document.getElementById('notification-count');
-      badge.textContent = unreadCount;
-      badge.style.display = unreadCount > 0 ? 'block' : 'none';
-    }
-
-    // Close notification panel when clicking outside
-    document.addEventListener('click', function(event) {
-      const panel = document.getElementById('notification-panel');
-      const bell = document.querySelector('.notification-bell');
-      if (!panel.contains(event.target) && !bell.contains(event.target)) {
-        panel.style.display = 'none';
-      }
-    });
-
-    // Function to add new notification
-    function addNotification(title, content, isUnread = true) {
-      const notificationList = document.querySelector('.notification-list');
-      const newNotification = document.createElement('div');
-      newNotification.className = `notification-item ${isUnread ? 'unread' : ''}`;
-      
-      // Get today's date in a readable format
-      const today = new Date().toLocaleDateString('en-US', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric'
-      });
-
-      newNotification.innerHTML = `
-        <div class="date">Today</div>
-        <div class="title">${title}</div>
-        <div class="content">${content}</div>
-      `;
-      notificationList.insertBefore(newNotification, notificationList.firstChild);
-      updateNotificationCount();
-    }
-
-    // Example of how to add a new notification programmatically
-    addNotification('Safety Handbook', 'added', true);
-    addNotification('Incident Monitoring', 'Contents was updated', true);
-    addNotification('KY Monitoring', 'Contents was added', true);
-    addNotification('Safety Cross', 'Contents was added', true);
 
     document.addEventListener('DOMContentLoaded', function() {
       // Add click event to all homepage cards
@@ -1340,7 +1302,7 @@
           const targetTabId = this.getAttribute('href');
           
           // List of tabs that are coming soon
-          const comingSoonTabs = ['#fourRKY', '#safetyDeclaration', '#reEducationStatus'];
+          const comingSoonTabs = ['#fourRKY'];
           
           // Check if the clicked tab is in the coming soon list
           if (comingSoonTabs.includes(targetTabId)) {

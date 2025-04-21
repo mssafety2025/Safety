@@ -7,28 +7,75 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
-        body {
+        /* Center and size content properly */
+        html, body {
             background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
         }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Make calendar take up more horizontal space */
+        #calendar {
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        #calendar table {
+            table-layout: fixed;
+            width: 100%;
+            margin: 10px auto;
+        }
+        
+        /* Keep cell sizing proportional */
+        #calendar table td, #calendar table th {
+            width: auto;
+            height: 75px; /* Reduced height slightly */
+            border: 1px solid #ffffff;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 20px; /* Reduced font size slightly */
+            padding: 0;
+        }
+        
         h1, h2 {
             color: #007bff;
             text-align: center;
         }
-        /* Table uses an 11-column grid in our example; adjust as needed */
-        table {
-            table-layout: fixed;
-            width: 440px; /* 11 columns * 40px each */
-            margin: 10px auto 40px auto; /* Added vertical margins */
-            padding: 20px 0; /* Added vertical padding */
+        
+        /* Add a wrapper class with defined width */
+        .content-wrapper {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-        /* Each cell is a square box (40px by 40px) */
-        th, td {
-            width: 40px;
-            height: 75px; /* Reduced from 88px to 40px */
+        
+        /* Target the calendar table specifically */
+        #calendar table {
+            table-layout: fixed;
+            width: 100%; /* Return to responsive width */
+            margin: 10px auto 40px auto;
+            padding: 10px 0;
+        }
+        /* Cell sizing */
+        #calendar table td, #calendar table th {
+            width: auto; /* Return to auto width */
+            height: 90px; /* Return to original height */
             border: 1px solid #ffffff;
             text-align: center;
             vertical-align: middle;
-            font-size: 16px; /* Reduced from 25px to 16px */
+            font-size: 25px; /* Return to original font size */
+            padding: 0;
         }
         td {
             cursor: pointer;
@@ -159,26 +206,107 @@
         h2 {
             font-size: 1.5rem;
         }
+        .light-green {
+            background-color: #e8f5e9 !important; /* Soft green background */
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Add a subtle leaf pattern for environment incidents */
+        .light-green::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30px;
+            height: 30px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%234caf50'%3E%3Cpath d='M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17 1.03.3 1.59.4L15 10.9c-.1-.56-.23-1.11-.4-1.59l2.3-.95-.66-1.89C17.83 5.9 14 8 17 8z'/%3E%3Cpath d='M17 12c-1.93 0-3.5-1.57-3.5-3.5S15.07 5 17 5s3.5 1.57 3.5 3.5S18.93 12 17 12zm0-5c-.83 0-1.5.67-1.5 1.5S16.17 10 17 10s1.5-.67 1.5-1.5S17.83 7 17 7z'/%3E%3C/svg%3E");
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.3;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+        }
+
+        /* Add a subtle animation for environment cells */
+        .light-green:hover {
+            background-color: #c8e6c9 !important;
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+        }
+
+        /* Add a glowing effect for environment cells */
+        .light-green::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            box-shadow: inset 0 0 10px rgba(76, 175, 80, 0.3);
+            border-radius: 2px;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            0% {
+                box-shadow: inset 0 0 10px rgba(76, 175, 80, 0.3);
+            }
+            100% {
+                box-shadow: inset 0 0 15px rgba(76, 175, 80, 0.5);
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="container my-3">
-        <!-- Month Navigation and Title Row -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <button class="btn btn-outline-primary" onclick="prevMonth()">Previous Month</button>
-            <h2 class="m-0" id="monthYearTitle"></h2>
-            <button class="btn btn-outline-primary" onclick="nextMonth()">Next Month</button>
-        </div>
-        
-        <!-- Calendar Container - Moved up -->
-        <div id="calendar" class="container mb-4"></div>
-        
-        <!-- Monthly Summary Card -->
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Monthly Summary</h5>
-                <div id="monthSummary" class="row">
-                    <!-- Summary will be injected here -->
+    <div class="content-wrapper">
+        <div class="container my-3">
+            <!-- Month Navigation and Title Row -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <button class="btn btn-outline-primary" onclick="prevMonth()">Previous Month</button>
+                <h2 class="m-0" id="monthYearTitle"></h2>
+                <button class="btn btn-outline-primary" onclick="nextMonth()">Next Month</button>
+            </div>
+            
+            <!-- Calendar Container - Moved up -->
+            <div id="calendar" class="container mb-4"></div>
+            
+            <!-- Monthly Summary Card -->
+            <div class="card mx-auto" style="max-width: 100%;">
+                <div class="card-body">
+                    <h5 class="card-title">Monthly Summary</h5>
+                    <div id="monthSummary" class="row row-cols-2 row-cols-md-3 g-2">
+                        <div class="col">
+                            <div class="p-2 border rounded text-center">
+                                <div class="fs-5 fw-bold">6</div>
+                                <div class="small text-muted">Total Incidents</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="p-2 border rounded text-center">
+                                <div class="fs-5 fw-bold">0</div>
+                                <div class="small text-muted">Current Safe Days</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="p-2 border rounded text-center">
+                                <div class="fs-5 fw-bold">12</div>
+                                <div class="small text-muted">Longest Safe Streak</div>
+                            </div>
+                        </div>
+                        <div class="col"> 
+                            <div class="p-2 border rounded text-center">
+                                <div class="fs-5 fw-bold">2</div>
+                                <div class="small text-muted">IN-REVIEW Incidents</div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="p-2 border rounded text-center">
+                                <div class="fs-5 fw-bold">3</div>
+                                <div class="small text-muted">CLOSED Incidents</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

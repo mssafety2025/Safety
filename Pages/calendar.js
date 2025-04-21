@@ -73,7 +73,7 @@ function renderCalendar() {
   // Calculate the number of days in the month.
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
   
-  // Create the table.
+  // Create the table with default responsive width
   const table = document.createElement("table");
   table.className = "table table-bordered";
   
@@ -206,8 +206,15 @@ function renderCalendar() {
           td.classList.add(stateClass);
           
           // Mark the cell if incident data exists.
-          if (getIncidentsForDay(day).length > 0) {
+          const dayIncidents = getIncidentsForDay(day);
+          const safetyOperationIncidents = dayIncidents.filter(incident => 
+            incident.type === 'Safety' || incident.type === 'Operation'
+          );
+          
+          if (safetyOperationIncidents.length > 0) {
             td.classList.add("has-data");
+          } else if (dayIncidents.length > 0) {
+            td.classList.add("light-green");
           }
         }
         
@@ -297,20 +304,64 @@ function nextMonth() {
   }, 300);
 }
 
+let safeDaysCounter = 0;
+let longestSafeStreak = 0;
+
+// Add this new function to get incidents for any specific date
+function getIncidentsForSpecificDate(date) {
+    const day = date.getDate();
+    const month = date.getMonth();
+    const year = date.getFullYear();
+    const formattedDate = monthAbbr[month] + "/" + (day < 10 ? "0" + day : day) + "/" + year;
+    return incidents.filter(incident => incident.date === formattedDate);
+}
+
 function updateMonthlySummary() {
     const incidents = getAllIncidentsForMonth(currentMonth, currentYear);
     const totalIncidents = incidents.length;
     
-    // Count incidents by status
-    const statusCounts = incidents.reduce((acc, incident) => {
+    // Filter incidents by type (Safety or Operation)
+    const safetyOperationIncidents = incidents.filter(incident => 
+        incident.type === 'Safety' || incident.type === 'Operation'
+    );
+    
+    // Count incidents by status for Safety/Operation only
+    const statusCounts = safetyOperationIncidents.reduce((acc, incident) => {
         acc[incident.status] = (acc[incident.status] || 0) + 1;
         return acc;
     }, {});
 
-    // Calculate days with/without incidents
-    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-    const daysWithIncidents = new Set(incidents.map(inc => new Date(inc.date).getDate())).size;
-    const safetyPercentage = ((daysInMonth - daysWithIncidents) / daysInMonth * 100).toFixed(1);
+    // Calculate current safe days streak - UPDATED to check all history
+    const today = new Date();
+    let checkDate = new Date(today);
+    let tempCounter = 0;
+
+    // Start from today and count backward
+    while (true) {
+        // Check if this date has safety or operation incidents
+        const checkIncidents = getIncidentsForSpecificDate(checkDate);
+        const hasSafetyOperation = checkIncidents.some(incident => 
+            incident.type === 'Safety' || incident.type === 'Operation'
+        );
+
+        if (hasSafetyOperation) {
+            // Found an incident, stop counting
+            break;
+        } else {
+            tempCounter++;
+        }
+
+        // Move to previous day
+        checkDate.setDate(checkDate.getDate() - 1);
+        
+        // Optional: Add a safety check to avoid infinite loops (e.g., stop after 1000 days)
+        if (tempCounter > 1000) break;
+    }
+
+    safeDaysCounter = tempCounter;
+    
+    // Calculate longest safe streak since January 2025
+    const longestStreak = calculateLongestSafeStreakSince2025();
 
     // Create status cards based on all possible statuses
     const statusCards = Object.entries(statusCounts).map(([status, count]) => `
@@ -336,8 +387,16 @@ function updateMonthlySummary() {
         <div class="col-md-3 mb-2">
             <div class="card bg-success text-white">
                 <div class="card-body text-center">
-                    <h3 class="card-title">${safetyPercentage}%</h3>
-                    <p class="card-text">Safe Days</p>
+                    <h3 class="card-title">${safeDaysCounter}</h3>
+                    <p class="card-text">Current Safe Days</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-2">
+            <div class="card bg-info text-white">
+                <div class="card-body text-center">
+                    <h3 class="card-title">${longestStreak}</h3>
+                    <p class="card-text">Longest Safe Streak (2025)</p>
                 </div>
             </div>
         </div>
@@ -345,6 +404,51 @@ function updateMonthlySummary() {
     `;
 
     document.getElementById('monthSummary').innerHTML = summaryHTML;
+}
+
+// Add this new function to calculate longest safe streak since January 2025
+function calculateLongestSafeStreakSince2025() {
+    const today = new Date();
+    // Start from January 1, 2025
+    let currentDate = new Date(2025, 0, 1);
+    let currentStreak = 0;
+    let longestStreak = 0;
+    
+    while (currentDate <= today) {
+        // Save the original month/year
+        const originalMonth = currentMonth;
+        const originalYear = currentYear;
+        
+        // Temporarily set current month/year to the date we're checking
+        currentMonth = currentDate.getMonth();
+        currentYear = currentDate.getFullYear();
+        
+        // Get incidents for this specific day
+        const dayIncidents = getIncidentsForDay(currentDate.getDate());
+        
+        // Reset current month/year back to original values
+        currentMonth = originalMonth;
+        currentYear = originalYear;
+        
+        // Check if this day has safety or operation incidents
+        const hasSafetyOperation = dayIncidents.some(incident => 
+            incident.type === 'Safety' || incident.type === 'Operation'
+        );
+
+        if (hasSafetyOperation) {
+            currentStreak = 0;
+        } else {
+            currentStreak++;
+            if (currentStreak > longestStreak) {
+                longestStreak = currentStreak;
+            }
+        }
+
+        // Move to next day
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+    
+    return longestStreak;
 }
 
 // Helper function to determine card color based on status

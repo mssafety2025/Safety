@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Core Objectives Monitoring</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+  <style>
+    body {
+      background-color: #f5f7fa;
+      background-image: linear-gradient(to bottom right, #f5f7fa, #e4e9f2);
+    }
+    .container-fluid {
+      max-width: 1600px;
+    }
+    .page-header {
+      background: linear-gradient(135deg, #2b5797 0%, #1b9aaa 100%);
+      color: white;
+      padding: 25px 0;
+      border-radius: 0 0 20px 20px;
+    }
+    .category-header {
+      background: linear-gradient(135deg, #2b5797 0%, #1b9aaa 100%);
+      color: white;
+      padding: 18px 25px;
+      border-radius: 8px;
+      margin: 25px 0 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .category-header::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -50%;
+      width: 200%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,0.15) 50%,
+        rgba(255,255,255,0) 100%
+      );
+      transform: skewX(-20deg);
+      animation: shine 3s infinite;
+    }
+    @keyframes shine {
+      0% { left: -50%; }
+      100% { left: 150%; }
+    }
+    .category-id {
+      background: #2b5797;
+      color: white;
+    }
+    .program-row {
+      margin-left: 20px;
+      border-bottom: 1px solid #eee;
+      padding: 8px 0;
+    }
+    .month-selector {
+      margin-bottom: 20px;
+    }
+    .month-btn {
+      transition: all 0.2s ease;
+      min-width: 50px;
+    }
+    .month-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .month-btn.active {
+      box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+      font-weight: bold;
+    }
+    .quick-links-card {
+      background: linear-gradient(to right, #f0f4ff, #ffffff);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+    .quick-links-card:hover {
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+    .stats-title {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #3a4a66;
+      font-weight: 600;
+    }
+    .quick-link {
+      min-width: 160px;
+      margin-bottom: 10px;
+      transition: all 0.2s ease;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .quick-link:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    .table-responsive {
+      overflow-x: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      margin-bottom: 30px;
+      background-color: white;
+    }
+    .table {
+      margin-bottom: 0;
+    }
+    .table th {
+      background: #f8f9fa;
+      color: #2b5797;
+      text-align: center;
+      vertical-align: middle;
+    }
+    .table td {
+      color: #4a6572;
+      text-align: center;
+      vertical-align: middle;
+    }
+    .table td:first-child {
+      text-align: left;
+    }
+    .text-success { color: #28a745 !important; }
+    .text-danger { color: #dc3545 !important; }
+    .text-muted { color: #6c757d !important; }
+    .category-section {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .month-indicator {
+      background: linear-gradient(135deg, #4a6bdf 0%, #3451b2 100%);
+      color: white;
+      padding: 8px 15px;
+      border-radius: 30px;
+      font-weight: bold;
+      display: inline-block;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      background: linear-gradient(to bottom right, #ffffff, #f8faff);
+    }
+    .card-title {
+      color: #3a4a66;
+      font-weight: 600;
+    }
+    .card-body {
+      padding: 1.5rem;
+    }
+    .highlight-cell {
+      background-color: #f1faee !important;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="page-header">
+    <div class="container-fluid">
+      <h1 class="text-center mb-0">Core Objectives Monitoring</h1>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="quick-links-card">
+      <h2 class="stats-title">Quick Access Links</h2>
+      <div class="d-flex flex-wrap gap-3 justify-content-center">
+        <a href="ky_monitoring.html" class="btn btn-primary quick-link" target="_blank">
+          <i class="bi bi-graph-up-arrow"></i> KY Monitoring
+        </a>
+        <a href="4rky_monitoring.html" class="btn btn-success quick-link" target="_blank">
+          <i class="bi bi-graph-up"></i> 4RKY Monitoring
+        </a>
+        <a href="safety_audit_monitoring.html" class="btn btn-info quick-link" target="_blank">
+          <i class="bi bi-clipboard-check"></i> Safety Audit
+        </a>
+        <a href="safety_declaration.html" class="btn btn-warning quick-link" target="_blank">
+          <i class="bi bi-file-earmark-check"></i> Safety Declaration
+        </a>
+      </div>
+    </div>
+    
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title mb-3">Select Month to View</h5>
+        <div class="month-selector d-flex flex-wrap gap-2">
+          <button class="btn btn-outline-primary month-btn" data-month="Jan">Jan</button>
+          <button class="btn btn-outline-primary month-btn" data-month="Feb">Feb</button>
+          <button class="btn btn-outline-primary month-btn" data-month="Mar">Mar</button>
+          <button class="btn btn-outline-primary month-btn" data-month="Apr">Apr</button>
+          <button class="btn btn-outline-primary month-btn" data-month="May">May</button>
+          <button class="btn btn-outline-primary month-btn" data-month="Jun">Jun</button>
+          <button class="btn btn-outline-primary month-btn" data-month="Jul">Jul</button>
+          <button class="btn btn-outline-primary month-btn" data-month="Aug">Aug</button>
+          <button class="btn btn-outline-primary month-btn" data-month="Sep">Sep</button>
+          <button class="btn btn-outline-primary month-btn" data-month="Oct">Oct</button>
+          <button class="btn btn-outline-primary month-btn" data-month="Nov">Nov</button>
+          <button class="btn btn-outline-primary month-btn" data-month="Dec">Dec</button>
+          <button class="btn btn-primary month-btn" data-month="Actual">Actual</button>
+          <button class="btn btn-info month-btn" data-month="Summary">Summary</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="text-center mb-4">
+      <div class="month-indicator">
+        <i class="bi bi-calendar-check me-2"></i> Viewing: <span id="current-month">Actual</span> Data
+      </div>
+    </div>
+    
+    <div class="objectives-container">
+      <!-- Data will be loaded here dynamically -->
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="core.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Default to showing Actual data
+      let currentMonth = 'Actual';
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      
+      // Group data by Functional Objectives Category
+      function groupDataByCategory(data) {
+        const groupedData = {};
+        
+        data.forEach(item => {
+          const category = item["Functional Objectives Category"];
+          if (!groupedData[category]) {
+            groupedData[category] = [];
+          }
+          groupedData[category].push(item);
+        });
+        
+        return groupedData;
+      }
+      
+      // Calculate YTD value for an item
+      function calculateYTD(item) {
+        // For percentage KPIs, we'll take the average of available months
+        if (item.KPI.includes('%')) {
+          let sum = 0;
+          let count = 0;
+          
+          months.forEach(month => {
+            if (item[month] && item[month] !== '' && item[month] !== '-') {
+              const value = parseFloat(item[month].replace('%', ''));
+              if (!isNaN(value)) {
+                sum += value;
+                count++;
+              }
+            }
+          });
+          
+          return count > 0 ? (sum / count).toFixed(1) + '%' : '-';
+        } 
+        // For numeric KPIs, we'll sum the values
+        else if (item.KPI.includes('No.')) {
+          let sum = 0;
+          let hasData = false;
+          
+          months.forEach(month => {
+            if (item[month] && item[month] !== '' && item[month] !== '-') {
+              // Handle special case for fractions like "4/9"
+              if (item[month].includes('/')) {
+                const parts = item[month].split('/');
+                const numerator = parseInt(parts[0]);
+                if (!isNaN(numerator)) {
+                  sum += numerator;
+                  hasData = true;
+                }
+              } else {
+                const value = parseInt(item[month]);
+                if (!isNaN(value)) {
+                  sum += value;
+                  hasData = true;
+                }
+              }
+            }
+          });
+          
+          return hasData ? sum.toString() : '0';
+        }
+        
+        return '-';
+      }
+      
+      // Render the objectives data
+      function renderObjectives(month) {
+        const container = document.querySelector('.objectives-container');
+        container.innerHTML = '';
+        
+        const groupedData = groupDataByCategory(data);
+        
+        // If Summary view is selected, render all months
+        if (month === 'Summary') {
+          renderSummaryView(groupedData);
+          return;
+        }
+        
+        // Create tables for each category
+        let categoryIndex = 0;
+        for (const category in groupedData) {
+          const categoryDiv = document.createElement('div');
+          categoryDiv.className = 'category-section mb-4';
+          categoryDiv.style.animationDelay = (categoryIndex * 0.1) + 's';
+          
+          // Modified category header creation
+          const categoryHeader = document.createElement('div');
+          categoryHeader.className = 'category-header';
+          categoryHeader.textContent = category;
+          categoryDiv.appendChild(categoryHeader);
+          
+          // Create table for this category
+          const tableResponsive = document.createElement('div');
+          tableResponsive.className = 'table-responsive';
+          
+          const table = document.createElement('table');
+          table.className = 'table table-bordered table-hover';
+          
+          // Table header
+          const thead = document.createElement('thead');
+          thead.innerHTML = `
+            <tr class="table-light">
+              <th style="width: 40%;">Program</th>
+              <th style="width: 20%;">KPI</th>
+              <th style="width: 13%;">Target</th>
+              <th style="width: 13%;">${month}</th>
+              <th style="width: 14%;">YTD</th>
+            </tr>
+          `;
+          table.appendChild(thead);
+          
+          // Table body
+          const tbody = document.createElement('tbody');
+          
+          groupedData[category].forEach((item, index) => {
+            const row = document.createElement('tr');
+            row.style.transition = `all 0.3s ease ${index * 0.05}s`;
+            
+            // Get the value for the selected month
+            const monthValue = item[month];
+            
+            // Calculate YTD
+            const ytdValue = calculateYTD(item);
+            
+            // Determine if target is met for color coding
+            let targetMet = false;
+            
+            if (monthValue && monthValue !== '') {
+              if (item.KPI.includes('%')) {
+                const targetValue = parseFloat(item.Target.replace('%', '').replace('>', ''));
+                const actualValue = parseFloat(monthValue.replace('%', ''));
+                targetMet = !isNaN(actualValue) && actualValue >= targetValue;
+              } else if (item.KPI.includes('No.')) {
+                const targetValue = parseInt(item.Target);
+                let actualValue = 0;
+                
+                // Handle fraction values like "4/9"
+                if (monthValue.includes('/')) {
+                  actualValue = parseInt(monthValue.split('/')[0]);
+                } else {
+                  actualValue = parseInt(monthValue);
+                }
+                
+                targetMet = !isNaN(actualValue) && actualValue >= targetValue;
+              }
+            }
+            
+            // Update cell class assignment
+            const monthClass = targetMet ? 'text-success' : 
+                              (monthValue && monthValue !== '' ? 'text-danger' : 'text-muted');
+            
+            // Update row creation to center-align all cells
+            row.innerHTML = `
+              <td>${item.Program}</td>
+              <td class="text-center">${item.KPI}</td>
+              <td class="text-center">${item.Target}</td>
+              <td class="text-center highlight-cell ${monthClass}">${monthValue || '-'}</td>
+              <td class="text-center">${ytdValue}</td>
+            `;
+            
+            tbody.appendChild(row);
+          });
+          
+          table.appendChild(tbody);
+          tableResponsive.appendChild(table);
+          categoryDiv.appendChild(tableResponsive);
+          container.appendChild(categoryDiv);
+          
+          categoryIndex++;
+        }
+        
+        // Update current month display
+        document.getElementById('current-month').textContent = month;
+      }
+      
+      // Render summary view with all months
+      function renderSummaryView(groupedData) {
+        const container = document.querySelector('.objectives-container');
+        
+        // Update current month display
+        document.getElementById('current-month').textContent = 'Summary (All Months)';
+        
+        // Create tables for each category
+        let categoryIndex = 0;
+        for (const category in groupedData) {
+          const categoryDiv = document.createElement('div');
+          categoryDiv.className = 'category-section mb-4';
+          categoryDiv.style.animationDelay = (categoryIndex * 0.1) + 's';
+          
+          // Modified category header creation
+          const categoryHeader = document.createElement('div');
+          categoryHeader.className = 'category-header';
+          categoryHeader.textContent = category;
+          categoryDiv.appendChild(categoryHeader);
+          
+          // Create table for this category
+          const tableResponsive = document.createElement('div');
+          tableResponsive.className = 'table-responsive';
+          
+          const table = document.createElement('table');
+          table.className = 'table table-bordered table-hover';
+          
+          // Table header with all months
+          const thead = document.createElement('thead');
+          const headerRow = document.createElement('tr');
+          headerRow.className = 'table-light';
+          
+          headerRow.innerHTML = `
+            <th style="width: 20%;">Program</th>
+            <th style="width: 10%;">KPI</th>
+            <th style="width: 8%;">Target</th>
+            <th style="width: 7%;">YTD</th>
+            <th style="width: 5%;">Jan</th>
+            <th style="width: 5%;">Feb</th>
+            <th style="width: 5%;">Mar</th>
+            <th style="width: 5%;">Apr</th>
+            <th style="width: 5%;">May</th>
+            <th style="width: 5%;">Jun</th>
+            <th style="width: 5%;">Jul</th>
+            <th style="width: 5%;">Aug</th>
+            <th style="width: 5%;">Sep</th>
+            <th style="width: 5%;">Oct</th>
+            <th style="width: 5%;">Nov</th>
+            <th style="width: 5%;">Dec</th>
+          `;
+          
+          thead.appendChild(headerRow);
+          table.appendChild(thead);
+          
+          // Table body
+          const tbody = document.createElement('tbody');
+          
+          groupedData[category].forEach((item, index) => {
+            const row = document.createElement('tr');
+            row.style.transition = `all 0.3s ease ${index * 0.05}s`;
+            
+            // Calculate YTD
+            const ytdValue = calculateYTD(item);
+            
+            // Create cell for program, KPI, target and YTD
+            let rowHTML = `
+              <td>${item.Program}</td>
+              <td class="text-center">${item.KPI}</td>
+              <td class="text-center">${item.Target}</td>
+              <td class="text-center highlight-cell">${ytdValue}</td>
+            `;
+            
+            // Add cells for each month
+            months.forEach(month => {
+              const monthValue = item[month] || '-';
+              rowHTML += `<td class="text-center">${monthValue}</td>`;
+            });
+            
+            row.innerHTML = rowHTML;
+            tbody.appendChild(row);
+          });
+          
+          table.appendChild(tbody);
+          tableResponsive.appendChild(table);
+          categoryDiv.appendChild(tableResponsive);
+          container.appendChild(categoryDiv);
+          
+          categoryIndex++;
+        }
+      }
+      
+      // Initial render
+      renderObjectives(currentMonth);
+      
+      // Add event listeners to month buttons
+      const monthButtons = document.querySelectorAll('.month-btn');
+      monthButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // Remove active class from all buttons
+          monthButtons.forEach(btn => btn.classList.remove('active'));
+          
+          // Add active class to clicked button
+          this.classList.add('active');
+          
+          // Update current month and re-render
+          currentMonth = this.getAttribute('data-month');
+          renderObjectives(currentMonth);
+        });
+      });
+      
+      // Set Actual button as active by default
+      document.querySelector('[data-month="Actual"]').classList.add('active');
+    });
+  </script>
+</body>
+</html>

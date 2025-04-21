@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Safety Audit Monitoring</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MS Section Safety Audit Monitoring</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
     <style>
         :root {
             --primary-color: #2A5C82;
-            --secondary-color: #5BA4E6;
+            --secondary-color: #46994a;
             --accent-color: #FF6B6B;
             --text-color: #2D3436;
         }
@@ -35,7 +35,8 @@
             flex: 1;
             max-width: 100%;
             padding: 0 1.5rem;
-            height: calc(100vh - 3rem);
+            height: auto;
+            max-height: 100vh;
             overflow-y: auto;
         }
 
@@ -98,32 +99,25 @@
         }
 
         .chart-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.5rem;
-            margin: 1rem 0;
-            flex: 1;
-            min-height: 400px;
+            position: relative;
+            height: 250px;
+            width: 100%;
         }
 
         .chart {
-            background: rgba(255, 255, 255, 0.9);
+            background: white;
             border-radius: 1rem;
-            padding: 1.2rem;
-            height: 100%;
-            min-height: 300px;
-            display: flex;
-            flex-direction: column;
-            animation: fadeIn 0.8s ease-in-out;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
         }
 
-        .chart canvas {
-            flex: 1;
-            min-height: 250px;
+        .chart:hover {
+            transform: translateY(-5px);
         }
 
         .chart h3 {
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             color: var(--primary-color);
             margin-bottom: 1.5rem;
             text-align: center;
@@ -197,11 +191,10 @@
             
             .chart-container {
                 grid-template-columns: 1fr;
-                min-height: auto;
             }
             
-            .chart {
-                min-height: 250px;
+            .analysis-card {
+                margin-bottom: 1rem;
             }
         }
 
@@ -210,7 +203,7 @@
             border-radius: 1rem;
             padding: 1.5rem;
             text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             transition: transform 0.3s ease;
         }
 
@@ -279,22 +272,6 @@
         .table thead th:hover {
             background-color: var(--primary-color);
             opacity: 0.9;
-        }
-
-        .chart-container {
-            position: relative;
-        }
-
-        .chart-container::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
-            pointer-events: none;
-            border-radius: 1rem;
         }
 
         .calendar-container {
@@ -471,75 +448,289 @@
                 padding: 0.6rem;
             }
         }
+
+        /* Responsive adjustments for charts */
+        @media (max-width: 992px) {
+            .chart-container {
+                grid-template-columns: 1fr;
+                max-height: none;
+            }
+            
+            .chart {
+                height: 350px;
+                margin-bottom: 1.5rem;
+            }
+        }
+
+        .metric-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 0.5rem;
+        }
+        
+        .metric-card i {
+            font-size: 1.5rem;
+            color: #2A5C82;
+        }
+        
+        .metric-card h6 {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        
+        .metric-card p {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #2A5C82;
+        }
+        
+        .card {
+            border: 1px solid rgba(0,0,0,0.125);
+            border-radius: 0.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-title {
+            color: #2A5C82;
+            margin-bottom: 1rem;
+        }
+
+        .header-container {
+            background: linear-gradient(45deg, #252525, #caccc3);
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-title {
+            color: white;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-title:hover {
+            transform: scale(1.02);
+            text-shadow: 0 0 15px rgba(255,255,255,0.5);
+        }
+
+        .completion-cell {
+            font-weight: 600;
+            border-radius: 15px;
+            padding: 2px 8px;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .completion-low {
+            background-color: #ffe0e0;
+            color: #dc3545;
+        }
+
+        .completion-high {
+            background-color: #e0ffe0;
+            color: #28a745;
+        }
+
+        .filter-btn-group .btn {
+            margin: 3px;
+            border-radius: 20px;
+            min-width: 80px;
+        }
+
+        .chart-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .chart-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .table thead {
+            background-color: #2A5C82;
+            color: white;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        canvas:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+        
+        .chartjs-render-monitor {
+            border-radius: 8px;
+            transition: transform 0.2s ease;
+        }
+
+        .chartjs-render-monitor:hover {
+            transform: scale(1.02);
+        }
+
+        .btn-outline-brown {
+            color: #8B4513;
+            border-color: #8B4513;
+        }
+        .btn-outline-brown:hover {
+            color: #fff;
+            background-color: #8B4513;
+            border-color: #8B4513;
+        }
+
+        .badge {
+            padding: 0.5em 0.75em;
+            border-radius: 15px;
+            font-weight: 500;
+        }
+
+        .audit-link {
+            color: #2A5C82;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .audit-link:hover {
+            color: #1a3a52;
+            text-decoration: underline;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <div class="container-fluid">
-        
-        <div class="table-container">
-            <h3>Safety Audit Data</h3>
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <input type="text" id="searchTitle" placeholder="Search by Title" class="form-control">
-                </div>
-                <div class="col-md-4">
-                    <select id="filterGroup" class="form-select">
-                        <option value="">All Groups</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <select id="filterYear" class="form-select">
-                        <option value="">All Years</option>
-                    </select>
-                </div>
-            </div>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>No.</th>
-                        <th>Group</th>
-                        <th>Audit Type</th>
-                        <th>Audit Date</th>
-                        <th>Audit Title</th>
-                        <th>No. Observation</th>
-                        <th>Rectified items</th>
-                        <th>% Completion</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Data rows will be inserted here -->
-                </tbody>
-            </table>
+    <div class="header-container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <a href="../Safety.html" class="btn btn-light">
+                <i class="bi bi-house-door"></i> Home
+            </a>
+            <h1 class="header-title mb-0" id="mainTitle">
+                MS SECTION SAFETY AUDIT MONITORING
+            </h1>
+            <div style="width: 100px"></div>
         </div>
 
-        <div class="table-container">
-            <h3>Audit Type Summary (Grouped by Year)</h3>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Year</th>
-                        <th>Audit Type</th>
-                        <th>Count</th>
-                    </tr>
-                </thead>
-                <tbody id="auditTypeSummary">
-                    <!-- Audit type summary will be populated here -->
-                </tbody>
-            </table>
+        <!-- Filters -->
+        <div class="row g-2 filter-btn-group">
+            <div class="col-md-4">
+                <div class="d-flex flex-wrap">
+                    <button class="btn btn-outline-primary active" data-group="all">All Groups</button>
+                    <button class="btn btn-outline-primary" data-group="1">Group 1</button>
+                    <button class="btn btn-outline-danger" data-group="2">Group 2</button>
+                    <button class="btn btn-outline-warning" data-group="3">Group 3</button>
+                    <button class="btn btn-outline-success" data-group="4">Group 4</button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="d-flex flex-wrap">
+                    <button class="btn btn-outline-light active" data-year="all">All Years</button>
+                    <button class="btn btn-outline-light" data-year="2024">2024</button>
+                    <button class="btn btn-outline-light" data-year="2025">2025</button>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="d-flex flex-wrap">
+                    <button class="btn btn-outline-light active" data-area="all">All Areas</button>
+                    <button class="btn btn-outline-warning" data-area="H2S">H2S</button>
+                    <button class="btn btn-outline-success" data-area="MS">MS</button>
+                    <button class="btn btn-outline-secondary" data-area="LS">LS</button>
+                    <button class="btn btn-outline-brown" data-area="FNTRL">FNTRL</button>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <div class="chart-container">
-            <div class="chart">
-                <h3>Group Audit Completion Chart</h3>
-                <canvas id="auditChart"></canvas>
+    <div class="container-fluid py-4">
+        <!-- Tab Navigation -->
+        <ul class="nav nav-tabs mb-4" id="mainTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="table-tab" data-bs-toggle="tab" 
+                        data-bs-target="#table-tab-pane" type="button" role="tab" 
+                        aria-controls="table-tab-pane" aria-selected="true">
+                    Table View
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="charts-tab" data-bs-toggle="tab" 
+                        data-bs-target="#charts-tab-pane" type="button" role="tab" 
+                        aria-controls="charts-tab-pane" aria-selected="false">
+                    Summary Charts
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+            <!-- Table Tab -->
+            <div class="tab-pane fade show active" id="table-tab-pane" role="tabpanel" 
+                 aria-labelledby="table-tab" tabindex="0">
+                <div class="card chart-card mb-4">
+                    <div class="card-body table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Group</th>
+                                    <th>Area</th>
+                                    <th>Audit Type</th>
+                                    <th>Date</th>
+                                    <th>Title</th>
+                                    <th>Observations</th>
+                                    <th>Rectified</th>
+                                    <th>Completion</th>
+                                </tr>
+                            </thead>
+                            <tbody id="auditTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <div class="chart">
-                <h3>Audit Count by Group</h3>
-                <canvas id="auditCountChart" onclick="showGroupModal()"></canvas>
-            </div>
-            <div class="chart">
-                <h3>Audit Count by Year</h3>
-                <canvas id="auditYearChart"></canvas>
+
+            <!-- Charts Tab -->
+            <div class="tab-pane fade" id="charts-tab-pane" role="tabpanel" 
+                 aria-labelledby="charts-tab" tabindex="0">
+                <div class="row g-4">
+                    <div class="col-lg-4">
+                        <div class="card chart-card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title text-center mb-4">Audit Count per Group</h5>
+                                <canvas id="groupChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card chart-card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title text-center mb-4">Audit Type Distribution</h5>
+                                <canvas id="typeChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card chart-card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title text-center mb-4">Area Distribution</h5>
+                                <canvas id="areaChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -563,664 +754,231 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="safetyaudit.js"></script>
-    <script src="calendar.js"></script>
     <script>
-        // Enhanced table population with sorting and filtering
-        const tableBody = document.querySelector('tbody');
-        const auditTypeSummary = document.getElementById('auditTypeSummary');
-        const auditTypeCounts = {};
+        let groupChart, typeChart, areaChart;
+        const chartColors = {
+            groups: ['#2A5C82', '#DC3545', '#FFC107', '#28A745'],
+            types: ['#2A5C82', '#5BA4E6', '#FF6B6B'],
+            areas: {
+                'H2S': '#FFC107',    // Yellow
+                'MS': '#28A745',     // Green
+                'LS': '#6C757D',     // Grey
+                'FNTRL': '#8B4513'   // Brown
+            }
+        };
 
-        // Sort data by date initially
-        const sortedData = [...data].sort((a, b) => new Date(b["Audit Date"]) - new Date(a["Audit Date"]));
+        function renderTable(data) {
+            const tbody = document.getElementById('auditTableBody');
+            tbody.innerHTML = data.sort((a,b) => new Date(b['Audit Date']) - new Date(a['Audit Date']))
+                .map(item => `
+                    <tr>
+                        <td>${item['No.']}</td>
+                        <td>
+                            <span class="badge" style="background-color: ${getGroupColor(item.Group)}">
+                                Group ${item.Group}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge" style="background-color: ${getAreaColor(item.Area)}">
+                                ${item.Area}
+                            </span>
+                        </td>
+                        <td>${item['Audit Type']}</td>
+                        <td>${new Date(item['Audit Date']).toLocaleDateString()}</td>
+                        <td>
+                            ${item.Links ? 
+                                `<a href="#" 
+                                    class="audit-link" 
+                                    data-pdf="${encodeURIComponent(item.Links)}">
+                                    ${item['Audit Title']}
+                                </a>` : 
+                                item['Audit Title']}
+                        </td>
+                        <td>${item['No. Observation']}</td>
+                        <td>${item['Rectified items']}</td>
+                        <td>
+                            <span class="completion-cell ${parseInt(item['% Completion']) < 100 ? 
+                                'completion-low' : 'completion-high'}">
+                                ${item['% Completion']}
+                            </span>
+                        </td>
+                    </tr>
+                `).join('');
 
-        sortedData.forEach(audit => {
-            // Populate the main audit data table
-            const row = document.createElement('tr');
-            const completion = parseFloat(audit["% Completion"]);
-            const completionClass = completion < 50 ? 'highlight-critical' : 
-                                  completion < 75 ? 'highlight-warning' : 
-                                  completion >= 100 ? 'highlight-success' : '';
+            // Add click handlers to all audit links
+            document.querySelectorAll('.audit-link[data-pdf]').forEach(link => {
+                link.addEventListener('click', handlePdfClick);
+            });
+        }
+
+        function updateCharts(data) {
+            // Destroy existing charts
+            [groupChart, typeChart, areaChart].forEach(chart => chart?.destroy());
+
+            // Simplified Group Chart (Vertical Bar)
+            groupChart = new Chart(document.getElementById('groupChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Group 1', 'Group 2', 'Group 3', 'Group 4'],
+                    datasets: [{
+                        label: 'Audit Count',
+                        data: [1,2,3,4].map(g => data.filter(d => d.Group == g).length),
+                        backgroundColor: chartColors.groups
+                    }]
+                }
+            });
+
+            // Simplified Type Chart (Doughnut)
+            typeChart = new Chart(document.getElementById('typeChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['ISA-THPAL', 'ISA-CTS', 'Safety Cross'],
+                    datasets: [{
+                        data: ['ISA-THPAL', 'ISA-CTS', 'Safety Cross'].map(t => 
+                            data.filter(d => d['Audit Type'] === t).length),
+                        backgroundColor: chartColors.types
+                    }]
+                }
+            });
+
+            // Simplified Area Chart (Pie)
+            areaChart = new Chart(document.getElementById('areaChart'), {
+                type: 'pie',
+                data: {
+                    labels: ['H2S', 'MS', 'LS', 'FNTRL'],
+                    datasets: [{
+                        data: ['H2S', 'MS', 'LS', 'FNTRL'].map(a => 
+                            data.filter(d => d.Area === a).length),
+                        backgroundColor: [
+                            chartColors.areas.H2S,
+                            chartColors.areas.MS,
+                            chartColors.areas.LS,
+                            chartColors.areas.FNTRL
+                        ]
+                    }]
+                }
+            });
+        }
+
+        function applyFilters() {
+            const activeGroup = document.querySelector('[data-group].active').dataset.group;
+            const activeYear = document.querySelector('[data-year].active').dataset.year;
+            const activeArea = document.querySelector('[data-area].active').dataset.area;
+
+            const filtered = safetyAuditData.filter(item => {
+                const groupMatch = activeGroup === 'all' || item.Group === activeGroup;
+                const yearMatch = activeYear === 'all' || 
+                    new Date(item['Audit Date']).getFullYear().toString() === activeYear;
+                const areaMatch = activeArea === 'all' || item.Area === activeArea;
+                return groupMatch && yearMatch && areaMatch;
+            });
+
+            renderTable(filtered);
+            updateCharts(filtered);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.filter-btn-group .btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    this.parentElement.querySelectorAll('.btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    applyFilters();
+                });
+            });
+
+            // Initialize charts when charts tab is shown
+            const chartsTab = document.getElementById('charts-tab');
+            chartsTab.addEventListener('shown.bs.tab', () => {
+                updateCharts(safetyAuditData);
+            });
+
+            // Initial render
+            renderTable(safetyAuditData);
+        });
+
+        // Helper functions for colors
+        function getGroupColor(group) {
+            const colors = {
+                '1': '#2A5C82', // Blue
+                '2': '#DC3545', // Red
+                '3': '#FFC107', // Yellow
+                '4': '#28A745'  // Green
+            };
+            return colors[group] || '#6C757D'; // Default to grey
+        }
+
+        function getAreaColor(area) {
+            const colors = {
+                'H2S': '#FFC107',  // Yellow
+                'MS': '#28A745',   // Green
+                'LS': '#6C757D',   // Grey
+                'FNTRL': '#8B4513' // Brown
+            };
+            return colors[area] || '#6C757D'; // Default to grey
+        }
+
+        function handlePdfClick(e) {
+            e.preventDefault();
+            const uncPath = decodeURIComponent(this.dataset.pdf).replace(/\\/g, '/');
+            const fileUri = `file:///${uncPath.replace(/^\\\\/g, '////')}`;
             
-            row.innerHTML = `
-                <td>${audit["No."]}</td>
-                <td>${audit["Group"]}</td>
-                <td>${audit["Audit Type"]}</td>
-                <td>${formatDate(audit["Audit Date"])}</td>
-                <td>${audit["Audit Title"]}</td>
-                <td>${audit["No. Observation"]}</td>
-                <td>${audit["Rectified items"]}</td>
-                <td class="${completionClass}">${audit["% Completion"]}</td>
+            // Create hidden container for PDF viewing
+            const viewer = document.createElement('div');
+            viewer.style.position = 'fixed';
+            viewer.style.top = '0';
+            viewer.style.left = '0';
+            viewer.style.width = '100%';
+            viewer.style.height = '100%';
+            viewer.style.background = 'rgba(0,0,0,0.8)';
+            viewer.style.zIndex = '9999';
+            viewer.innerHTML = `
+                <iframe 
+                    src="${fileUri}" 
+                    style="width:90%; height:90%; margin:5% auto; display:block; border:none"
+                ></iframe>
+                <button 
+                    style="position:absolute; top:20px; right:20px; padding:10px 20px; background:#dc3545; color:white; border:none; border-radius:5px"
+                    onclick="this.parentElement.remove()">
+                    Close
+                </button>
             `;
-            tableBody.appendChild(row);
-
-            // Count audits by type and year
-            const year = new Date(audit["Audit Date"]).getFullYear();
-            const type = audit["Audit Type"];
-            const key = `${year}-${type}`;
-            auditTypeCounts[key] = (auditTypeCounts[key] || 0) + 1;
-        });
-
-        // Enhanced audit type summary with percentage calculation
-        const totalAudits = Object.values(auditTypeCounts).reduce((a, b) => a + b, 0);
-        const summaryData = [];
-        
-        for (const [key, count] of Object.entries(auditTypeCounts)) {
-            const [year, type] = key.split('-');
-            const percentage = ((count / totalAudits) * 100).toFixed(1);
-            summaryData.push({ year, type, count, percentage });
-        }
-
-        // Sort summary by year and count
-        summaryData.sort((a, b) => b.year - a.year || b.count - a.count);
-
-        summaryData.forEach(item => {
-            const summaryRow = document.createElement('tr');
-            summaryRow.innerHTML = `
-                <td>${item.year}</td>
-                <td>${item.type}</td>
-                <td>${item.count} (${item.percentage}%)</td>
-            `;
-            auditTypeSummary.appendChild(summaryRow);
-        });
-
-        // Enhanced Group Audit Completion Chart
-        const auditChartCtx = document.getElementById('auditChart').getContext('2d');
-        const groupData = {};
-        
-        data.forEach(audit => {
-            if (!groupData[audit.Group]) {
-                groupData[audit.Group] = {
-                    completions: [],
-                    average: 0
-                };
-            }
-            if (audit["% Completion"]) {
-                groupData[audit.Group].completions.push(parseFloat(audit["% Completion"]));
-            }
-        });
-
-        // Calculate averages
-        Object.keys(groupData).forEach(group => {
-            const completions = groupData[group].completions;
-            groupData[group].average = completions.reduce((a, b) => a + b, 0) / completions.length;
-        });
-
-        const auditChart = new Chart(auditChartCtx, {
-            type: 'bar',
-            data: {
-                labels: Object.keys(groupData).sort(),
-                datasets: [{
-                    label: 'Average Completion (%)',
-                    data: Object.values(groupData).map(g => g.average.toFixed(1)),
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.7)',   // Pink
-                        'rgba(54, 162, 235, 0.7)',   // Blue
-                        'rgba(255, 206, 86, 0.7)',   // Yellow
-                        'rgba(75, 192, 192, 0.7)',   // Teal
-                        'rgba(153, 102, 255, 0.7)',  // Purple
-                        'rgba(255, 159, 64, 0.7)',   // Orange
-                        'rgba(46, 204, 113, 0.7)'    // Green
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top'
-                    },
-                    title: {
-                        display: true,
-                        text: 'Average Completion Rate by Group',
-                        font: { size: 16 }
-                    },
-                    datalabels: {
-                        anchor: 'end',
-                        align: 'top',
-                        formatter: (value) => value + '%',
-                        font: { weight: 'bold' }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        title: {
-                            display: true,
-                            text: 'Completion Percentage (%)',
-                            font: { weight: 'bold' }
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Groups',
-                            font: { weight: 'bold' }
-                        }
-                    }
-                }
-            }
-        });
-
-        // Enhanced Audit Count by Year Chart with Trend Line
-        const auditYearCtx = document.getElementById('auditYearChart').getContext('2d');
-        const yearCounts = {};
-        data.forEach(audit => {
-            const year = new Date(audit["Audit Date"]).getFullYear();
-            yearCounts[year] = (yearCounts[year] || 0) + 1;
-        });
-
-        const years = Object.keys(yearCounts).sort();
-        const counts = years.map(year => yearCounts[year]);
-
-        const auditYearChart = new Chart(auditYearCtx, {
-            type: 'bar',
-            data: {
-                labels: years,
-                datasets: [{
-                    label: 'Number of Audits',
-                    data: counts,
-                    backgroundColor: 'rgba(75, 192, 192, 0.7)',  // Teal
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top'
-                    },
-                    title: {
-                        display: true,
-                        text: 'Yearly Audit Distribution',
-                        font: { size: 16 }
-                    },
-                    datalabels: {
-                        anchor: 'end',
-                        align: 'top',
-                        formatter: (value) => value,
-                        font: { weight: 'bold' }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Number of Audits',
-                            font: { weight: 'bold' }
-                        }
-                    },
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Year',
-                            font: { weight: 'bold' }
-                        }
-                    }
-                }
-            }
-        });
-
-        // Helper function to format dates
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric'
-            });
-        }
-
-        // Create the group audit completion chart
-        const auditCountCtx = document.getElementById('auditCountChart').getContext('2d');
-        const groupCounts = {};
-        data.forEach(audit => {
-            groupCounts[audit.Group] = (groupCounts[audit.Group] || 0) + 1;
-        });
-
-        const auditCountChart = new Chart(auditCountCtx, {
-            type: 'pie',
-            data: {
-                labels: Object.keys(groupCounts),
-                datasets: [{
-                    label: 'Number of Audits',
-                    data: Object.values(groupCounts),
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.7)',   // Pink
-                        'rgba(54, 162, 235, 0.7)',   // Blue
-                        'rgba(255, 206, 86, 0.7)',   // Yellow
-                        'rgba(75, 192, 192, 0.7)',   // Teal
-                        'rgba(153, 102, 255, 0.7)',  // Purple
-                        'rgba(255, 159, 64, 0.7)',   // Orange
-                        'rgba(46, 204, 113, 0.7)'    // Green
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)',
-                        'rgba(46, 204, 113, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'right',
-                        labels: {
-                            padding: 20,
-                            font: { size: 12 }
-                        }
-                    },
-                    title: {
-                        display: true,
-                        text: 'Distribution of Audits by Group',
-                        font: { size: 16 }
-                    },
-                    datalabels: {
-                        formatter: (value, ctx) => {
-                            const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = ((value / total) * 100).toFixed(1);
-                            return `${value}\n(${percentage}%)`;
-                        },
-                        color: '#fff',
-                        font: { weight: 'bold' }
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const label = context.label || '';
-                                const value = context.raw || 0;
-                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                const percentage = ((value / total) * 100).toFixed(1);
-                                return `${label}: ${value} (${percentage}%)`;
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        // Show group modal on pie chart click
-        function showGroupModal() {
-            const groupList = document.getElementById('groupDetails');
-            groupList.innerHTML = ''; // Clear previous entries
-            Object.keys(groupCounts).forEach(group => {
-                const groupAudits = data.filter(audit => audit.Group === group);
-                const groupItem = document.createElement('div');
-                groupItem.className = 'list-group-item';
-                groupItem.innerHTML = `<strong>Group ${group}</strong><ul>`;
-                groupAudits.forEach(audit => {
-                    groupItem.innerHTML += `<li>${audit["Audit Title"]}: ${audit["% Completion"]}</li>`;
-                });
-                groupItem.innerHTML += '</ul>';
-                groupList.appendChild(groupItem);
-            });
-            const modal = new bootstrap.Modal(document.getElementById('groupModal'));
-            modal.show();
-        }
-
-        // Populate filter dropdowns
-        function populateFilters() {
-            const groups = new Set();
-            const years = new Set();
             
-            data.forEach(audit => {
-                groups.add(audit.Group);
-                years.add(new Date(audit["Audit Date"]).getFullYear());
-            });
-
-            const groupSelect = document.getElementById('filterGroup');
-            const yearSelect = document.getElementById('filterYear');
-
-            // Sort groups alphabetically and years numerically
-            [...groups].sort().forEach(group => {
-                const option = document.createElement('option');
-                option.value = group;
-                option.textContent = group;
-                groupSelect.appendChild(option);
-            });
-
-            [...years].sort((a, b) => b - a).forEach(year => {
-                const option = document.createElement('option');
-                option.value = year;
-                option.textContent = year;
-                yearSelect.appendChild(option);
-            });
+            document.body.appendChild(viewer);
         }
 
-        // Update filter function
-        document.getElementById('searchTitle').addEventListener('input', filterTable);
-        document.getElementById('filterGroup').addEventListener('change', filterTable);
-        document.getElementById('filterYear').addEventListener('change', filterTable);
+        document.getElementById('mainTitle').addEventListener('click', () => {
+            const folderPath = 'G:\\Prod\\312 Safety MS';
+            const uriPath = encodeURIComponent(folderPath).replace(/%5C/g, '/').replace(/^%3A/g, ':');
+            window.location.href = `file:///${uriPath}`;
+        });
 
-        function filterTable() {
-            const titleFilter = document.getElementById('searchTitle').value.toLowerCase();
-            const groupFilter = document.getElementById('filterGroup').value;
-            const yearFilter = document.getElementById('filterYear').value;
-            const rows = tableBody.getElementsByTagName('tr');
-
-            for (let i = 0; i < rows.length; i++) {
-                const cells = rows[i].getElementsByTagName('td');
-                const titleMatch = cells[4].textContent.toLowerCase().includes(titleFilter);
-                const groupMatch = !groupFilter || cells[1].textContent === groupFilter;
-                const yearMatch = !yearFilter || new Date(cells[3].textContent).getFullYear().toString() === yearFilter;
-                rows[i].style.display = (titleMatch && groupMatch && yearMatch) ? '' : 'none';
+        const chartOptions = {
+            plugins: {
+                datalabels: {
+                    color: function(context) {
+                        // Dynamic color based on background
+                        const bgColor = context.dataset.backgroundColor[context.dataIndex];
+                        return isDarkColor(bgColor) ? '#FFFFFF' : '#2D3436';
+                    },
+                    font: {
+                        size: 18,
+                        weight: 'bold'
+                    },
+                    formatter: (value) => value > 0 ? value : '',
+                    padding: 6
+                }
             }
-        }
-
-        // Call populateFilters after data is loaded
-        populateFilters();
-
-        // Enhance charts with animations
-        Chart.defaults.animation = {
-            duration: 2000,
-            easing: 'easeInOutQuart'
         };
 
-        // Add hover effects to charts
-        const charts = document.querySelectorAll('.chart');
-        charts.forEach(chart => {
-            chart.addEventListener('mouseenter', function() {
-                this.style.transform = 'scale(1.02)';
-                this.style.transition = 'transform 0.3s ease';
-            });
-            
-            chart.addEventListener('mouseleave', function() {
-                this.style.transform = 'scale(1)';
-            });
-        });
-
-        // Sample data structure for activities
-        const activities2024 = {
-            'January': [
-                { 
-                    type: 'Internal Safety Audit', 
-                    group: 'Group 1 PRC',
-                    status: 'completed',
-                    date: '2024-01-15'
-                },
-                { 
-                    type: '4RKY Presentation', 
-                    group: 'Group 4 NJL',
-                    status: 'completed',
-                    date: '2024-01-20'
-                },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'February': [
-                { type: 'Safety Cross Audit with VSLC', group: 'THPAL-VSLC' },
-                { type: '4RKY Presentation', group: 'Group 1 PRC' },
-                { type: 'Internal Safety Audit', group: 'Group 4 NJL' },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'March': [
-                { type: 'Internal Safety Audit', group: 'Group 2 JED' },
-                { type: '4RKY Presentation', group: 'Group 3 VPL' },
-                { type: 'Quarterly 4RKY Contest', group: 'Group 3 VPL' },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'April': [
-                { type: 'Safety Cross Audit', group: 'All Groups' },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'May': [
-                { type: '4RKY Presentation', group: 'Group 2 JED' },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'June': [
-                { type: 'Internal Safety Audit', group: 'Group 4 NJL' },
-                { type: 'Safety Cross Audit', group: 'Engineering-MS/CLC' },
-                { type: '4RKY Presentation', group: 'Group 4 NJL' },
-                { type: 'Quarterly 4RKY Contest', group: 'Group 1 NJL' },
-                { type: 'Small Group Discussion', group: 'All Groups' },
-                { type: 'RE-education Schedule', group: 'All Groups' },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'July': [
-                { type: 'Safety Cross Audit', group: 'Mech-MS/JED' },
-                { type: '4RKY Presentation', group: 'Group 1 CLC' },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'August': [
-                { type: 'Safety Cross Audit with VSLC', group: 'THPAL-VSLC' },
-                { type: 'Internal Safety Audit', group: 'Group 3 VPL' },
-                { type: '4RKY Presentation', group: 'Group 2 JED' },
-                { type: 'Quarterly 4RKY Contest', group: 'Group 2 JED' },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'September': [
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'October': [
-                { type: 'Internal Safety Audit', group: 'Group 2 JED' },
-                { type: 'Safety Cross Audit', group: 'MS/VPL-Scandium' },
-                { type: '4RKY Presentation', group: 'Group 3 VPL' },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'November': [
-                { type: 'Internal Safety Audit', group: 'Group 1 CLC' },
-                { type: 'Safety Cross Audit', group: 'MS/NJL-Admin' },
-                { type: '4RKY Presentation', group: 'Group 1 CLC' },
-                { type: 'Quarterly 4RKY Contest', group: 'Group 1 CLC' },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'December': [
-                { type: '4RKY Presentation', group: 'Group 1 NJL' },
-                { type: 'RE-education Schedule', group: 'All Groups' },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ]
-        };
-
-        const activities2025 = {
-            'January': [
-                { type: 'Safety Cross Audit with VSLC', group: 'THPAL-VSLC' },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'February': [
-                { type: 'Safety Cross Audit', group: 'E&I-MS JED' },
-                { type: 'Safety Cross Audit with VSLC', group: 'THPAL-VSLC' },
-                { type: '4RKY Presentation', group: 'Group 4 NJL' },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'March': [
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'April': [
-                { type: 'Internal Safety Audit', group: 'Group 3 JNY' },
-                { type: '4RKY Presentation', group: 'Group 1 CLC' },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'May': [
-                { type: 'Internal Safety Audit', group: 'Group 1 CLC' },
-                { type: '4RKY Presentation', group: 'Group 2 JED' },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'June': [
-                { type: 'Internal Safety Audit', group: 'Group 2 JED' },
-                { type: '4RKY Presentation', group: 'Group 3 JNY' },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'July': [
-                { type: 'Safety Cross Audit', group: 'MS CLC-Mech' },
-                { type: '4RKY Presentation', group: 'Group 4 NJL' },
-                { type: 'RE-education Schedule', group: 'All Groups' },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'August': [
-                { type: 'Internal Safety Audit', group: 'Group 4 NJL' },
-                { type: 'Safety Cross Audit with VSLC', group: 'THPAL-VSLC' },
-                { type: '4RKY Presentation', group: 'Group 4 NJL' },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'September': [
-                { type: '4RKY Presentation', group: 'Group 1 CLC' },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'October': [
-                { type: 'Internal Safety Audit', group: 'Group 3 JNY' },
-                { type: '4RKY 1st Round', group: 'All Groups' },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'November': [
-                { type: 'Safety Cross Audit', group: 'MS NJL-Scandium' },
-                { type: '4RKY 2nd Round', group: 'All Groups' },
-                { type: 'Group 2 JED', group: 'Quarterly 4RKY Contest' },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ],
-            'December': [
-                { type: 'Safety Cross Audit', group: 'MS JNY-Chromite' },
-                { type: 'Plant Wide 4RKY Presentation', group: 'All Groups' },
-                { type: 'RE-education Schedule', group: 'All Groups' },
-                { type: 'KY Discussion', group: 'All Groups' }
-            ]
-        };
-
-        function getStatusBadge(status, date) {
-            const activityDate = new Date(date);
-            const today = new Date();
-            
-            if (status === 'completed') {
-                return '<span class="activity-status status-completed">Completed</span>';
-            }
-            
-            if (activityDate < today && status !== 'completed') {
-                return '<span class="activity-status status-pending">Pending</span>';
-            }
-            
-            if (activityDate.toDateString() === today.toDateString()) {
-                return '<span class="activity-status status-in-progress">Today</span>';
-            }
-            
-            return '<span class="activity-status status-pending">Upcoming</span>';
-        }
-
-        function createCalendar(year) {
-            const calendarGrid = document.querySelector('.calendar-grid');
-            calendarGrid.innerHTML = '';
-            
-            const activities = year === '2024' ? activities2024 : activities2025;
-            const months = ['January', 'February', 'March', 'April', 
-                           'May', 'June', 'July', 'August',
-                           'September', 'October', 'November', 'December'];
-            
-            const currentDate = new Date();
-            const currentMonth = currentDate.toLocaleString('default', { month: 'long' });
-            const currentYear = currentDate.getFullYear().toString();
-
-            months.forEach(month => {
-                const monthCard = document.createElement('div');
-                monthCard.className = 'month-card';
-                
-                if (month === currentMonth && year === currentYear) {
-                    monthCard.classList.add('current-month');
-                }
-                
-                const monthActivities = activities[month] || [];
-                
-                monthCard.innerHTML = `
-                    <div class="month-header">${month}</div>
-                    <div class="activities">
-                        ${monthActivities.length > 0 ? 
-                            monthActivities.map(activity => `
-                                <div class="activity-item">
-                                    <div class="activity-content">
-                                        <div class="activity-type">${activity.type}</div>
-                                        <div class="activity-info">
-                                            <span class="activity-date">${formatDate(activity.date)}</span>
-                                            <span class="activity-group ${getGroupClass(activity.group)}">${activity.group}</span>
-                                        </div>
-                                    </div>
-                                    ${getStatusBadge(activity.status, activity.date)}
-                                </div>
-                            `).join('') : 
-                            '<div class="empty-month">No scheduled activities</div>'
-                        }
-                    </div>
-                `;
-                
-                monthCard.addEventListener('click', () => {
-                    showMonthDetails(month, monthActivities, year);
-                });
-                
-                calendarGrid.appendChild(monthCard);
-            });
-        }
-
-        function getGroupClass(group) {
-            if (group.includes('Group 1')) return 'group-1';
-            if (group.includes('Group 2')) return 'group-2';
-            if (group.includes('Group 3')) return 'group-3';
-            if (group.includes('Group 4')) return 'group-4';
-            return '';
-        }
-
-        // Replace the year selection event listener and calendar initialization with:
-        function initializeCalendar() {
-            const currentDate = new Date();
-            const currentYear = currentDate.getFullYear().toString();
-            
-            // Set active year button
-            document.querySelectorAll('.year-btn').forEach(btn => {
-                if (btn.dataset.year === currentYear) {
-                    btn.classList.add('active');
-                }
-                
-                btn.addEventListener('click', (e) => {
-                    // Remove active class from all buttons
-                    document.querySelectorAll('.year-btn').forEach(b => 
-                        b.classList.remove('active'));
-                    // Add active class to clicked button
-                    e.target.classList.add('active');
-                    // Create calendar for selected year
-                    createCalendar(e.target.dataset.year);
-                });
-            });
-
-            // Initialize calendar with current year
-            createCalendar(currentYear);
-            
-            // Scroll to current month
-            const currentMonth = document.querySelector('.current-month');
-            if (currentMonth) {
-                currentMonth.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
-
-        // Call initialization
-        initializeCalendar();
-
-        // Add this new function to show month details in a modal
-        function showMonthDetails(month, activities, year) {
-            const modal = document.getElementById('groupModal');
-            const modalTitle = modal.querySelector('.modal-title');
-            const modalBody = modal.querySelector('.modal-body');
-            
-            modalTitle.textContent = `${month} ${year} Activities`;
-            modalBody.innerHTML = activities.length > 0 ? `
-                <div class="list-group">
-                    ${activities.map(activity => `
-                        <div class="list-group-item">
-                            <h6 class="mb-1">${activity.type}</h6>
-                            <p class="mb-1">
-                                <span class="badge ${getGroupClass(activity.group)}">${activity.group}</span>
-                            </p>
-                        </div>
-                    `).join('')}
-                </div>
-            ` : '<p class="text-center text-muted">No scheduled activities for this month</p>';
-            
-            const modalInstance = new bootstrap.Modal(modal);
-            modalInstance.show();
+        // Add color contrast helper
+        function isDarkColor(color) {
+            const hex = color.replace('#', '');
+            const r = parseInt(hex.substr(0,2), 16);
+            const g = parseInt(hex.substr(2,2), 16);
+            const b = parseInt(hex.substr(4,2), 16);
+            const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+            return brightness < 128;
         }
     </script>
 </body>

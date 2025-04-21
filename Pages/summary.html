@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.85">
+    <title>Incident Monitoring Summary</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Match the base styles from Incident Monitoring page */
+        body {
+            transform: scale(0.8);
+            transform-origin: top left;
+            width: 124%;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 12px;
+            background-color: #f5f6fa;
+            margin: 0;
+            padding: 20px;
+            background-image: linear-gradient(to bottom, #e6f2ff, #f5f6fa);
+        }
+
+        /* Match the header container style */
+        .header-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: #1a365d;
+            text-align: center;
+            font-size: 48px;
+            padding: 30px 0;
+            margin-bottom: 0;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border-bottom: 4px solid #3498db;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            background: linear-gradient(to right, #2c3e50, #4a6491);
+            color: white;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Match the navigation tabs style */
+        .nav-tabs-container {
+            background-color: #f8f9fa;
+            padding: 15px 20px 0;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-top: none;
+        }
+
+        .nav-tabs {
+            border-bottom: 2px solid #3498db;
+            padding: 0 20px;
+        }
+
+        .nav-tabs .nav-link {
+            border: 1px solid transparent;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            color: #2c3e50;
+            font-weight: 600;
+            padding: 12px 25px;
+            font-size: 16px;
+            margin-right: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tabs .nav-link:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+            border-color: #e9ecef #e9ecef #dee2e6;
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        /* Keep the rest of your summary page styles */
+        .status-open {
+            background-color: #ff6666;
+            color: white;
+            text-align: center;
+            border-radius: 4px;
+        }
+        .status-closed {
+            background-color: #66cc66;
+            color: white;
+            text-align: center;
+            border-radius: 4px;
+        }
+        .status-in-review {
+            background-color: #f0ad4e;
+            color: white;
+            text-align: center;
+            border-radius: 4px;
+        }
+        .status-returned {
+            background-color: #ffffaa;
+            color: black;
+            text-align: center;
+            border-radius: 4px;
+        }
+        .summary-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        .summary-header {
+            background-color: #343a40;
+            color: white;
+            padding: 12px;
+            font-weight: bold;
+            text-align: center;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        .summary-body {
+            padding: 20px;
+        }
+        .chart-container {
+            height: 350px;
+            margin-bottom: 20px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            position: relative;
+        }
+        .table-container {
+            margin-bottom: 20px;
+            background-color: white;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .table {
+            margin-bottom: 0;
+        }
+        .table thead th {
+            background-color: #f0f0f0;
+            border-color: #dee2e6;
+        }
+        .count-badge {
+            font-size: 2.5rem;
+            font-weight: bold;
+            display: block;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .filter-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        .total-incidents {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #dc3545;
+            text-align: center;
+            margin: 15px 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        .year-badge {
+            background-color: #343a40;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        
+        /* Ensure monthly distribution chart maintains height */
+        #monthlyDistributionChart {
+            height: 100% !important;
+            width: 100% !important;
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 15px;
+        }
+        
+        /* Adjust the summary card for the monthly distribution */
+        .summary-card .summary-body {
+            padding: 20px;
+            position: relative;
+        }
+        
+        /* For the monthly distribution specifically */
+        .monthly-distribution-container {
+            height: 350px;
+            position: relative;
+        }
+
+        /* Year filter button styles */
+        .year-filter-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .year-btn {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            color: #495057;
+            padding: 8px 16px;
+            margin-right: 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        
+        .year-btn:hover {
+            background-color: #e9ecef;
+        }
+        
+        .year-btn.active {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <h1>MS SECTION INCIDENT MONITORING</h1>
+        
+        <div class="nav-tabs-container">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" href="Incident Monitoring.html">
+                        <i class="bi bi-table"></i> Incident List
+                    </a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" href="summary.html">
+                        <i class="bi bi-bar-chart-fill"></i> Summary Dashboard
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container-fluid mt-4 mb-5">
+        <div class="year-filter-container">
+            <div class="d-flex align-items-center">
+                <label class="form-label me-3 mb-0"><i class="bi bi-calendar-event"></i> Filter by Year:</label>
+                <div id="yearButtons">
+                    <!-- Year buttons will be generated here -->
+                </div>
+                <span class="year-badge ms-3" id="currentYear">2025</span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="summary-card">
+                    <div class="summary-header">
+                        <i class="bi bi-exclamation-triangle-fill"></i> TOTAL INCIDENTS
+                    </div>
+                    <div class="summary-body">
+                        <div class="total-incidents" id="totalIncidents">0</div>
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="summary-header">
+                        <i class="bi bi-clipboard-check"></i> REPORT STATUS
+                    </div>
+                    <div class="summary-body">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="p-2 status-open">OPEN</div>
+                                <div class="p-2 bg-light text-center fw-bold fs-4" id="openCount">0</div>
+                            </div>
+                            <div class="col-6">
+                                <div class="p-2 status-closed">CLOSED</div>
+                                <div class="p-2 bg-light text-center fw-bold fs-4" id="closedCount">0</div>
+                            </div>
+                            <div class="col-6 mt-3">
+                                <div class="p-2 status-in-review">IN-REVIEW</div>
+                                <div class="p-2 bg-light text-center fw-bold fs-4" id="inReviewCount">0</div>
+                            </div>
+                            <div class="col-6 mt-3">
+                                <div class="p-2 status-returned">RETURNED</div>
+                                <div class="p-2 bg-light text-center fw-bold fs-4" id="returnedCount">0</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-5">
+                <div class="summary-card">
+                    <div class="summary-header">
+                        <i class="bi bi-bar-chart-fill"></i> INCIDENT TYPES
+                    </div>
+                    <div class="summary-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <canvas id="incidentTypesChart" height="200"></canvas>
+                            </div>
+                            <div class="col-md-6">
+                                <table class="table table-sm table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Type</th>
+                                            <th class="text-end">Count</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="incidentTypesTable">
+                                        <!-- Populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="summary-card">
+                            <div class="summary-header">
+                                <i class="bi bi-shield-fill"></i> SAFETY LEVELS
+                            </div>
+                            <div class="summary-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <canvas id="safetyLevelsChart" height="150"></canvas>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <table class="table table-sm table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Level</th>
+                                                    <th class="text-end">Count</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="safetyLevelsTable">
+                                                <!-- Populated by JavaScript -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <div class="summary-card">
+                            <div class="summary-header">
+                                <i class="bi bi-tree-fill"></i> ENVIRONMENT LEVELS
+                            </div>
+                            <div class="summary-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <canvas id="environmentLevelsChart" height="150"></canvas>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <table class="table table-sm table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Level</th>
+                                                    <th class="text-end">Count</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="environmentLevelsTable">
+                                                <!-- Populated by JavaScript -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="summary-card">
+                    <div class="summary-header">
+                        <i class="bi bi-clipboard-data"></i> INCIDENT RECORDS BY MONTH
+                    </div>
+                    <div class="summary-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="table-container">
+                                    <table class="table table-sm table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Month</th>
+                                                <th class="text-center">Total</th>
+                                                <th class="text-center">Safety</th>
+                                                <th class="text-center">Environment</th>
+                                                <th class="text-center">Operation</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="monthlyIncidentsTable">
+                                            <!-- Populated by JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="chart-container">
+                                    <canvas id="incidentsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script>
+        let filteredIncidents = [];
+        let incidentsChart = null;
+        let incidentTypesChart = null;
+        let safetyLevelsChart = null;
+        let environmentLevelsChart = null;
+        let currentYear = "2025"; // Default year
+        
+        // Define consistent colors for incident types
+        const SAFETY_COLOR = '#ffc107';     // Yellow/amber
+        const ENVIRONMENT_COLOR = '#28a745'; // Green
+        const OPERATION_COLOR = '#6c757d';   // Gray
+
+        document.addEventListener('DOMContentLoaded', function() {
+            generateYearButtons();
+            filterByYear(currentYear);
+        });
+
+        function generateYearButtons() {
+            // Get unique years from incidents
+            const years = [...new Set(incidents
+                .filter(incident => incident.date)
+                .map(incident => {
+                    const incidentDate = new Date(incident.date.replace(/(\w+)\/(\d+)\/(\d+)/, '$3-$1-$2'));
+                    return incidentDate.getFullYear().toString();
+                }))]
+                .sort((a, b) => b - a); // Sort descending
+            
+            const buttonsContainer = document.getElementById('yearButtons');
+            buttonsContainer.innerHTML = '';
+            
+            years.forEach(year => {
+                const button = document.createElement('button');
+                button.className = `year-btn ${year === currentYear ? 'active' : ''}`;
+                button.textContent = year;
+                button.onclick = () => filterByYear(year);
+                buttonsContainer.appendChild(button);
+            });
+        }
+
+        function filterByYear(year) {
+            // Update active button
+            document.querySelectorAll('.year-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent === year) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            currentYear = year;
+            document.getElementById('currentYear').textContent = year;
+            
+            // Filter incidents by year
+            filteredIncidents = incidents.filter(incident => {
+                const incidentDate = new Date(incident.date.replace(/(\w+)\/(\d+)\/(\d+)/, '$3-$1-$2'));
+                return incidentDate.getFullYear().toString() === year;
+            });
+            
+            updateSummary();
+        }
+
+        function updateSummary() {
+            // Update total incidents
+            document.getElementById('totalIncidents').textContent = filteredIncidents.length;
+            
+            // Update status counts
+            const openCount = filteredIncidents.filter(i => i.status === 'OPEN').length;
+            const closedCount = filteredIncidents.filter(i => i.status === 'CLOSED').length;
+            const inReviewCount = filteredIncidents.filter(i => i.status === 'IN-REVIEW').length;
+            const returnedCount = filteredIncidents.filter(i => i.status === 'RETURNED').length;
+            
+            document.getElementById('openCount').textContent = openCount;
+            document.getElementById('closedCount').textContent = closedCount;
+            document.getElementById('inReviewCount').textContent = inReviewCount;
+            document.getElementById('returnedCount').textContent = returnedCount;
+            
+            // Update incident types
+            const types = {};
+            filteredIncidents.forEach(incident => {
+                types[incident.type] = (types[incident.type] || 0) + 1;
+            });
+            
+            const typesTable = document.getElementById('incidentTypesTable');
+            typesTable.innerHTML = '';
+            Object.entries(types).forEach(([type, count]) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${type}</td><td class="text-end">${count}</td>`;
+                typesTable.appendChild(row);
+            });
+            
+            // Update safety levels
+            const safetyLevels = {};
+            filteredIncidents.filter(i => i.type === 'Safety').forEach(incident => {
+                safetyLevels[incident.level] = (safetyLevels[incident.level] || 0) + 1;
+            });
+            
+            const safetyTable = document.getElementById('safetyLevelsTable');
+            safetyTable.innerHTML = '';
+            for (let i = 1; i <= 6; i++) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${i}</td><td class="text-end">${safetyLevels[i.toString()] || 0}</td>`;
+                safetyTable.appendChild(row);
+            }
+            
+            // Update environment levels
+            const envLevels = {};
+            filteredIncidents.filter(i => i.type === 'Environment').forEach(incident => {
+                envLevels[incident.level] = (envLevels[incident.level] || 0) + 1;
+            });
+            
+            const envTable = document.getElementById('environmentLevelsTable');
+            envTable.innerHTML = '';
+            for (let i = 1; i <= 4; i++) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${i}</td><td class="text-end">${envLevels[i.toString()] || 0}</td>`;
+                envTable.appendChild(row);
+            }
+            
+            // Update monthly incidents
+            updateMonthlyIncidents();
+            
+            // Update charts
+            updateCharts(types, safetyLevels, envLevels);
+        }
+
+        function updateMonthlyIncidents() {
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const monthlyData = {};
+            
+            months.forEach(month => {
+                monthlyData[month] = {
+                    total: 0,
+                    Safety: 0,
+                    Environment: 0,
+                    Operation: 0
+                };
+            });
+            
+            filteredIncidents.forEach(incident => {
+                const incidentDate = new Date(incident.date.replace(/(\w+)\/(\d+)\/(\d+)/, '$3-$1-$2'));
+                const month = months[incidentDate.getMonth()];
+                
+                monthlyData[month].total++;
+                monthlyData[month][incident.type]++;
+            });
+            
+            const monthlyTable = document.getElementById('monthlyIncidentsTable');
+            monthlyTable.innerHTML = '';
+            
+            months.forEach(month => {
+                const data = monthlyData[month];
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${month}</td>
+                    <td class="text-center">${data.total}</td>
+                    <td class="text-center">${data.Safety}</td>
+                    <td class="text-center">${data.Environment}</td>
+                    <td class="text-center">${data.Operation}</td>
+                `;
+                monthlyTable.appendChild(row);
+            });
+        }
+
+        function updateCharts(types, safetyLevels, envLevels) {
+            updateIncidentsChart();
+            updateIncidentTypesChart(types);
+            updateSafetyLevelsChart(safetyLevels);
+            updateEnvironmentLevelsChart(envLevels);
+        }
+
+        function updateIncidentsChart() {
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const safetyData = Array(12).fill(0);
+            const environmentData = Array(12).fill(0);
+            const operationData = Array(12).fill(0);
+            
+            filteredIncidents.forEach(incident => {
+                const incidentDate = new Date(incident.date.replace(/(\w+)\/(\d+)\/(\d+)/, '$3-$1-$2'));
+                const monthIndex = incidentDate.getMonth();
+                
+                if (incident.type === 'Safety') {
+                    safetyData[monthIndex]++;
+                } else if (incident.type === 'Environment') {
+                    environmentData[monthIndex]++;
+                } else if (incident.type === 'Operation') {
+                    operationData[monthIndex]++;
+                }
+            });
+            
+            const ctx = document.getElementById('incidentsChart').getContext('2d');
+            
+            if (incidentsChart) {
+                incidentsChart.destroy();
+            }
+            
+            incidentsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months,
+                    datasets: [
+                        {
+                            label: 'Safety',
+                            data: safetyData,
+                            backgroundColor: SAFETY_COLOR,
+                            borderColor: SAFETY_COLOR,
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Environment',
+                            data: environmentData,
+                            backgroundColor: ENVIRONMENT_COLOR,
+                            borderColor: ENVIRONMENT_COLOR,
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Operation',
+                            data: operationData,
+                            backgroundColor: OPERATION_COLOR,
+                            borderColor: OPERATION_COLOR,
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Monthly Incident Distribution by Type',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true
+                        },
+                        y: {
+                            stacked: true,
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateIncidentTypesChart(types) {
+            const ctx = document.getElementById('incidentTypesChart').getContext('2d');
+            
+            if (incidentTypesChart) {
+                incidentTypesChart.destroy();
+            }
+            
+            const typeLabels = Object.keys(types);
+            const typeCounts = Object.values(types);
+            
+            // Use consistent colors for specific incident types
+            const backgroundColors = typeLabels.map(type => {
+                if (type === 'Safety') return SAFETY_COLOR;
+                if (type === 'Environment') return ENVIRONMENT_COLOR;
+                if (type === 'Operation') return OPERATION_COLOR;
+                return '#17a2b8'; // Default color for any other types
+            });
+            
+            incidentTypesChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: typeLabels,
+                    datasets: [{
+                        data: typeCounts,
+                        backgroundColor: backgroundColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateSafetyLevelsChart(safetyLevels) {
+            const ctx = document.getElementById('safetyLevelsChart').getContext('2d');
+            
+            if (safetyLevelsChart) {
+                safetyLevelsChart.destroy();
+            }
+            
+            const labels = [];
+            const data = [];
+            const backgroundColors = ['#ff6384', '#ff9f40', '#ffcd56', '#4bc0c0', '#36a2eb', '#9966ff'];
+            
+            for (let i = 1; i <= 6; i++) {
+                labels.push(`Level ${i}`);
+                data.push(safetyLevels[i.toString()] || 0);
+            }
+            
+            safetyLevelsChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: backgroundColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                boxWidth: 12,
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateEnvironmentLevelsChart(envLevels) {
+            const ctx = document.getElementById('environmentLevelsChart').getContext('2d');
+            
+            if (environmentLevelsChart) {
+                environmentLevelsChart.destroy();
+            }
+            
+            const labels = [];
+            const data = [];
+            const backgroundColors = ['#8bc34a', '#4caf50', '#009688', '#00bcd4'];
+            
+            for (let i = 1; i <= 4; i++) {
+                labels.push(`Level ${i}`);
+                data.push(envLevels[i.toString()] || 0);
+            }
+            
+            environmentLevelsChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: backgroundColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            labels: {
+                                boxWidth: 12,
+                                font: {
+                                    size: 10
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html> 

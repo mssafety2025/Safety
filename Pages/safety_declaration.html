@@ -2,36 +2,1745 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Safety Declaration</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safety & Exam Dashboard</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <style>
+        
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+            --primary-color-rgb: 0, 123, 255; /* RGB values for your primary color */
+        }
+        
         body {
-            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7f9;
+            color: #333;
         }
-        h1 {
-            color: #007bff;
+        
+        .container {
+            width: 98%;
+            margin: 0 auto;
+            padding: 20px 0;
         }
+        
+        .dashboard-header {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            margin: 20px 0 10px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
         .card {
-            transition: transform 0.2s;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
         }
-        .card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        
+        .card-header {
+            background-color: var(--light-color);
+            padding: 10px 15px;
+            border-bottom: 1px solid #ddd;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        img {
-            max-width: 100%; /* Ensure images scale with the container */
-            height: auto; /* Maintain aspect ratio */
+        
+        .card-body {
+            padding: 15px;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+            font-size: 0.8rem;
+        }
+        
+        th, td {
+            padding: 4px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: var(--light-color);
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        
+        tr:hover {
+            background-color: #f1f5f9;
+        }
+        
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        select, input, button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border: none;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+        
+        .progress-bar {
+            height: 24px;
+            background-color: #e0e0e0;
+            border-radius: 12px;
+            margin: 5px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 12px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgb(20, 20, 20);
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        /* Color scheme based on percentage thresholds */
+        .progress-low {
+            background-color: #e74c3c; /* Red for < 33% */
+        }
+        
+        .progress-medium {
+            background-color: #f32112; /* Orange/Yellow for 33-66% */
+        }
+        
+        .progress-high {
+            background-color: #b4cc2e; /* Green for > 66% but < 100% */
+        }
+        
+        .progress-perfect {
+            background-color: #27ae60; /* Brighter/deeper green for 100% */
+            box-shadow: 0 0 5px rgba(39, 174, 96, 0.5); /* Add a subtle glow effect */
+        }
+        
+        .week-filter {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .week-btn {
+            padding: 8px 12px;
+            background-color: #32159e;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .week-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .clickable {
+            cursor: pointer;
+            color: var(--danger-color);
+            text-decoration: none;
+        }
+        
+        .tabs {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+        
+        .tab.active {
+            background-color: white;
+            border-color: #ddd;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .tab:hover:not(.active) {
+            background-color: #f5f5f5;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 900px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close:hover {
+            color: black;
+        }
+        
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            text-align: center;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+        
+        .stat-label {
+            color: #333;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        
+        .stat-label:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .stat-label.active {
+            background-color: #e0e0e0;
+            color: var(--primary-color);
+        }
+        
+        .progress-bar {
+            height: 24px;
+            background-color: #f0f0f0;
+            border-radius: 12px;
+            margin: 5px 0;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 12px;
+            transition: width 0.8s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        /* Area-specific colors with enhanced gradients */
+        .ms-color { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .fntrl-color { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        .ls-color { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .h2s-color { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        .sdcs-color { background: linear-gradient(135deg, #f1c40f, #f39c12); }
+        .slmdcs-color { background: linear-gradient(135deg, #1abc9c, #16a085); }
+        .overall-color { background: linear-gradient(135deg, #34495e, #2c3e50); }
+        
+        /* Assigned status colors */
+        .assigned-color { 
+            background: linear-gradient(135deg, #6c5ce7, #4834d4); 
+        }
+        
+        .pass {
+            color: var(--success-color);
+        }
+        
+        .fail {
+            color: var(--danger-color);
+        }
+        
+        .score-5 { background-color: #43a047; color: white; }
+        .score-4 { background-color: #7cb342; color: white; }
+        .score-3 { background-color: #c0ca33; color: white; }
+        .score-2 { background-color: #ffb300; color: black; }
+        .score-1 { background-color: #fb8c00; color: white; }
+        .score-0, .score-empty { background-color: #e53935; color: white; }
+        
+        .dashboard-header h1 {
+            text-align: center;
+        }
+        
+        /* Month button styles */
+        .month-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .month-btn {
+            padding: 6px 12px;
+            border: 1px solid #161313;
+            background-color: #1ae467;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        
+        .month-btn.active {
+            background-color: #007bff;
+            color: rgb(23, 10, 141);
+            border-color: #007bff;
+        }
+        
+        .month-btn:hover:not(.active) {
+            background-color: #e9ecef;
+        }
+        
+        /* Add these styles for the compliance modal */
+        .clickable {
+            cursor: pointer;
+        }
+        
+        .pass {
+            color: var(--success-color);
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .fail {
+            color: var(--danger-color);
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        #compliance-details-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        #compliance-details-table th,
+        #compliance-details-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        #compliance-details-table th {
+            background-color: var(--light-color);
+        }
+        
+        /* Exam table styles */
+        .inner-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .inner-table th, .inner-table td {
+            padding: 4px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        
+        .score-5 { background-color: #43a047; color: white; }
+        .score-4 { background-color: #7cb342; color: white; }
+        .score-3 { background-color: #c0ca33; color: white; }
+        .score-2 { background-color: #ffb300; color: black; }
+        .score-1 { background-color: #fb8c00; color: white; }
+        .score-0, .score-empty { background-color: #e53935; color: white; }
+        
+        /* Simplified exam table styles */
+        #exam-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        #exam-table th, #exam-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        #exam-table th {
+            background-color: var(--light-color);
+            position: sticky;
+            top: 0;
+        }
+        
+        #exam-table td {
+            text-align: center;
+        }
+        
+        #exam-table td:first-child {
+            text-align: left;
+        }
+        
+        /* Tab styles */
+        .tabs {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+        
+        .tab.active {
+            background-color: white;
+            border-color: #ddd;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .tab:hover:not(.active) {
+            background-color: #f5f5f5;
+        }
+        
+        .tab-content {
+            margin-top: 15px;
+        }
+        
+        /* Table styles */
+        #score-table, #exam-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        #score-table th, #score-table td,
+        #exam-table th, #exam-table td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        #score-table th, #exam-table th {
+            background-color: var(--light-color);
+            position: sticky;
+            top: 0;
+        }
+        
+        #score-table td:nth-child(2),
+        #score-table td:nth-child(3) {
+            text-align: center;
+        }
+        
+        /* Score colors */
+        .score-5 { background-color: #43a047; color: white; }
+        .score-4 { background-color: #7cb342; color: white; }
+        .score-3 { background-color: #c0ca33; color: white; }
+        .score-2 { background-color: #ffb300; color: black; }
+        .score-1 { background-color: #fb8c00; color: white; }
+        .score-0, .score-empty { background-color: #e53935; color: white; }
+        
+        /* Simple centered score table styles */
+        #score-table {
+            width: 30%;
+            margin: 10px auto;
+            border-collapse: collapse;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        #score-table th, #score-table td {
+            padding: 5px;
+            border: 1px solid #b8b2b2;
+            text-align: center;
+        }
+        
+        #score-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .score-cell {
+            font-weight: bold;
+            text-align: center;
+            color:#070707
+        }
+        
+        .count-cell, .percentage-cell {
+            text-align: center;
+        }
+        
+        /* Additional styles for area filtering */
+        .highlighted-area {
+            font-weight: bold;
+            color: var(--primary-color);
+            background-color: rgba(var(--primary-color-rgb), 0.1);
+        }
+        
+        /* Add styles for highlighted rows */
+        .highlighted-row {
+            background-color: rgba(0, 102, 204, 0.1);
+        }
+        
+        /* Make stat labels look clickable */
+        .stat-label {
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 4px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        
+        .stat-label:hover {
+            background-color: #f0f0f0;
+        }
+        
+        /* Enhanced chart container styles */
+        .chart-container {
+            height: 400px;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #eaeaea;
+        }
+        
+        /* Add a nice gradient background to the card */
+        .card:has(.chart-container) {
+            background: linear-gradient(to bottom, #f9f9f9, #ffffff);
+        }
+        
+        /* Add a nice header style */
+        .card-header:has(+ .card-body .chart-container) {
+            background: linear-gradient(to right, #34495e, #2c3e50);
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            padding: 15px 20px;
+            border-radius: 8px 8px 0 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Safety Declaration</h2>
-        <p>View current rankings and declarations from the safety exam.</p>
-        <img src="https://via.placeholder.com/600x300.png?text=Safety+Declaration+Image" class="img-fluid rounded" alt="Safety Declaration">
+        <!-- Add Home Button -->
+        <div class="text-start mb-3">
+            <a href="../Safety.html" class="btn btn-primary">
+                <i class="bi bi-house-fill"></i> Home
+            </a>
+        </div>
+        
+        <div class="dashboard-header">
+            <h1>Safety & Examination Dashboard</h1>
+            <div class="month-buttons" id="month-buttons">
+                <button class="month-btn" data-month="all">All Months</button>
+                <button class="month-btn" data-month="1">January</button>
+                <button class="month-btn" data-month="2">February</button>
+                <button class="month-btn" data-month="3">March</button>
+                <button class="month-btn" data-month="4">April</button>
+                <button class="month-btn" data-month="5">May</button>
+            </div>
+        </div>
+        
+        <!-- Area Compliance Section (Moved up) -->
+        <div class="section-header">
+            <h2>Area Compliance</h2>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">Area Compliance Overview</div>
+            <div class="card-body">
+                <div id="area-compliance">
+                    <div class="grid-container">
+                        <div class="stat-card">
+                            <div class="stat-label">MS</div>
+                            <div class="progress-bar">
+                                <div id="ms-progress" class="progress-fill ms-color" style="width: 0%">0%</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">FNTRL</div>
+                            <div class="progress-bar">
+                                <div id="fntrl-progress" class="progress-fill fntrl-color" style="width: 0%">0%</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">LS</div>
+                            <div class="progress-bar">
+                                <div id="ls-progress" class="progress-fill ls-color" style="width: 0%">0%</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">H2S</div>
+                            <div class="progress-bar">
+                                <div id="h2s-progress" class="progress-fill h2s-color" style="width: 0%">0%</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Sub DCS</div>
+                            <div class="progress-bar">
+                                <div id="sdcs-progress" class="progress-fill sdcs-color" style="width: 0%">0%</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Shiftleader/MDCS</div>
+                            <div class="progress-bar">
+                                <div id="slmdcs-progress" class="progress-fill slmdcs-color" style="width: 0%">0%</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Overall</div>
+                            <div class="progress-bar">
+                                <div id="overall-progress" class="progress-fill overall-color" style="width: 0%">0%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="compliance-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly Topics Section -->
+        <div class="section-header">
+            <h2>Weekly Topics</h2>
+            <div>
+                <button id="toggleChartBtn">Toggle Chart View</button>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <span>Weekly Topics</span>
+                <div class="filter-container">
+                    <select id="topic-filter">
+                        <option value="all">All Topics</option>
+                    </select>
+                    <div class="week-filter" id="week-filter">
+                        <!-- Week buttons will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <table id="topics-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Chapter & Section</th>
+                            <th>Topic</th>
+                            <th>Area</th>
+                            <th>Compliance</th>
+                        </tr>
+                    </thead>
+                    <tbody id="topics-body"></tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Exam Results Section -->
+        <div class="section-header">
+            <h2>Exam Results</h2>
+            <div id="exam-date-buttons" class="month-buttons">
+                <button class="month-btn active" data-date="all">All Dates</button>
+                <!-- Date buttons will be added here dynamically -->
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">Exam Summary</div>
+            <div class="card-body">
+                <div class="grid-container">
+                    <div class="stat-card">
+                        <div class="stat-label">Total Participants</div>
+                        <div class="stat-value" id="total-participants">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Pass Rate</div>
+                        <div class="stat-value" id="pass-rate">0%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Average Score</div>
+                        <div class="stat-value" id="average-score">0</div>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="exam-chart"></canvas>
+                </div>
+                
+                <table id="score-table">
+                    <thead>
+                        <tr>
+                            <th>Score</th>
+                            <th>Count</th>
+                            <th>Percentage</th>
+                        </tr>
+                    </thead>
+                    <tbody id="score-body"></tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div id="examModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 id="exam-date-title"></h2>
+                
+                <div class="tabs">
+                    <div class="tab active" data-group="all">All</div>
+                    <div class="tab" data-group="1">Group 1</div>
+                    <div class="tab" data-group="2">Group 2</div>
+                    <div class="tab" data-group="3">Group 3</div>
+                    <div class="tab" data-group="4">Group 4</div>
+                    <div class="tab" data-group="N/A">Group N/A</div>
+                </div>
+                
+                <div class="card-body">
+                    <table id="exam-details-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>External ID</th>
+                                <th>Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="exam-details-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Add this modal for compliance details -->
+        <div id="complianceModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 id="compliance-topic-title"></h2>
+                <div class="card-body">
+                    <table id="compliance-details-table">
+                        <thead>
+                            <tr>
+                                <th>Shift</th>
+                                <th>Status</th>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody id="compliance-details-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Load data scripts with correct relative paths -->
+    <script src="safetydec.js"></script>
+    <script src="exam.js"></script>
+
+    <script>
+        // Initialize dashboard after page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if data variables exist
+            if (typeof safetyData === 'undefined' || typeof examData === 'undefined') {
+                console.error('Data not loaded properly. Check your JS files!');
+                return;
+            }
+            
+            console.log('Safety Data loaded:', safetyData.length, 'records');
+            console.log('Exam Data loaded:', examData.length, 'records');
+            
+            // Initialize Dashboard
+            initializeDashboard(safetyData, examData);
+        });
+        
+        function initializeDashboard(safetyData, examData) {
+            // Safety Declaration processing
+            const topicsTable = document.getElementById('topics-body');
+            const topicFilter = document.getElementById('topic-filter');
+            const monthButtons = document.querySelectorAll('.month-btn');
+            const weekFilter = document.getElementById('week-filter');
+            const examDateButtons = document.getElementById('exam-date-buttons');
+            const complianceModal = document.getElementById('complianceModal');
+            const complianceDetailsBody = document.getElementById('compliance-details-body');
+            const complianceTopicTitle = document.getElementById('compliance-topic-title');
+            
+            // Close modal when clicking on X
+            document.querySelector('#complianceModal .close').addEventListener('click', function() {
+                complianceModal.style.display = 'none';
+            });
+            
+            // Close modal when clicking outside of it
+            window.addEventListener('click', function(event) {
+                if (event.target === complianceModal) {
+                    complianceModal.style.display = 'none';
+                }
+            });
+            
+            // Format dates in safetyData for better display
+            safetyData.forEach(item => {
+                if (item.Date) {
+                    const date = new Date(item.Date);
+                    // Store original date for filtering
+                    item.originalDate = item.Date;
+                    // Format date as DD-MMM-YYYY
+                    item.Date = date.toLocaleDateString('en-US', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                    });
+                }
+            });
+            
+            // Add event listeners to month buttons
+            monthButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    monthButtons.forEach(b => b.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    const selectedMonth = this.dataset.month;
+                    const selectedTopic = topicFilter.value;
+                    
+                    // Update data based on selected month
+                    populateTopicsTable(selectedTopic, selectedMonth, null);
+                    generateWeekButtons(selectedMonth);
+                });
+            });
+            
+            // Populate exam date buttons with available dates
+            const examDates = Object.keys(examData[0]).filter(key => 
+                key.match(/\d+\/\d+\/\d+/) && key !== "ZipGrade ID" && key !== "External ID"
+            );
+            
+            examDates.forEach(date => {
+                const button = document.createElement('button');
+                button.className = 'month-btn';
+                button.dataset.date = date;
+                const formattedDate = new Date(date).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric'
+                });
+                button.textContent = formattedDate;
+                examDateButtons.appendChild(button);
+            });
+            
+            // Set current month as default selection
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth() + 1;
+            
+            // Instead, just set the active class and trigger the click for the current month
+            const currentMonthBtn = document.querySelector(`.month-btn[data-month="${currentMonth}"]`);
+            if (currentMonthBtn) {
+                monthButtons.forEach(btn => btn.classList.remove('active'));
+                currentMonthBtn.classList.add('active');
+                currentMonthBtn.click();
+            } else {
+                // If current month button not found, default to "All Months"
+                const allMonthsBtn = document.querySelector('.month-btn[data-month="all"]');
+                if (allMonthsBtn) {
+                    monthButtons.forEach(btn => btn.classList.remove('active'));
+                    allMonthsBtn.classList.add('active');
+                    allMonthsBtn.click();
+                }
+            }
+            
+            // Initialize with current month's data
+            const selectedTopic = topicFilter.value;
+            populateTopicsTable(selectedTopic, currentMonth.toString(), null);
+            generateWeekButtons(currentMonth.toString());
+            
+            topicFilter.addEventListener('change', function() {
+                const selectedTopic = this.value;
+                const selectedMonth = document.querySelector('.month-btn.active').dataset.month;
+                const activeWeekBtn = document.querySelector('.week-btn.active');
+                
+                if (activeWeekBtn.dataset.week === 'all') {
+                    populateTopicsTable(selectedTopic, selectedMonth, null);
+                } else {
+                    const startDate = new Date(activeWeekBtn.dataset.start);
+                    const endDate = new Date(activeWeekBtn.dataset.end);
+                    populateTopicsTable(selectedTopic, selectedMonth, { start: startDate, end: endDate });
+                }
+            });
+            
+            // Generate week filter buttons
+            generateWeekButtons(currentMonth.toString());
+            
+            // Extract unique topics for filter
+            const topics = [...new Set(safetyData.map(item => item.SUBTOPIC))];
+            topics.forEach(topic => {
+                if (topic) {
+                    const option = document.createElement('option');
+                    option.value = topic;
+                    option.textContent = topic;
+                    topicFilter.appendChild(option);
+                }
+            });
+            
+            // Function to generate week filter buttons
+            function generateWeekButtons(monthFilter) {
+                // Clear existing buttons
+                weekFilter.innerHTML = '';
+                
+                // Add "All Weeks" button
+                const allWeeksBtn = document.createElement('button');
+                allWeeksBtn.className = 'week-btn active';
+                allWeeksBtn.textContent = 'All Weeks';
+                allWeeksBtn.dataset.week = 'all';
+                weekFilter.appendChild(allWeeksBtn);
+                
+                // Filter dates by month if needed
+                let filteredDates = [...new Set(safetyData.map(item => item.originalDate))];
+                
+                if (monthFilter !== 'all') {
+                    filteredDates = filteredDates.filter(dateStr => {
+                        const date = new Date(dateStr);
+                        return date.getMonth() + 1 === parseInt(monthFilter);
+                    });
+                }
+                
+                // Sort dates chronologically
+                filteredDates.sort((a, b) => new Date(a) - new Date(b));
+                
+                // Group dates by week
+                const weeks = {};
+                filteredDates.forEach(dateStr => {
+                    const date = new Date(dateStr);
+                    // Get the Sunday of the week
+                    const day = date.getDay();
+                    const diff = date.getDate() - day + (day === 0 ? 0 : -1); // adjust when day is Sunday
+                    const sunday = new Date(date);
+                    sunday.setDate(diff);
+                    
+                    // Format as YYYY-MM-DD for key
+                    const weekKey = sunday.toISOString().substring(0, 10);
+                    
+                    if (!weeks[weekKey]) {
+                        const saturday = new Date(sunday);
+                        saturday.setDate(sunday.getDate() + 6);
+                        
+                        // Format for display
+                        const sundayStr = sunday.toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric'
+                        });
+                        const saturdayStr = saturday.toLocaleDateString('en-US', {
+                            month: 'short',
+                            day: 'numeric'
+                        });
+                        
+                        weeks[weekKey] = {
+                            display: `${sundayStr} - ${saturdayStr}`,
+                            start: sunday,
+                            end: saturday
+                        };
+                    }
+                });
+                
+                // Get current date and find current week
+                const today = new Date();
+                const currentDay = today.getDay();
+                const diffToSunday = currentDay === 0 ? 0 : -currentDay;
+                const currentSunday = new Date(today);
+                currentSunday.setDate(today.getDate() + diffToSunday);
+                const currentWeekKey = currentSunday.toISOString().substring(0, 10);
+                
+                // Sort week keys chronologically
+                const sortedWeekKeys = Object.keys(weeks).sort();
+                
+                // Create buttons for each week in chronological order
+                sortedWeekKeys.forEach(weekKey => {
+                    const weekBtn = document.createElement('button');
+                    weekBtn.className = 'week-btn';
+                    weekBtn.textContent = weeks[weekKey].display;
+                    weekBtn.dataset.week = weekKey;
+                    weekBtn.dataset.start = weeks[weekKey].start.toISOString();
+                    weekBtn.dataset.end = weeks[weekKey].end.toISOString();
+                    weekFilter.appendChild(weekBtn);
+                });
+                
+                // Add event listeners to week buttons
+                const weekBtns = document.querySelectorAll('.week-btn');
+                weekBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        weekBtns.forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        
+                        const selectedWeek = this.dataset.week;
+                        const selectedTopic = topicFilter.value;
+                        const selectedMonth = document.querySelector('.month-btn.active').dataset.month;
+                        
+                        if (selectedWeek === 'all') {
+                            populateTopicsTable(selectedTopic, selectedMonth, null);
+                        } else {
+                            const startDate = new Date(this.dataset.start);
+                            const endDate = new Date(this.dataset.end);
+                            populateTopicsTable(selectedTopic, selectedMonth, { start: startDate, end: endDate });
+                        }
+                    });
+                });
+            }
+            
+            // Function to show compliance details in modal
+            function showComplianceDetails(item) {
+                // Set the modal title
+                complianceTopicTitle.textContent = `${item.Date} - ${item.SUBTOPIC} (${item.Assigned})`;
+                
+                // Clear previous content
+                complianceDetailsBody.innerHTML = '';
+                
+                // Add rows for each position in the specified order: 2nd, 3rd, 1st
+                const positions = [
+                    { key: '2nd', label: '2nd Shift' },
+                    { key: '3rd', label: '3rd Shift' },
+                    { key: '1st', label: '1st Shift' }
+                ];
+                
+                positions.forEach(pos => {
+                    const row = document.createElement('tr');
+                    const hasName = item[pos.key] && item[pos.key].trim() !== '';
+                    
+                    row.innerHTML = `
+                        <td>${pos.label}</td>
+                        <td class="${hasName ? 'pass' : 'fail'}">${hasName ? '✓' : '✗'}</td>
+                        <td>${hasName ? item[pos.key] : '-'}</td>
+                    `;
+                    
+                    complianceDetailsBody.appendChild(row);
+                });
+                
+                // Show the modal
+                complianceModal.style.display = 'block';
+            }
+            
+            // Populate topics table
+            function populateTopicsTable(filter, monthFilter, weekFilter, areaFilter = null) {
+                topicsTable.innerHTML = '';
+                
+                const filteredData = safetyData.filter(item => {
+                    const itemDate = new Date(item.originalDate);
+                    
+                    const dateMatch = monthFilter === 'all' || itemDate.getMonth() + 1 === parseInt(monthFilter);
+                    const topicMatch = filter === 'all' || item.SUBTOPIC === filter;
+                    const areaMatch = !areaFilter || item.Assigned === areaFilter;
+                    
+                    let weekMatch = true;
+                    if (weekFilter) {
+                        weekMatch = itemDate >= weekFilter.start && itemDate <= weekFilter.end;
+                    }
+                    
+                    return dateMatch && topicMatch && weekMatch && areaMatch;
+                });
+                
+                filteredData.forEach(item => {
+                    // Skip exam rows for topics table
+                    if (item.CHAPTER === 'Exam') return;
+                    
+                    const row = document.createElement('tr');
+                    
+                    // Calculate compliance
+                    let complianceCount = 0;
+                    let totalPositions = 0;
+                    
+                    if (item['1st']) { totalPositions++; complianceCount++; }
+                    else totalPositions++;
+                    
+                    if (item['2nd']) { totalPositions++; complianceCount++; }
+                    else totalPositions++;
+                    
+                    if (item['3rd']) { totalPositions++; complianceCount++; }
+                    else totalPositions++;
+                    
+                    const compliancePercentage = totalPositions > 0 ? Math.round((complianceCount / totalPositions) * 100) : 0;
+                    
+                    // Determine progress bar class based on percentage
+                    let progressClass = 'progress-low';
+                    if (compliancePercentage === 100) {
+                        progressClass = 'progress-perfect';
+                    } else if (compliancePercentage > 66) {
+                        progressClass = 'progress-high';
+                    } else if (compliancePercentage >= 33) {
+                        progressClass = 'progress-medium';
+                    }
+                    
+                    // Highlight the row if it matches the area filter
+                    const rowClass = areaFilter && item.Assigned === areaFilter ? 'highlighted-row' : '';
+                    row.className = rowClass;
+                    
+                    row.innerHTML = `
+                        <td>${item.Date}</td>
+                        <td>${item.CHAPTER} ${item.SECTION}</td>
+                        <td>${item.SUBTOPIC}</td>
+                        <td>${item.Assigned}</td>
+                        <td>
+                            <div class="progress-bar clickable" data-index="${filteredData.indexOf(item)}">
+                                <div class="progress-fill ${progressClass}" style="width: ${compliancePercentage}%">${compliancePercentage}%</div>
+                            </div>
+                        </td>
+                    `;
+                    
+                    topicsTable.appendChild(row);
+                });
+                
+                // Add click event to progress bars
+                document.querySelectorAll('.progress-bar.clickable').forEach(bar => {
+                    bar.addEventListener('click', function() {
+                        const index = this.dataset.index;
+                        showComplianceDetails(filteredData[index]);
+                    });
+                });
+                
+                // Update area compliance
+                updateAreaCompliance(monthFilter);
+            }
+            
+            // Update area compliance stats
+            function updateAreaCompliance(monthFilter) {
+                const areas = ['MS', 'FNTRL', 'LS', 'H2S', 'SDCS', 'SL/MDCS'];
+                const areaStats = {};
+                let overallCompliance = { total: 0, filled: 0 };
+                
+                // Filter data by month
+                const filteredData = safetyData.filter(item => {
+                    return monthFilter === 'all' || new Date(item.originalDate).getMonth() + 1 === parseInt(monthFilter);
+                });
+                
+                // Calculate compliance for each area
+                areas.forEach(area => {
+                    const areaData = filteredData.filter(item => item.Assigned === area);
+                    let totalPositions = 0;
+                    let filledPositions = 0;
+                    
+                    areaData.forEach(item => {
+                        if (item['1st']) { totalPositions++; filledPositions++; }
+                        else totalPositions++;
+                        
+                        if (item['2nd']) { totalPositions++; filledPositions++; }
+                        else totalPositions++;
+                        
+                        if (item['3rd']) { totalPositions++; filledPositions++; }
+                        else totalPositions++;
+                    });
+                    
+                    areaStats[area] = {
+                        total: totalPositions,
+                        filled: filledPositions,
+                        percentage: totalPositions > 0 ? Math.round((filledPositions / totalPositions) * 100) : 0
+                    };
+                    
+                    overallCompliance.total += totalPositions;
+                    overallCompliance.filled += filledPositions;
+                });
+                
+                // Determine progress class for each area
+                function getProgressClass(percentage) {
+                    if (percentage > 66) return 'progress-high';
+                    if (percentage >= 33) return 'progress-medium';
+                    return 'progress-low';
+                }
+                
+                // Update progress bars with appropriate classes
+                document.getElementById('ms-progress').style.width = `${areaStats['MS']?.percentage || 0}%`;
+                document.getElementById('ms-progress').textContent = `${areaStats['MS']?.percentage || 0}%`;
+                document.getElementById('ms-progress').className = `progress-fill ${getProgressClass(areaStats['MS']?.percentage || 0)}`;
+                
+                document.getElementById('fntrl-progress').style.width = `${areaStats['FNTRL']?.percentage || 0}%`;
+                document.getElementById('fntrl-progress').textContent = `${areaStats['FNTRL']?.percentage || 0}%`;
+                document.getElementById('fntrl-progress').className = `progress-fill ${getProgressClass(areaStats['FNTRL']?.percentage || 0)}`;
+                
+                document.getElementById('ls-progress').style.width = `${areaStats['LS']?.percentage || 0}%`;
+                document.getElementById('ls-progress').textContent = `${areaStats['LS']?.percentage || 0}%`;
+                document.getElementById('ls-progress').className = `progress-fill ${getProgressClass(areaStats['LS']?.percentage || 0)}`;
+                
+                document.getElementById('h2s-progress').style.width = `${areaStats['H2S']?.percentage || 0}%`;
+                document.getElementById('h2s-progress').textContent = `${areaStats['H2S']?.percentage || 0}%`;
+                document.getElementById('h2s-progress').className = `progress-fill ${getProgressClass(areaStats['H2S']?.percentage || 0)}`;
+                
+                document.getElementById('sdcs-progress').style.width = `${areaStats['SDCS']?.percentage || 0}%`;
+                document.getElementById('sdcs-progress').textContent = `${areaStats['SDCS']?.percentage || 0}%`;
+                document.getElementById('sdcs-progress').className = `progress-fill ${getProgressClass(areaStats['SDCS']?.percentage || 0)}`;
+                
+                document.getElementById('slmdcs-progress').style.width = `${areaStats['SL/MDCS']?.percentage || 0}%`;
+                document.getElementById('slmdcs-progress').textContent = `${areaStats['SL/MDCS']?.percentage || 0}%`;
+                document.getElementById('slmdcs-progress').className = `progress-fill ${getProgressClass(areaStats['SL/MDCS']?.percentage || 0)}`;
+                
+                const overallPercentage = overallCompliance.total > 0 ? 
+                    Math.round((overallCompliance.filled / overallCompliance.total) * 100) : 0;
+                document.getElementById('overall-progress').style.width = `${overallPercentage}%`;
+                document.getElementById('overall-progress').textContent = `${overallPercentage}%`;
+                document.getElementById('overall-progress').className = `progress-fill ${getProgressClass(overallPercentage)}`;
+                
+                // Update chart
+                updateComplianceChart(areaStats);
+                
+                // Add click event listeners to area labels for filtering
+                document.querySelectorAll('.stat-label').forEach(label => {
+                    // Make the label look clickable
+                    label.style.cursor = 'pointer';
+                    label.title = 'Click to filter by this area';
+                    
+                    // Remove any existing event listeners by cloning and replacing
+                    const newLabel = label.cloneNode(true);
+                    label.parentNode.replaceChild(newLabel, label);
+                    
+                    // Add new event listener
+                    newLabel.addEventListener('click', function() {
+                        const areaName = this.textContent.trim();
+                        let areaCode;
+                        
+                        // Map the display name to the area code used in the data
+                        switch(areaName) {
+                            case 'MS': areaCode = 'MS'; break;
+                            case 'FNTRL': areaCode = 'FNTRL'; break;
+                            case 'LS': areaCode = 'LS'; break;
+                            case 'H2S': areaCode = 'H2S'; break;
+                            case 'Sub DCS': areaCode = 'SDCS'; break;
+                            case 'Shiftleader/MDCS': areaCode = 'SL/MDCS'; break;
+                            default: areaCode = null;
+                        }
+                        
+                        // Filter the topics table by this area
+                        if (areaCode) {
+                            // Get current filters
+                            const selectedMonth = document.querySelector('.month-btn.active').dataset.month;
+                            const selectedTopic = topicFilter.value;
+                            const weekBtn = document.querySelector('.week-btn.active');
+                            
+                            let weekFilter = null;
+                            if (weekBtn.dataset.week !== 'all') {
+                                weekFilter = {
+                                    start: new Date(weekBtn.dataset.start),
+                                    end: new Date(weekBtn.dataset.end)
+                                };
+                            }
+                            
+                            // Apply area filter to the topics table
+                            populateTopicsTable(selectedTopic, selectedMonth, weekFilter, areaCode);
+                            
+                            // Highlight the selected area
+                            document.querySelectorAll('.stat-label').forEach(l => {
+                                l.style.backgroundColor = '';
+                                l.style.color = '';
+                            });
+                            this.style.backgroundColor = '#e0e0e0';
+                            this.style.color = '#0066cc';
+                        }
+                    });
+                });
+            }
+            
+            // Function to update the compliance chart with monthly averages
+            function updateComplianceChart(areaData) {
+                const ctx = document.getElementById('compliance-chart').getContext('2d');
+                
+                // Destroy previous chart if it exists
+                if (window.complianceChart) {
+                    window.complianceChart.destroy();
+                }
+                
+                // Get all months from data
+                const monthsData = {};
+                
+                safetyData.forEach(item => {
+                    if (item.originalDate) {
+                        const date = new Date(item.originalDate);
+                        const monthKey = `${date.getMonth() + 1}-${date.getFullYear()}`;
+                        const monthName = date.toLocaleString('default', { month: 'short' });
+                        
+                        if (!monthsData[monthKey]) {
+                            monthsData[monthKey] = {
+                                name: monthName,
+                                areas: {
+                                    'MS': { total: 0, filled: 0 },
+                                    'FNTRL': { total: 0, filled: 0 },
+                                    'LS': { total: 0, filled: 0 },
+                                    'H2S': { total: 0, filled: 0 },
+                                    'SDCS': { total: 0, filled: 0 },
+                                    'SL/MDCS': { total: 0, filled: 0 }
+                                },
+                                overall: { total: 0, filled: 0 }
+                            };
+                        }
+                        
+                        // Add data to the appropriate month and area
+                        const area = item.Assigned;
+                        if (area && monthsData[monthKey].areas[area]) {
+                            if (item['1st']) { 
+                                monthsData[monthKey].areas[area].total++; 
+                                monthsData[monthKey].areas[area].filled++;
+                                monthsData[monthKey].overall.total++;
+                                monthsData[monthKey].overall.filled++;
+                            } else {
+                                monthsData[monthKey].areas[area].total++;
+                                monthsData[monthKey].overall.total++;
+                            }
+                            
+                            if (item['2nd']) { 
+                                monthsData[monthKey].areas[area].total++; 
+                                monthsData[monthKey].areas[area].filled++;
+                                monthsData[monthKey].overall.total++;
+                                monthsData[monthKey].overall.filled++;
+                            } else {
+                                monthsData[monthKey].areas[area].total++;
+                                monthsData[monthKey].overall.total++;
+                            }
+                            
+                            if (item['3rd']) { 
+                                monthsData[monthKey].areas[area].total++; 
+                                monthsData[monthKey].areas[area].filled++;
+                                monthsData[monthKey].overall.total++;
+                                monthsData[monthKey].overall.filled++;
+                            } else {
+                                monthsData[monthKey].areas[area].total++;
+                                monthsData[monthKey].overall.total++;
+                            }
+                        }
+                    }
+                });
+                
+                // Calculate percentages for each month and area
+                const monthKeys = Object.keys(monthsData).sort((a, b) => {
+                    const [aMonth, aYear] = a.split('-').map(Number);
+                    const [bMonth, bYear] = b.split('-').map(Number);
+                    
+                    if (aYear !== bYear) return aYear - bYear;
+                    return aMonth - bMonth;
+                });
+                
+                // Prepare data for chart
+                const labels = monthKeys.map(key => monthsData[key].name);
+                
+                // Area-specific colors
+                const areaColors = {
+                    'MS': '#3498db',
+                    'FNTRL': '#9b59b6',
+                    'LS': '#2ecc71',
+                    'H2S': '#e74c3c',
+                    'SDCS': '#f1c40f',
+                    'SL/MDCS': '#1abc9c',
+                    'Overall': '#34495e'
+                };
+                
+                // Create datasets for each area
+                const datasets = Object.keys(areaColors).map(area => {
+                    return {
+                        label: area,
+                        data: monthKeys.map(key => {
+                            if (area === 'Overall') {
+                                const overall = monthsData[key].overall;
+                                return overall.total > 0 ? Math.round((overall.filled / overall.total) * 100) : 0;
+                            } else {
+                                const areaData = monthsData[key].areas[area];
+                                return areaData.total > 0 ? Math.round((areaData.filled / areaData.total) * 100) : 0;
+                            }
+                        }),
+                        backgroundColor: areaColors[area] + 'CC', // Add some transparency
+                        borderColor: areaColors[area],
+                        borderWidth: 2,
+                        borderRadius: 4,
+                        barPercentage: 0.8,
+                        categoryPercentage: 0.9
+                    };
+                });
+                
+                // Create new bar chart
+                window.complianceChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: datasets
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                max: 100,
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                },
+                                ticks: {
+                                    callback: function(value) {
+                                        return value + '%';
+                                    },
+                                    font: {
+                                        weight: 'bold'
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Compliance Percentage',
+                                    font: {
+                                        weight: 'bold'
+                                    }
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    font: {
+                                        weight: 'bold'
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Month',
+                                    font: {
+                                        weight: 'bold'
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Monthly Area Compliance',
+                                font: {
+                                    size: 16,
+                                    weight: 'bold'
+                                },
+                                padding: {
+                                    top: 10,
+                                    bottom: 20
+                                }
+                            },
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    usePointStyle: true,
+                                    boxWidth: 10,
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                titleFont: {
+                                    weight: 'bold',
+                                    size: 14
+                                },
+                                bodyFont: {
+                                    size: 13
+                                },
+                                padding: 12,
+                                cornerRadius: 6,
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.dataset.label}: ${context.raw}%`;
+                                    }
+                                }
+                            }
+                        },
+                        animation: {
+                            duration: 1000,
+                            easing: 'easeOutQuart'
+                        }
+                    }
+                });
+            }
+            
+            // Initialize exam data display
+            initializeExamDisplay(examData);
+        }
+        
+        // Function to initialize exam data display
+        function initializeExamDisplay(examData) {
+            const examDateButtons = document.getElementById('exam-date-buttons');
+            const scoreBody = document.getElementById('score-body');
+            let examChart = null;
+            
+            // Clear all existing date buttons except the "All Dates" button
+            while (examDateButtons.childElementCount > 1) {
+                examDateButtons.removeChild(examDateButtons.lastChild);
+            }
+            
+            // Get exam dates (columns that contain dates)
+            const examDates = Object.keys(examData[0]).filter(key => 
+                key.match(/\d+\/\d+\/\d+/) && key !== "ZipGrade ID" && key !== "External ID"
+            );
+            
+            // Sort dates in ascending order
+            const sortedDates = examDates.sort((a, b) => new Date(b) - new Date(a));
+            const latestDate = sortedDates[0]; // Get the most recent date
+            
+            // Populate date buttons - only add each date once
+            const addedDates = new Set();
+            sortedDates.forEach(date => {
+                // Skip if this date has already been added
+                if (addedDates.has(date)) return;
+                
+                const button = document.createElement('button');
+                button.className = 'month-btn';
+                button.dataset.date = date;
+                const formattedDate = new Date(date).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric'
+                });
+                button.textContent = formattedDate;
+                
+                // Set active class for the latest date
+                if (date === latestDate) {
+                    button.classList.add('active');
+                }
+                
+                examDateButtons.appendChild(button);
+                addedDates.add(date);
+            });
+            
+            // Remove "active" class from "All Dates" button
+            examDateButtons.querySelector('[data-date="all"]').classList.remove('active');
+            
+            // Add event listeners to date buttons
+            examDateButtons.querySelectorAll('.month-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    examDateButtons.querySelectorAll('.month-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Update data
+                    updateExamData(this.dataset.date);
+                });
+            });
+            
+            // Update exam data
+            function updateExamData(dateFilter = 'all') {
+                // Calculate statistics
+                let totalParticipants = 0;
+                let totalScores = 0;
+                let passCount = 0;
+                const scoreDistribution = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+                
+                // Clear score table
+                scoreBody.innerHTML = '';
+                
+                examData.forEach(person => {
+                    if (dateFilter === 'all') {
+                        // For "all" dates, count each score
+                        examDates.forEach(date => {
+                            if (person[date] && person[date].trim() !== '' && person[date] !== '--') {
+                                const score = parseInt(person[date]);
+                                if (!isNaN(score) && score >= 0 && score <= 5) {
+                                    totalParticipants++;
+                                    totalScores += score;
+                                    if (score > 2) passCount++;
+                                    scoreDistribution[score]++;
+                                }
+                            }
+                        });
+                    } else {
+                        // For specific date
+                        if (person[dateFilter] && person[dateFilter].trim() !== '' && person[dateFilter] !== '--') {
+                            const score = parseInt(person[dateFilter]);
+                            if (!isNaN(score) && score >= 0 && score <= 5) {
+                                totalParticipants++;
+                                totalScores += score;
+                                if (score > 2) passCount++;
+                                scoreDistribution[score]++;
+                            }
+                        }
+                    }
+                });
+                
+                // Update score distribution table
+                for (let score = 0; score <= 5; score++) {
+                    const row = document.createElement('tr');
+                    const count = scoreDistribution[score];
+                    const percentage = totalParticipants > 0 ? Math.round((count / totalParticipants) * 100) : 0;
+                    
+                    row.innerHTML = `
+                        <td class="score-${score} score-cell">${score}</td>
+                        <td class="count-cell">${count}</td>
+                        <td class="percentage-cell">${percentage}%</td>
+                    `;
+                    
+                    scoreBody.appendChild(row);
+                }
+                
+                // Update statistics
+                document.getElementById('total-participants').textContent = totalParticipants;
+                
+                const averageScore = totalParticipants > 0 ? (totalScores / totalParticipants).toFixed(1) : '0.0';
+                document.getElementById('average-score').textContent = averageScore;
+                
+                const passRate = totalParticipants > 0 ? Math.round((passCount / totalParticipants) * 100) : 0;
+                document.getElementById('pass-rate').textContent = `${passRate}%`;
+                
+                // Update chart
+                updateExamChart(scoreDistribution, totalParticipants);
+            }
+            
+            // Update exam chart as pie chart
+            function updateExamChart(scoreDistribution, totalParticipants) {
+                const ctx = document.getElementById('exam-chart').getContext('2d');
+                
+                // Destroy previous chart if it exists
+                if (examChart) {
+                    examChart.destroy();
+                }
+                
+                // Define fixed colors for each score (0-5)
+                const scoreColors = [
+                    '#e53935', // 0 - Red
+                    '#fb8c00', // 1 - Orange
+                    '#ffb300', // 2 - Amber
+                    '#c0ca33', // 3 - Lime
+                    '#7cb342', // 4 - Light Green
+                    '#43a047'  // 5 - Green
+                ];
+                
+                // Prepare data and labels
+                const data = [];
+                const labels = [];
+                const colors = [];
+                
+                // Important: Always include all scores in the same order
+                // This ensures consistent colors across different date selections
+                for (let score = 0; score <= 5; score++) {
+                    const count = scoreDistribution[score];
+                    // Only add to chart if there are participants with this score
+                    if (count > 0) {
+                        data.push(count);
+                        const percentage = totalParticipants > 0 ? Math.round((count / totalParticipants) * 100) : 0;
+                        labels.push(`Score ${score} (${percentage}%)`);
+                        colors.push(scoreColors[score]);
+                    }
+                }
+                
+                // Create new pie chart
+                examChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: colors,
+                            borderColor: colors,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Score Distribution'
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.raw || 0;
+                                        return `${label}: ${value} participants`;
+                                    }
+                                }
+                            },
+                            legend: {
+                                position: 'right'
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Initial population with latest date
+            updateExamData(latestDate);
+        }
+    </script>
 </body>
 </html> 

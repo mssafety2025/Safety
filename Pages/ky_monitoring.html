@@ -31,6 +31,7 @@
             border-radius: 20px;
             padding: 0.5rem 1.5rem;
             transition: all 0.3s ease;
+            align-content: center;
         }
         .btn:hover {
             transform: translateY(-2px);
@@ -43,6 +44,12 @@
             background: white;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 2rem;
+        }
+        .month-selector-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 0.5rem;
+        align-content: center;
         }
         .close-btn {
             position: absolute;
@@ -97,63 +104,112 @@
 </head>
 <body>
     <div class="container py-4">
+        <!-- Add Home Button -->
+        <div class="text-start mb-3">
+            <a href="../Safety.html" class="btn btn-primary">
+                <i class="bi bi-house-fill"></i> Home
+            </a>
+        </div>
 
-        <!-- Add summary cards -->
+        <!-- Add animated title section -->
         <div class="row mb-4">
-            <div class="col-md-3 col-sm-6">
-                <div class="stats-card text-center">
-                    <i class="bi bi-people-fill stats-icon text-primary"></i>
-                    <div class="stats-value" id="totalEmployees">0</div>
-                    <div class="stats-label text-muted">Total Employees</div>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-6">
-                <div class="stats-card text-center">
-                    <i class="bi bi-check-circle-fill stats-icon text-success"></i>
-                    <div class="stats-value" id="compliantCount">0</div>
-                    <div class="stats-label text-muted">100% Compliant</div>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-6">
-                <div class="stats-card text-center">
-                    <i class="bi bi-check-square-fill stats-icon text-info"></i>
-                    <div class="stats-value" id="partiallyCompliant">0</div>
-                    <div class="stats-label text-muted">95-99% Compliant</div>
-                </div>
-            </div>
-            <div class="col-md-3 col-sm-6">
-                <div class="stats-card text-center">
-                    <i class="bi bi-x-circle-fill stats-icon text-danger"></i>
-                    <div class="stats-value" id="nonCompliant">0</div>
-                    <div class="stats-label text-muted">&lt;95% Compliant</div>
+            <div class="col-12 text-center">
+                <div class="title-container py-3">
+                    <h1 class="main-title fw-bold">KY Card Monitoring Dashboard</h1>
+                    <p class="subtitle">Safety performance tracking and analysis</p>
+                    <div class="title-underline"></div>
                 </div>
             </div>
         </div>
 
-        <!-- Month Selector for Detailed (Monthly) Analysis for Charts 1 & 2 -->
-        <div class="mb-4">
+        <!-- MOVED: Team Performance Metrics to the top -->
+        <div class="row mb-5">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header text center">
+                        <h5 class="card-title text-center">Team Performance Metrics</h5>
+                        <div class="btn-group month-selector" role="group">
+                            <button type="button" class="btn btn-sm btn-primary" data-month="January">Jan</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-month="February">Feb</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-month="March">Mar</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-month="April">Apr</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-month="May">May</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-month="June">Jun</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-month="July">Jul</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-month="August">Aug</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-month="September">Sep</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-month="October">Oct</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-month="November">Nov</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-month="December">Dec</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <canvas id="metricsChart" height="400"></canvas>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card h-100">
+                                    <div class="card-header bg-light py-1">
+                                        <h6 class="card-title text-center mb-0" style="font-size: 0.85rem;">Top Performing Group</h6>
+                                    </div>
+                                    <div class="card-body p-1">
+                                        <div class="table-responsive">
+                                            <table class="table table-sm" id="bestGroupTable" style="font-size: 0.75rem;">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Month</th>
+                                                        <th>Best Group</th>
+                                                        <th>Score</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- Will be filled by JavaScript -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Personnel Average Ratings moved to appear right after Team Performance Metrics -->
+        <div class="row mb-5">
+            <div class="col-md-12">
+                <h2 class="text-center"><span id="ratingTitleMonth">March</span> Personnel Average KY Ratings</h2>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <!-- Note we're using marchRatingsChart ID to match existing JavaScript -->
+                        <canvas id="marchRatingsChart" width="400" height="250"></canvas>
+                    </div>
+                    <div class="col-sm-4" id="marchRatingsSummary">
+                        <!-- Summary will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Month Selector for Detailed (Monthly) Analysis for Chart 2 -->
+        <div class="mb-4" style="display: none;">
             <div id="detailedMonthSelector" class="mb-3 d-flex flex-wrap justify-content-center">
                 <!-- Buttons will be inserted dynamically -->
             </div>
         </div>
 
-        <!-- Row for Chart 1 and Chart 2 in two columns -->
-        <div class="row">
-            <!-- Chart 1: Average Compliance per Group (Monthly) -->
-            <div class="col-md-6 mb-5">
-                <h2 class="text-center">Compliance per Group</h2>
-                <canvas id="barChart" width="400" height="250"></canvas>
-            </div>
-
-            <!-- Chart 2: Personnel Compliance (Monthly) as a Pie Chart with side summary -->
-            <div class="col-md-6 mb-5">
+        <!-- Personnel Compliance Chart - hidden but kept in DOM -->
+        <div class="row mb-5" style="display: none;">
+            <div class="col-md-12">
                 <h2 class="text-center">Personnel Compliance</h2>
                 <p class="text-center">Click on a slice to view the names in that category.</p>
-                <div class="row">
-                    <div class="col-sm-8">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
                         <canvas id="personnelChart" width="400" height="250"></canvas>
                     </div>
-                    <div class="col-sm-4" id="below95Summary">
+                    <div class="col-md-4" id="below95Summary">
                         <!-- Summary table will be inserted here -->
                     </div>
                 </div>
@@ -186,6 +242,14 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- New Chart 4: Monthly KY Card Performance -->
+        <div class="row mb-5">
+            <div class="col-md-12">
+                <h2 class="text-center">Monthly KY Card Consumption</h2>
+                <canvas id="kyCardChart" width="1200" height="400"></canvas>
             </div>
         </div>
     </div>
@@ -222,6 +286,9 @@
     <!-- Include the data -->
     <script src="ky.js"></script>
     
+    <!-- Load data script -->
+    <script src="ky2.js"></script>
+    
     <!-- Compute metrics and display charts -->
     <script>
         // Register the Data Labels plugin
@@ -229,12 +296,14 @@
 
         // List of months
         const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const fullMonths = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
         // Global variables for tracking the selected month for Charts 1 & 2
-        let currentSelectedMonth = months[new Date().getMonth()];
+        let currentSelectedMonth = 'March'; // Default to March since we have data for it
         let currentBelow95 = [];
         let currentBetween95And100 = [];
         let currentFullyCompliant = [];
+        let currentMetric = "Average Team Compliance"; // Default metric
 
         // Define colors for grouping (Chart 1)
         const groupColors = {
@@ -250,87 +319,43 @@
             "4": "rgba(75, 192, 192, 1)"
         };
 
-        // ---------------------------
-        // Chart 1: Average Compliance per Group (Monthly)
-        const ctxBar = document.getElementById('barChart').getContext('2d');
-        const chart1 = new Chart(ctxBar, {
-            type: 'bar',
-            data: {
-                labels: ["Group 1", "Group 2", "Group 3", "Group 4"],
-                datasets: [{
-                    label: 'Average Compliance (%)',
-                    data: [0, 0, 0, 0],
-                    backgroundColor: [
-                        groupColors["1"],
-                        groupColors["2"],
-                        groupColors["3"],
-                        groupColors["4"]
-                    ],
-                    borderColor: [
-                        groupBorderColors["1"],
-                        groupBorderColors["2"],
-                        groupBorderColors["3"],
-                        groupBorderColors["4"]
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    title: {
-                        display: true
-                    },
-                    datalabels: {
-                        display: true,
-                        color: 'black',
-                        formatter: function(value) {
-                            return value === 0 ? '' : value;
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Groups'
-                        }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        title: {
-                            display: true,
-                        }
-                    }
-                }
-            }
-        });
+        // Update the month field mapping to match your data structure
+        const monthFieldMap = {
+            'January': 'Jan',
+            'February': 'Feb',
+            'March': 'Mar',  // Matches "Mar" in your data
+            'April': 'Apr',   // Matches "Apr" in your data
+            'May': 'May',
+            'June': 'Jun',
+            'July': 'Jul',
+            'August': 'Aug',
+            'September': 'Sep',
+            'October': 'Oct',
+            'November': 'Nov',
+            'December': 'Dec'
+        };
 
-        // Function to update Chart 1 based on the selected month.
-        function updateChart1(selectedMonth) {
-            const sums = [0, 0, 0, 0],
-                  counts = [0, 0, 0, 0];
-            data.forEach(record => {
-                const group = record.Group;
-                const valueStr = record[selectedMonth];
-                if (valueStr && valueStr.trim() !== "") {
-                    const value = parseFloat(valueStr.replace('%', ''));
-                    if (!isNaN(value)) {
-                        const idx = parseInt(group) - 1;
-                        sums[idx] += value;
-                        counts[idx]++;
-                    }
-                }
-            });
-            const averages = sums.map((sum, i) =>
-                counts[i] > 0 ? +(sum / counts[i]).toFixed(1) : 0
-            );
-            chart1.data.datasets[0].data = averages;
-            chart1.update();
+        // Function to get the appropriate group field based on month
+        function getGroupFieldForMonth(month) {
+            // Map abbreviated month names to full month names
+            const monthMap = {
+                'Jan': 'January',
+                'Feb': 'February',
+                'Mar': 'March',
+                'Apr': 'April',
+                'May': 'May',
+                'Jun': 'June',
+                'Jul': 'July',
+                'Aug': 'August',
+                'Sep': 'September',
+                'Oct': 'October',
+                'Nov': 'November',
+                'Dec': 'December'
+            };
+            
+            // Use the full month name for the group field
+            const fullMonthName = monthMap[month] || month;
+            return `Group_${fullMonthName}`;
         }
 
         // ---------------------------
@@ -404,6 +429,10 @@
 
         // Function to update Chart 2 based on the selected month with three divisions:
         function updateChart2(selectedMonth) {
+            if (!chart2 || !chart2.data || !chart2.data.datasets) {
+                return; // Exit early if chart2 isn't properly initialized
+            }
+            
             // Reset the arrays
             currentBelow95 = [];
             currentBetween95And100 = [];
@@ -432,13 +461,210 @@
         }
 
         // ---------------------------
+        // NEW: Chart for March Personnel Ratings
+        let currentBelow75 = [];
+        let currentBetween75And95 = [];
+        let currentBetween95And100March = [];
+        let currentFullyCompliantMarch = [];
+
+        // Add a new div for the March ratings chart after the KY Card Chart
+        const marchRatingsDiv = document.createElement('div');
+        marchRatingsDiv.className = 'row mb-5';
+        marchRatingsDiv.innerHTML = `
+            <div class="col-md-12">
+                
+                <div class="row">
+                    <div class="col-sm-8">
+                        <canvas id="marchRatingsChart" width="400" height="250"></canvas>
+                    </div>
+                    <div class="col-sm-4" id="marchRatingsSummary">
+                        <!-- Summary will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        `;
+        document.querySelector('.container').appendChild(marchRatingsDiv);
+
+        // Create the March Ratings Chart
+        const ctxMarchRatings = document.getElementById('marchRatingsChart').getContext('2d');
+        const marchRatingsChart = new Chart(ctxMarchRatings, {
+            type: 'pie',
+            data: {
+                labels: ["< 75%", "≥75% and <95%", "≥95% and <100%", "100%"],
+                datasets: [{
+                    label: 'Personnel Count',
+                    data: [0, 0, 0, 0],
+                    backgroundColor: [
+                        'rgba(255, 0, 0, 0.6)',      // Red for <75%
+                        'rgba(255, 165, 0, 0.6)',    // Orange for 75-95%
+                        'rgba(255, 206, 86, 0.6)',   // Yellow for 95-100%
+                        'rgba(54, 162, 235, 0.6)'    // Blue for 100%
+                    ],
+                    borderColor: [
+                        'rgba(255, 0, 0, 1)',
+                        'rgba(255, 165, 0, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(54, 162, 235, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Personnel Ratings'
+                    },
+                    legend: {
+                        position: 'top'
+                    },
+                    datalabels: {
+                        display: true,
+                        color: 'black',
+                        formatter: function(value) {
+                            return value === 0 ? '' : value;
+                        }
+                    }
+                },
+                onClick: (event, activeElements) => {
+                    if (activeElements.length > 0) {
+                        const index = activeElements[0].index;
+                        let records = [];
+                        let title = "";
+                        if (index === 0) {
+                            records = currentBelow75;
+                            title = "Personnel with <75% Rating";
+                        } else if (index === 1) {
+                            records = currentBetween75And95;
+                            title = "Personnel with ≥75% and <95% Rating";
+                        } else if (index === 2) {
+                            records = currentBetween95And100March;
+                            title = "Personnel with ≥95% and <100% Rating";
+                        } else if (index === 3) {
+                            records = currentFullyCompliantMarch;
+                            title = "Personnel with 100% Rating";
+                        }
+                        
+                        // Update modal title and content
+                        document.getElementById("personnelListTitle").textContent = title;
+                        document.getElementById("personnelListContent").innerHTML = buildPersonnelTable(records);
+                        
+                        // Show the modal using Bootstrap
+                        const modal = new bootstrap.Modal(document.getElementById('personnelListContainer'));
+                        modal.show();
+                    }
+                }
+            }
+        });
+
+        // Modify the updateMarchRatingsChart function
+        function updateMarchRatingsChart(selectedMonth) {
+            const field = monthFieldMap[selectedMonth];
+            
+            // Reset the arrays
+            currentBelow75 = [];
+            currentBetween75And95 = [];
+            currentBetween95And100March = [];
+            currentFullyCompliantMarch = [];
+
+            data.forEach(record => {
+                const valueStr = record[field];
+                if (valueStr && valueStr.trim() !== "" && valueStr !== "--") {
+                    // Handle different percentage formats
+                    const cleanValue = valueStr.replace('%', '').trim();
+                    const value = parseFloat(cleanValue);
+                    
+                    if (!isNaN(value)) {
+                        if (value === 100) {
+                            currentFullyCompliantMarch.push(record);
+                        } else if (value >= 95) {
+                            currentBetween95And100March.push(record);
+                        } else if (value >= 75) {
+                            currentBetween75And95.push(record);
+                        } else {
+                            currentBelow75.push(record);
+                        }
+                    }
+                }
+            });
+
+            // Update pie chart dataset
+            const counts = [
+                currentBelow75.length, 
+                currentBetween75And95.length, 
+                currentBetween95And100March.length, 
+                currentFullyCompliantMarch.length
+            ];
+            
+            // Update chart only if data exists
+            if (counts.some(c => c > 0)) {
+                marchRatingsChart.data.datasets[0].data = counts;
+                marchRatingsChart.update();
+            }
+            
+            updateRatingsSummary(selectedMonth, currentBelow75, currentBetween75And95, 
+                               currentBetween95And100March, currentFullyCompliantMarch);
+        }
+
+        // Function to update the ratings summary section
+        function updateRatingsSummary(selectedMonth, below75, between75And95, between95And100, fullyCompliant) {
+            // Calculate total personnel
+            const total = below75.length + between75And95.length + 
+                         between95And100.length + fullyCompliant.length;
+            
+            // Create summary html
+            let summaryHtml = `
+                <div class="card mb-2">
+                    <div class="card-body p-2">
+                        <h6>Summary for ${selectedMonth}</h6>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Total Personnel:</span>
+                            <span class="fw-bold">${total}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>Below 75%:</span>
+                            <span class="fw-bold text-danger">${below75.length} (${Math.round(below75.length/total*100) || 0}%)</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>75% to 94%:</span>
+                            <span class="fw-bold text-warning">${between75And95.length} (${Math.round(between75And95.length/total*100) || 0}%)</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>95% to 99%:</span>
+                            <span class="fw-bold text-info">${between95And100.length} (${Math.round(between95And100.length/total*100) || 0}%)</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span>100%:</span>
+                            <span class="fw-bold text-success">${fullyCompliant.length} (${Math.round(fullyCompliant.length/total*100) || 0}%)</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Update the summary container using the correct ID
+            document.getElementById('marchRatingsSummary').innerHTML = summaryHtml;
+        }
+
+        // ---------------------------
         // Utility: Build an HTML table (4 columns) grouping personnel by Group (1-4)
         function buildPersonnelTable(records) {
+            if (records.length === 0) {
+                return '<div class="text-center p-2">No personnel in this category</div>';
+            }
+            
             // Create an object holding group arrays.
             const groups = { "1": [], "2": [], "3": [], "4": [] };
+            
+            // Use the appropriate group field based on the current selected month
+            const groupField = getGroupFieldForMonth(currentSelectedMonth);
+            
+            console.log("Using group field for table:", groupField);
+            console.log("Current selected month:", currentSelectedMonth);
+            
             records.forEach(record => {
-                // Assumes 'Group' is present in the record.
-                const grp = record.Group.toString();
+                // Use the dynamic group field
+                const grp = record[groupField] ? record[groupField].toString() : "";
                 if (groups[grp]) {
                     groups[grp].push(record.Name);
                 }
@@ -475,8 +701,9 @@
         }
 
         // Initialize Charts 1 & 2 with default month (Jan)
-        updateChart1(currentSelectedMonth);
         updateChart2(currentSelectedMonth);
+        // Initialize March Ratings Chart
+        updateMarchRatingsChart(currentSelectedMonth);
 
         // Create month buttons for the detailed (monthly) analysis for Charts 1 & 2.
         const detailedMonthSelector = document.getElementById('detailedMonthSelector');
@@ -507,39 +734,27 @@
 
         // ---------------------------
         // Chart 3: Overall Compliance (All Months Combined)
-        const overallMonthlyCompliance = {};
-        months.forEach(m => {
-            overallMonthlyCompliance[m] = { sum: 0, count: 0 };
-        });
-
-        data.forEach(record => {
-            months.forEach(m => {
-                const valStr = record[m];
-                if (valStr && valStr.trim() !== "") {
-                    const val = parseFloat(valStr.replace('%', ''));
-                    if (!isNaN(val)) {
-                        overallMonthlyCompliance[m].sum += val;
-                        overallMonthlyCompliance[m].count++;
-                    }
-                }
-            });
-        });
-
-        const overallPercentages = [];
-        months.forEach(m => {
-            const { sum, count } = overallMonthlyCompliance[m];
-            const average = count > 0 ? sum / count : 0;
-            overallPercentages.push(+average.toFixed(1));
-        });
-
         const ctxMonthly = document.getElementById('monthlyChart').getContext('2d');
         new Chart(ctxMonthly, {
             type: 'bar',
             data: {
                 labels: months,
                 datasets: [{
-                    label: '',  // Set to an empty string to remove the displayed label
-                    data: overallPercentages,
+                    label: '',
+                    data: months.map(month => {
+                        const entry = ky2data.find(item => 
+                            item.Month === fullMonths[months.indexOf(month)] && 
+                            item.Data === 'Average Team Compliance'
+                        );
+                        
+                        // Handle missing or invalid data
+                        if (!entry || entry.Overall === '--' || entry.Overall === '') {
+                            return null; // Will create gaps in the chart
+                        }
+                        
+                        const value = parseFloat(entry.Overall.replace('%', ''));
+                        return isNaN(value) ? null : value;
+                    }),
                     backgroundColor: 'rgba(153, 102, 255, 0.6)',
                     borderColor: 'rgba(153, 102, 255, 1)',
                     borderWidth: 1
@@ -548,77 +763,81 @@
             options: {
                 responsive: false,
                 plugins: {
-                    legend: {
-                        display: false  // Hide the legend if you don't want the label to appear
-                    },
-                    title: {
-                        display: true,
-                        
-                    },
+                    legend: { display: false },
+                    title: { display: true },
                     datalabels: {
                         display: true,
                         color: 'black',
                         formatter: function(value) {
-                            return value === 0 ? '' : value;
+                            return value === null || value === 0 ? '' : value + '%';
                         }
                     }
                 },
                 scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: 'Month'
-                        }
-                    },
+                    x: { title: { display: true, text: 'Month' } },
                     y: {
                         beginAtZero: true,
                         max: 100,
-                        title: {
-                            display: true,
-                            text: 'Compliance (%)'
+                        title: { display: true, text: 'Compliance (%)' },
+                        ticks: { 
+                            callback: function(value) {
+                                return isNaN(value) ? '' : value + '%';
+                            }
                         }
                     }
                 }
             }
         });
 
-        // Update the table population logic
-        function updateComplianceTable(overallPercentages) {
+        // Update the compliance table population code
+        function updateComplianceTable() {
             const tableBody = document.getElementById('complianceTable');
             tableBody.innerHTML = '';
-            
-            // Get current month index (0-11) and current date
             const currentDate = new Date();
             const currentMonthIndex = currentDate.getMonth();
-            
-            overallPercentages.forEach((percentage, index) => {
-                // Only show months up to current month
-                if (index <= currentMonthIndex) {
+            const monthsToShow = months.slice(0, currentMonthIndex + 1);
+
+            monthsToShow.forEach((monthAbbr, index) => {
+                const monthFull = fullMonths[index];
+                const complianceData = ky2data.find(item => 
+                    item.Month === monthFull && 
+                    item.Data === 'Average Team Compliance'
+                );
+                
+                if (complianceData) {
                     const row = document.createElement('tr');
+                    const target = 97;
+                    const actual = complianceData.Overall !== '--' ? 
+                        parseFloat(complianceData.Overall.replace('%', '')) : 0;
                     
-                    // Only show status and coloring for completed months (not the current month)
-                    const isCurrentMonth = index === currentMonthIndex;
-                    const status = isCurrentMonth ? 
-                        '<i class="bi bi-hourglass-split text-warning"></i>' : 
-                        (percentage >= 95 
-                            ? '<i class="bi bi-check-circle-fill text-success"></i>' 
-                            : '<i class="bi bi-x-circle-fill text-danger"></i>');
-                    
+                    // Enhanced status indicator
+                    let status;
+                    if (index === currentMonthIndex) {
+                        status = `
+                        <div class="d-flex align-items-center text-warning">
+                            <div class="spinner-border spinner-border-sm me-2" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <span>In Progress</span>
+                        </div>`;
+                    } else {
+                        status = actual >= target ? 
+                            '<span class="text-success"><i class="fas fa-check-circle me-1"></i>Achieved</span>' : 
+                            '<span class="text-danger"><i class="fas fa-times-circle me-1"></i>Missed</span>';
+                    }
+
                     row.innerHTML = `
-                        <td>${months[index]}</td>
-                        <td>95%</td>
-                        <td class="${isCurrentMonth ? '' : (percentage >= 95 ? 'text-success' : 'text-danger')} fw-bold">
-                            ${percentage.toFixed(1)}%
-                        </td>
-                        <td class="text-center">${status}</td>
-                    `;
+                        <td class="fw-bold">${monthFull}</td>
+                        <td>${target}%</td>
+                        <td class="${actual >= target ? 'text-success' : 'text-danger'} fw-bold">${actual}%</td>
+                        <td>${status}</td>`;
                     tableBody.appendChild(row);
                 }
             });
         }
 
-        // Add this line after creating the chart
-        updateComplianceTable(overallPercentages);
+        // Call this function after initializing the chart
+        updateComplianceTable();
 
         // Utility: Function to show personnel details for <95% compliance for a specific month.
         function showBelow95Details(month) {
@@ -683,46 +902,1025 @@
         // Add this at the end of your script, after all chart initializations
         hideLoading();
 
-        // Function to update summary statistics
+        // Function to update summary statistics - Fix to handle missing elements
         function updateSummaryStats(selectedMonth) {
-            let totalEmps = 0;
-            let compliant = 0;
-            let partiallyComp = 0;
-            let nonComp = 0;
-
-            data.forEach(record => {
-                const valueStr = record[selectedMonth];
-                if (valueStr && valueStr.trim() !== "") {
-                    const value = parseFloat(valueStr.replace('%', ''));
-                    if (!isNaN(value)) {
-                        totalEmps++;
-                        if (value === 100) {
-                            compliant++;
-                        } else if (value >= 95) {
-                            partiallyComp++;
-                        } else {
-                            nonComp++;
-                        }
-                    }
-                }
-            });
-
-            document.getElementById('totalEmployees').textContent = totalEmps;
-            document.getElementById('compliantCount').textContent = compliant;
-            document.getElementById('partiallyCompliant').textContent = partiallyComp;
-            document.getElementById('nonCompliant').textContent = nonComp;
+            // Skip this function since we removed the elements
+            // This prevents errors when trying to update removed DOM elements
+            return;
         }
 
-        // Function to handle month changes
+        // Function to handle month change
         function onMonthChange(month) {
             currentSelectedMonth = month;
-            updateChart1(month);
             updateChart2(month);
-            updateSummaryStats(month);
+            updateMarchRatingsChart(month);
+            document.getElementById('ratingTitleMonth').textContent = month;
         }
 
         // Initialize summary stats with default month
         updateSummaryStats(currentSelectedMonth);
+
+        // Chart 4: Monthly KY Card Performance
+        const ctxKY = document.getElementById('kyCardChart').getContext('2d');
+        const kyCardData = {
+            labels: months,
+            datasets: [{
+                label: 'KY Cards Submitted',
+                data: Array(12).fill(0),
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        const kyCardChart = new Chart(ctxKY, {
+            type: 'bar',
+            data: kyCardData,
+            options: {
+                responsive: false,
+                plugins: {
+                    title: {
+                        display: false,
+                        text: 'Monthly KY Card Submissions'
+                    },
+                    legend: {
+                        display: false
+                    },
+                    datalabels: {
+                        display: true,
+                        color: 'black',
+                        formatter: function(value) {
+                            return value === 0 ? '' : value;
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Month'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of KY Cards'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Function to update KY Card Chart
+        function updateKYCardChart() {
+            const monthlyCounts = Array(12).fill(0);
+            
+            data.forEach(record => {
+                for (let i = 1; i <= 12; i++) {
+                    const value = record[i.toString()];
+                    if (value && value.trim() !== "") {
+                        monthlyCounts[i-1] += parseInt(value);
+                    }
+                }
+            });
+
+            kyCardChart.data.datasets[0].data = monthlyCounts;
+            kyCardChart.update();
+        }
+
+        // Call this function after all charts are initialized
+        updateKYCardChart();
+
+        // Initialize dashboard after page loads - Improved version
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                // Check if ky2data variable exists 
+                if (typeof ky2data === 'undefined') {
+                    console.error('KY2 Data not loaded properly. Check ky2.js file!');
+                } else {
+                    console.log('KY2 Data loaded:', ky2data.length, 'records');
+                }
+                
+                // Check if regular data variable exists for KY cards
+                if (typeof data === 'undefined') {
+                    console.error('KY Card Data not loaded properly. Check ky.js file!');
+                } else {
+                    console.log('KY Card Data loaded:', data.length, 'records');
+                }
+                
+                // Show loading overlay
+                document.getElementById('loadingOverlay').style.display = 'flex';
+                
+                // Initialize month selection for metrics chart
+                if (typeof updateMetricsChart === 'function') {
+                    updateMetricsChart('January');
+                }
+                
+                // Initialize KY Card Chart if function exists
+                if (typeof updateKYCardChart === 'function') {
+                    updateKYCardChart();
+                }
+                
+                // Initialize overall compliance chart if function exists
+                if (typeof updateOverallComplianceChart === 'function') {
+                    updateOverallComplianceChart();
+                }
+            } catch (e) {
+                console.error("Error initializing charts:", e);
+            } finally {
+                // Always hide loading overlay
+                document.getElementById('loadingOverlay').style.display = 'none';
+            }
+        });
+
+        // Initialize metrics chart
+        const ctxMetrics = document.getElementById('metricsChart').getContext('2d');
+
+        // Create gradient backgrounds for bars
+        const compliantGradient = ctxMetrics.createLinearGradient(0, 0, 0, 400);
+        compliantGradient.addColorStop(0, 'rgba(32, 201, 151, 0.9)');  // Teal top
+        compliantGradient.addColorStop(1, 'rgba(32, 201, 151, 0.4)');  // Lighter teal bottom
+
+        const ratingGradient = ctxMetrics.createLinearGradient(0, 0, 0, 400);
+        ratingGradient.addColorStop(0, 'rgba(54, 162, 235, 0.9)');     // Blue top
+        ratingGradient.addColorStop(1, 'rgba(54, 162, 235, 0.4)');     // Lighter blue bottom
+
+        const overallGradient = ctxMetrics.createLinearGradient(0, 0, 0, 400);
+        overallGradient.addColorStop(0, 'rgba(255, 99, 132, 0.9)');    // Pink top
+        overallGradient.addColorStop(1, 'rgba(255, 99, 132, 0.4)');    // Lighter pink bottom
+
+        const metricsChart = new Chart(ctxMetrics, {
+            type: 'bar',
+            data: {
+                labels: ['Group 1', 'Group 2', 'Group 3', 'Group 4'],
+                datasets: [
+                    {
+                        label: 'Avg. Team Compliance',
+                        data: [0, 0, 0, 0],
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Avg. Team Rating',
+                        data: [0, 0, 0, 0],
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Overall Team Rating',
+                        data: [0, 0, 0, 0],
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            padding: 15,
+                            font: {
+                                size: 13,
+                                weight: 'bold'
+                            },
+                            usePointStyle: true,
+                            pointStyle: 'rectRounded'
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Team Performance Metrics',
+                        font: {
+                            size: 18,
+                            weight: 'bold'
+                        },
+                        padding: {
+                            top: 10,
+                            bottom: 20
+                        }
+                    },
+                    datalabels: {
+                        display: true,
+                        color: '#333',
+                        align: 'center',
+                        anchor: 'end',
+                        offset: -2,
+                        font: {
+                            weight: 'bold',
+                            size: 12
+                        },
+                        padding: 4,
+                        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                        borderRadius: 4,
+                        formatter: function(value) {
+                            return value ? value + '%' : '';
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                        titleFont: {
+                            size: 14
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        padding: 10,
+                        cornerRadius: 6,
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.parsed.y + '%';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Groups',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        },
+                        ticks: {
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: {
+                            color: 'rgba(200, 200, 200, 0.2)'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Percentage (%)',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return value + '%';
+                            },
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                },
+                animation: {
+                    duration: 1200,
+                    easing: 'easeOutQuart'
+                },
+                layout: {
+                    padding: {
+                        top: 10,
+                        right: 15,
+                        bottom: 10,
+                        left: 10
+                    }
+                },
+                barPercentage: 0.8,
+                categoryPercentage: 0.8
+            }
+        });
+
+        // Function to update metrics chart with all metrics for the selected month
+        function updateMetricsChart(month) {
+            // Find the data items for each metric
+            const complianceData = ky2data.find(item => item.Month === month && item.Data === "Average Team Compliance");
+            const ratingData = ky2data.find(item => item.Month === month && item.Data === "Average Team Rating");
+            const overallData = ky2data.find(item => item.Month === month && item.Data === "Overall Team Rating");
+            
+            // Update the chart title
+            metricsChart.options.plugins.title.text = `${month} Team Performance Metrics`;
+            
+            // Update dataset for Average Team Compliance
+            if (complianceData) {
+                metricsChart.data.datasets[0].data = [
+                    parseFloatFromPercentage(complianceData["1"]),
+                    parseFloatFromPercentage(complianceData["2"]),
+                    parseFloatFromPercentage(complianceData["3"]),
+                    parseFloatFromPercentage(complianceData["4"])
+                ];
+            } else {
+                metricsChart.data.datasets[0].data = [0, 0, 0, 0];
+            }
+            
+            // Update dataset for Average Team Rating
+            if (ratingData) {
+                metricsChart.data.datasets[1].data = [
+                    parseFloatFromPercentage(ratingData["1"]),
+                    parseFloatFromPercentage(ratingData["2"]),
+                    parseFloatFromPercentage(ratingData["3"]),
+                    parseFloatFromPercentage(ratingData["4"])
+                ];
+            } else {
+                metricsChart.data.datasets[1].data = [0, 0, 0, 0];
+            }
+            
+            // Update dataset for Overall Team Rating
+            if (overallData) {
+                metricsChart.data.datasets[2].data = [
+                    parseFloatFromPercentage(overallData["1"]),
+                    parseFloatFromPercentage(overallData["2"]),
+                    parseFloatFromPercentage(overallData["3"]),
+                    parseFloatFromPercentage(overallData["4"])
+                ];
+            } else {
+                metricsChart.data.datasets[2].data = [0, 0, 0, 0];
+            }
+            
+            // Update the chart
+            metricsChart.update();
+            
+            // Highlight the corresponding row in the best group table
+            const rows = document.querySelectorAll('#bestGroupTable tbody tr');
+            rows.forEach(row => {
+                if (row.cells[0].textContent === month.substring(0, 3)) {
+                    row.classList.add('table-primary');
+                } else {
+                    row.classList.remove('table-primary');
+                }
+            });
+        }
+        
+        // Helper function to get metric data for specific month
+        function getMetricDataForMonth(month, metricName) {
+            const metricData = ky2data.find(item => item.Month === month && item.Data === metricName);
+            
+            if (metricData) {
+                return [
+                    parseFloatFromPercentage(metricData["1"]),
+                    parseFloatFromPercentage(metricData["2"]),
+                    parseFloatFromPercentage(metricData["3"]),
+                    parseFloatFromPercentage(metricData["4"]),
+                    parseFloatFromPercentage(metricData["Overall"])
+                ];
+            }
+            
+            return [0, 0, 0, 0, 0];
+        }
+        
+        // Helper function to parse percentage strings to numbers
+        function parseFloatFromPercentage(value) {
+            if (!value || value === '' || value === '--') return null;
+            return parseFloat(value.replace('%', ''));
+        }
+        
+        // Add event listeners to month selector buttons
+        document.querySelectorAll('.month-selector button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const month = this.getAttribute('data-month');
+                updateMetricsChart(month);
+            });
+        });
+        
+        // Initialize with January data
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize with January data when page loads
+            updateMetricsChart('January');
+        });
+
+        // Add this at the beginning of your script section
+        function safelyInitializeCharts() {
+            // Prevent errors for the Personnel Chart
+            if (document.getElementById('personnelChart')) {
+                // Initialize chart2 as normal
+            } else {
+                // Create a dummy chart2 object with update method that does nothing
+                window.chart2 = {
+                    update: function() {},
+                    data: {datasets: [{data: []}]}
+                };
+            }
+            
+            // Do the same for other charts if needed
+        }
+
+        // Call this function after your document is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            safelyInitializeCharts();
+            // Rest of your initialization code
+        });
+
+        // Make updateChart2 safe
+        function updateChart2(selectedMonth) {
+            if (!chart2 || !chart2.data || !chart2.data.datasets) {
+                return; // Exit early if chart2 isn't properly initialized
+            }
+            
+            // Original updateChart2 code
+            // ...
+        }
+
+        // Add this at the beginning of your script or in the DOMContentLoaded event
+        document.addEventListener('DOMContentLoaded', function() {
+            // Remove loading overlay after a short delay
+            setTimeout(function() {
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                if (loadingOverlay) {
+                    loadingOverlay.style.display = 'none';
+                }
+            }, 1000); // 1 second delay
+            
+            // Rest of your initialization code
+            // ...
+        });
+        
+        // Alternatively, if you have specific code that should signal completion:
+        function hideLoadingOverlay() {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            if (loadingOverlay) {
+                loadingOverlay.style.display = 'none';
+            }
+        }
+        
+        // Call this function after your data loading and chart initialization is complete
+        // For example, after your last chart is initialized
+
+        // Add after your existing script code
+        
+        // Simplified function to get the appropriate data column
+        function getDataColumnForRatings(monthName) {
+            // Direct mapping with visual feedback
+            console.log("Finding data column for month:", monthName);
+            
+            const columnMapping = {
+                'January': 'Jan',
+                'February': 'Feb',
+                'March': 'Mar'
+            };
+            
+            const dataColumn = columnMapping[monthName] || monthName.substring(0, 3);
+            console.log(`Using data column: ${dataColumn} for ${monthName}`);
+            return dataColumn;
+        }
+        
+        // Enhanced function to update chart with better debugging
+        function updatePersonnelRatingsChart(selectedMonth) {
+            console.log("🔄 Updating Personnel Ratings Chart for:", selectedMonth);
+            
+            // Update the title to show selected month
+            document.getElementById('ratingTitleMonth').textContent = selectedMonth;
+            
+            // Get the appropriate data column
+            const dataColumn = getDataColumnForRatings(selectedMonth);
+            
+            // Debug: Show some sample records with their values
+            console.log("Sample data records for " + dataColumn + ":");
+            if (data && data.length > 0) {
+                for (let i = 0; i < Math.min(5, data.length); i++) {
+                    console.log(`Record ${i}: Name=${data[i].Name}, ${dataColumn}=${data[i][dataColumn]}`);
+                }
+            }
+            
+            // Reset the arrays for different rating categories
+            let currentBelow75 = [];
+            let currentBetween75And95 = [];
+            let currentBetween95And100 = [];
+            let currentFullyCompliant = [];
+            
+            // Process data using the appropriate column
+            data.forEach(record => {
+                const valueStr = record[dataColumn];
+                if (valueStr && valueStr.trim() !== "") {
+                    const value = parseFloat(valueStr.replace('%', ''));
+                    if (!isNaN(value)) {
+                        if (value === 100) {
+                            currentFullyCompliant.push(record);
+                        } else if (value >= 95) {
+                            currentBetween95And100.push(record);
+                        } else if (value >= 75) {
+                            currentBetween75And95.push(record);
+                        } else {
+                            currentBelow75.push(record);
+                        }
+                    }
+                }
+            });
+            
+            console.log(`📊 Counts for ${dataColumn}:`, {
+                "below75": currentBelow75.length,
+                "between75And95": currentBetween75And95.length,
+                "between95And100": currentBetween95And100.length,
+                "fullyCompliant": currentFullyCompliant.length
+            });
+            
+            // Update the chart data
+            if (marchRatingsChart) {
+                marchRatingsChart.data.datasets[0].data = [
+                    currentBelow75.length, 
+                    currentBetween75And95.length, 
+                    currentBetween95And100.length, 
+                    currentFullyCompliant.length
+                ];
+                marchRatingsChart.update();
+                
+                // Update the summary section
+                updateRatingsSummary(selectedMonth, currentBelow75, currentBetween75And95, 
+                                   currentBetween95And100, currentFullyCompliant);
+            }
+        }
+        
+        // Direct event binding for month buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("Setting up month button click handlers");
+            
+            // Add direct event handlers for month buttons - use event delegation
+            document.querySelector('.month-selector').addEventListener('click', function(event) {
+                // Check if a button was clicked
+                if (event.target.classList.contains('btn')) {
+                    const selectedMonth = event.target.getAttribute('data-month');
+                    console.log("🔘 Month button clicked:", selectedMonth);
+                    
+                    // Update all charts with the selected month
+                    updatePersonnelRatingsChart(selectedMonth);
+                }
+            });
+            
+            // Force immediate update with March data on page load
+            setTimeout(() => {
+                console.log("Initial chart update");
+                updatePersonnelRatingsChart('March');
+            }, 500);
+        });
+
+        // Add this to your existing scripts - will set the current month button as active
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get current month name
+            const monthNames = [
+                "January", "February", "March", "April", "May", "June", 
+                "July", "August", "September", "October", "November", "December"
+            ];
+            const currentDate = new Date();
+            const currentMonthName = monthNames[currentDate.getMonth()];
+            
+            console.log("Current month is:", currentMonthName);
+            
+            // Reset all buttons to outline style
+            document.querySelectorAll('.month-selector .btn').forEach(btn => {
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-outline-primary');
+            });
+            
+            // Find the button for the current month and make it active
+            const currentMonthButton = document.querySelector(`.month-selector .btn[data-month="${currentMonthName}"]`);
+            if (currentMonthButton) {
+                currentMonthButton.classList.remove('btn-outline-primary');
+                currentMonthButton.classList.add('btn-primary');
+                console.log("Set current month button active:", currentMonthName);
+                
+                // Trigger a click on this button to update all charts
+                setTimeout(() => {
+                    currentMonthButton.click();
+                }, 300);
+            } else {
+                console.warn("Could not find button for current month:", currentMonthName);
+            }
+        });
+
+        // Fix the marchRatingsChart click handler without modifying the existing arrays
+        marchRatingsChart.options.onClick = function(event, elements) {
+            if (elements.length > 0) {
+                const index = elements[0].index;
+                let records = [];
+                let title = "";
+                
+                // Use the correct data arrays for the current selected month
+                const selectedMonth = document.getElementById('ratingTitleMonth').textContent;
+                const dataColumn = getDataColumnForRatings(selectedMonth);
+                
+                // Filter the data based on the clicked slice
+                if (index === 0) { // Below 75%
+                    records = data.filter(record => {
+                        const valueStr = record[dataColumn];
+                        if (valueStr && valueStr.trim() !== "" && valueStr !== "--") {
+                            const value = parseFloat(valueStr.replace('%', ''));
+                            return !isNaN(value) && value < 75;
+                        }
+                        return false;
+                    });
+                    title = `Personnel with <75% Rating for ${selectedMonth}`;
+                } else if (index === 1) { // Between 75% and 95%
+                    records = data.filter(record => {
+                        const valueStr = record[dataColumn];
+                        if (valueStr && valueStr.trim() !== "" && valueStr !== "--") {
+                            const value = parseFloat(valueStr.replace('%', ''));
+                            return !isNaN(value) && value >= 75 && value < 95;
+                        }
+                        return false;
+                    });
+                    title = `Personnel with ≥75% and <95% Rating for ${selectedMonth}`;
+                } else if (index === 2) { // Between 95% and 100%
+                    records = data.filter(record => {
+                        const valueStr = record[dataColumn];
+                        if (valueStr && valueStr.trim() !== "" && valueStr !== "--") {
+                            const value = parseFloat(valueStr.replace('%', ''));
+                            return !isNaN(value) && value >= 95 && value < 100;
+                        }
+                        return false;
+                    });
+                    title = `Personnel with ≥95% and <100% Rating for ${selectedMonth}`;
+                } else if (index === 3) { // 100%
+                    records = data.filter(record => {
+                        const valueStr = record[dataColumn];
+                        if (valueStr && valueStr.trim() !== "" && valueStr !== "--") {
+                            const value = parseFloat(valueStr.replace('%', ''));
+                            return !isNaN(value) && value === 100;
+                        }
+                        return false;
+                    });
+                    title = `Personnel with 100% Rating for ${selectedMonth}`;
+                }
+                
+                // Update modal title and content
+                document.getElementById("personnelListTitle").textContent = title;
+                document.getElementById("personnelListContent").innerHTML = buildPersonnelTable(records);
+                
+                // Show the modal using Bootstrap
+                const modal = new bootstrap.Modal(document.getElementById('personnelListContainer'));
+                modal.show();
+            }
+        };
+
+        // Function to get top performing group
+        function getTopPerformingGroup(month) {
+            // Determine which metric to use based on month
+            let metricType;
+            if (month === 'January' || month === 'February') {
+                metricType = "Average Team Compliance";
+            } else {
+                metricType = "Overall Team Rating";
+            }
+            
+            // Find the data item in ky2data
+            const dataItem = ky2data.find(item => 
+                item.Month === month && 
+                item.Data === metricType
+            );
+            
+            if (!dataItem) {
+                return null;
+            }
+            
+            // Find the best group
+            let bestGroup = null;
+            let bestValue = -1;
+            
+            // Check groups 1-4
+            for (let i = 1; i <= 4; i++) {
+                const valueStr = dataItem[i.toString()];
+                if (valueStr && valueStr !== '--' && valueStr.trim() !== '') {
+                    const value = parseFloat(valueStr.replace(/[^0-9.]/g, ''));
+                    if (!isNaN(value) && value > bestValue) {
+                        bestValue = value;
+                        bestGroup = i;
+                    }
+                }
+            }
+            
+            return bestGroup ? { group: bestGroup, value: bestValue } : null;
+        }
+
+        // Function to update best group table - simplified version
+        function updateBestGroupTable() {
+            const tableBody = document.getElementById('bestGroupTable').querySelector('tbody');
+            if (!tableBody) return;
+            
+            tableBody.innerHTML = '';
+            
+            // Process January-December
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                           'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            months.forEach(month => {
+                let row = document.createElement('tr');
+                const bestGroup = getTopPerformingGroup(month);
+                
+                // Add table row with compact styling
+                if (bestGroup && bestGroup.group) {
+                    row.innerHTML = `
+                        <td class="py-1">${month.substring(0, 3)}</td>
+                        <td class="py-1"><span class="text-primary fw-bold">Group ${bestGroup.group} <span style="font-size: 0.7rem;">⭐</span></span></td>
+                        <td class="py-1">${bestGroup.value.toFixed(1)}%</td>
+                    `;
+                } else {
+                    row.innerHTML = `
+                        <td class="py-1">${month.substring(0, 3)}</td>
+                        <td class="py-1">--</td>
+                        <td class="py-1">--</td>
+                    `;
+                }
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Directly call this function once to make sure table is populated
+        document.addEventListener('DOMContentLoaded', function() {
+            // First check if data is already loaded
+            if (window.ky2data && window.ky2data.length > 0) {
+                console.log("ky2data loaded, updating best group table");
+                updateBestGroupTable();
+                
+                // Highlight the current selected month
+                const activeButton = document.querySelector('.month-selector .btn-primary');
+                if (activeButton) {
+                    const month = activeButton.getAttribute('data-month');
+                    const rows = document.querySelectorAll('#bestGroupTable tbody tr');
+                    rows.forEach(row => {
+                        const monthCell = row.cells[0];
+                        if (monthCell.textContent === month.substring(0, 3)) {
+                            row.classList.add('table-info');
+                        }
+                    });
+                }
+            } else {
+                console.error("ky2data not available");
+            }
+        });
+
+        // Also add an explicit call at the end of the script
+        setTimeout(updateBestGroupTable, 2000);
+
+        // Add this code to properly handle month button selection and highlighting
+
+        // Function to set the active month button
+        function setActiveMonthButton(monthName) {
+            console.log("Setting active month button:", monthName);
+            
+            // First, reset all buttons to outline style
+            document.querySelectorAll('.month-selector button').forEach(btn => {
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-outline-primary');
+            });
+            
+            // Find the button for the selected month and make it active
+            const selectedMonthButton = document.querySelector(`.month-selector button[data-month="${monthName}"]`);
+            if (selectedMonthButton) {
+                selectedMonthButton.classList.remove('btn-outline-primary');
+                selectedMonthButton.classList.add('btn-primary');
+                console.log("Successfully set active button for:", monthName);
+            } else {
+                console.warn("Could not find button for month:", monthName);
+            }
+        }
+
+        // Create a single handler for month button clicks that ensures proper highlighting
+        function handleMonthButtonClick(event) {
+            // Get the selected month name
+            const selectedMonth = event.currentTarget.getAttribute('data-month');
+            console.log("Month button clicked:", selectedMonth);
+            
+            // Set this as the active button
+            setActiveMonthButton(selectedMonth);
+            
+            // Update all charts with the selected month
+            if (typeof updateMetricsChart === 'function') {
+                updateMetricsChart(selectedMonth);
+            }
+            
+            if (typeof updateChart2 === 'function') {
+                currentSelectedMonth = selectedMonth;
+                updateChart2(selectedMonth);
+            }
+            
+            if (document.getElementById('ratingTitleMonth')) {
+                document.getElementById('ratingTitleMonth').textContent = selectedMonth;
+            }
+            
+            if (typeof updateMarchRatingsChart === 'function') {
+                updateMarchRatingsChart(selectedMonth);
+            }
+            
+            // Highlight selected month in the best group table
+            highlightSelectedMonthInTable(selectedMonth);
+        }
+
+        // Clean up any existing event handlers and set up new ones
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all month selector buttons
+            const monthButtons = document.querySelectorAll('.month-selector button');
+            
+            // Remove any existing click handlers to avoid duplicates
+            monthButtons.forEach(btn => {
+                // Create a new clone of the button to remove all event listeners
+                const newBtn = btn.cloneNode(true);
+                btn.parentNode.replaceChild(newBtn, btn);
+            });
+            
+            // Add our new click handler to each button
+            document.querySelectorAll('.month-selector button').forEach(btn => {
+                btn.addEventListener('click', handleMonthButtonClick);
+            });
+            
+            // Set the initial active button to the current month
+            const currentDate = new Date();
+            const monthNames = [
+                'January', 'February', 'March', 'April', 'May', 'June', 
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+            const currentMonth = monthNames[currentDate.getMonth()];
+            
+            // First try to use the current month
+            setTimeout(() => {
+                setActiveMonthButton(currentMonth);
+                
+                // Also trigger updates for this month
+                if (typeof updateMetricsChart === 'function') {
+                    updateMetricsChart(currentMonth);
+                }
+                
+                if (typeof updateChart2 === 'function') {
+                    currentSelectedMonth = currentMonth;
+                    updateChart2(currentMonth);
+                }
+                
+                if (document.getElementById('ratingTitleMonth')) {
+                    document.getElementById('ratingTitleMonth').textContent = currentMonth;
+                }
+                
+                if (typeof updateMarchRatingsChart === 'function') {
+                    updateMarchRatingsChart(currentMonth);
+                }
+                
+                // Highlight in the best group table
+                highlightSelectedMonthInTable(currentMonth);
+            }, 500);
+        });
+
+        // Fix to ensure consistent colors between pie chart and summary
+
+        // Define exact standard colors for each category
+        const ratingColorScheme = {
+            below75: '#dc3545',        // Bootstrap danger red
+            between75and94: '#ffc107', // Bootstrap warning yellow
+            between95and99: '#0dcaf0', // Bootstrap info blue
+            fully100: '#198754'        // Bootstrap success green
+        };
+
+        // Direct update to pie chart colors without changing any other behavior
+        if (typeof marchRatingsChart !== 'undefined' && marchRatingsChart) {
+            // Set the exact colors to match the summary
+            marchRatingsChart.data.datasets[0].backgroundColor = [
+                ratingColorScheme.below75,
+                ratingColorScheme.between75and94,
+                ratingColorScheme.between95and99,
+                ratingColorScheme.fully100
+            ];
+            
+            // Optional slightly darker border colors
+            marchRatingsChart.data.datasets[0].borderColor = [
+                '#c82333', // Darker red
+                '#e0a800', // Darker yellow
+                '#0ba5c2', // Darker blue
+                '#146c43'  // Darker green
+            ];
+            
+            // Apply changes
+            marchRatingsChart.update();
+            
+            console.log("Applied uniform color scheme to personnel ratings chart");
+        }
+
+        // Add a small piece of inline CSS to ensure summary text matches exactly
+        const colorMatchStyles = document.createElement('style');
+        colorMatchStyles.textContent = `
+            /* Exact color matching for summary text */
+            #marchRatingsSummary .text-danger { color: ${ratingColorScheme.below75} !important; }
+            #marchRatingsSummary .text-warning { color: ${ratingColorScheme.between75and94} !important; }
+            #marchRatingsSummary .text-info { color: ${ratingColorScheme.between95and99} !important; }
+            #marchRatingsSummary .text-success { color: ${ratingColorScheme.fully100} !important; }
+            
+            /* Match the color squares/indicators in the summary */
+            #marchRatingsSummary .color-indicator-below75 { background-color: ${ratingColorScheme.below75} !important; }
+            #marchRatingsSummary .color-indicator-75to94 { background-color: ${ratingColorScheme.between75and94} !important; }
+            #marchRatingsSummary .color-indicator-95to99 { background-color: ${ratingColorScheme.between95and99} !important; }
+            #marchRatingsSummary .color-indicator-100 { background-color: ${ratingColorScheme.fully100} !important; }
+        `;
+        document.head.appendChild(colorMatchStyles);
+
+        // If the chart click handler exists, ensure it also uses the same colors
+        if (marchRatingsChart && marchRatingsChart.options && marchRatingsChart.options.onClick) {
+            // Store the original handler
+            const originalClickHandler = marchRatingsChart.options.onClick;
+            
+            // Replace with a wrapper that ensures consistent colors
+            marchRatingsChart.options.onClick = function(event, elements) {
+                // Call the original handler
+                originalClickHandler.call(this, event, elements);
+                
+                // After the modal is shown, ensure colors are consistent there too
+                setTimeout(() => {
+                    const modal = document.getElementById('personnelListContainer');
+                    if (modal) {
+                        const title = modal.querySelector('.modal-title');
+                        if (title) {
+                            // Add color based on the title text
+                            if (title.textContent.includes('Below 75%')) {
+                                title.style.color = ratingColorScheme.below75;
+                            } else if (title.textContent.includes('≥75% and <95%')) {
+                                title.style.color = ratingColorScheme.between75and94;
+                            } else if (title.textContent.includes('≥95% and <100%')) {
+                                title.style.color = ratingColorScheme.between95and99;
+                            } else if (title.textContent.includes('100%')) {
+                                title.style.color = ratingColorScheme.fully100;
+                            }
+                        }
+                    }
+                }, 100);
+            };
+        }
+
+        // Enhanced chart options with design improvements
+        const chartDesignOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        font: {
+                            size: 14,
+                            family: "'Inter', sans-serif"
+                        }
+                    }
+                },
+                title: {
+                    display: true,
+                    font: {
+                        size: 18,
+                        weight: '600'
+                    },
+                    padding: 20
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(25,25,25,0.95)',
+                    titleFont: { size: 16 },
+                    bodyFont: { size: 14 },
+                    padding: 12,
+                    cornerRadius: 8,
+                    displayColors: false
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: {
+                        font: {
+                            size: 14,
+                            weight: '500'
+                        }
+                    }
+                },
+                y: {
+                    grid: { color: 'rgba(200,200,200,0.2)' },
+                    ticks: {
+                        font: {
+                            size: 14,
+                            weight: '500'
+                        }
+                    }
+                }
+            }
+        };
+
+        // Apply design options to all charts
+        [monthlyChart, metricsChart, kyCardChart, marchRatingsChart].forEach(chart => {
+            chart.options = {
+                ...chart.options,
+                ...chartDesignOptions
+            };
+            chart.update();
+        });
+
+        // Add gradient background to charts
+        function addChartGradients(ctx) {
+            const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(101, 117, 255, 0.8)');
+            gradient.addColorStop(1, 'rgba(101, 117, 255, 0.2)');
+            return gradient;
+        }
+
+        // Update chart datasets with gradients
+        monthlyChart.data.datasets[0].backgroundColor = addChartGradients(ctxMonthly);
+        monthlyChart.update();
     </script>
 </body>
 </html>

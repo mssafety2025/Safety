@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.85">
     <title>Incident Monitoring</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         /* Enhanced base styles */
         body {
@@ -15,19 +17,95 @@
             background-color: #f5f6fa;
             margin: 0;
             padding: 20px;
+            background-image: linear-gradient(to bottom, #e6f2ff, #f5f6fa);
         }
 
-        /* Enhanced header */
+        /* Enhanced header with navigation */
+        .header-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
         h1 {
-            color: #2c3e50;
+            color: #1a365d;
             text-align: center;
             font-size: 48px;
             padding: 30px 0;
-            margin-bottom: 40px;
+            margin-bottom: 0;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             border-bottom: 4px solid #3498db;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            background: linear-gradient(to right, #2c3e50, #4a6491);
+            color: white;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Enhanced navigation tabs */
+        .nav-tabs-container {
+            background-color: #f8f9fa;
+            padding: 15px 20px 0;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-top: none;
+        }
+
+        .nav-tabs {
+            border-bottom: 2px solid #3498db;
+            padding: 0 20px;
+        }
+
+        .nav-tabs .nav-link {
+            border: 1px solid transparent;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            color: #2c3e50;
+            font-weight: 600;
+            padding: 12px 25px;
+            font-size: 16px;
+            margin-right: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tabs .nav-link:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+            border-color: #e9ecef #e9ecef #dee2e6;
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        .nav-tabs .nav-link i {
+            margin-right: 8px;
+        }
+
+        /* Enhanced header */
+        h1::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent 49%, rgba(255,255,255,0.1) 50%, transparent 51%);
+            background-size: 20px 20px;
+            z-index: 1;
+        }
+
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, #3498db, #2ecc71);
         }
 
         /* Enhanced table styling */
@@ -47,10 +125,10 @@
             background-color: #2c3e50;
             color: white;
             text-align: center;
-            padding: 15px 10px;
+            padding: 10px 10px;
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 13px;
+            font-size: 11px;
             letter-spacing: 1px;
         }
 
@@ -169,7 +247,7 @@
 
         /* Enhanced modal styling */
         .modal-content {
-            background-color: #fff;
+            background-color: #fefefe;
             margin: 5% auto;
             padding: 30px;
             border-radius: 8px;
@@ -359,11 +437,21 @@
             cursor: pointer;
         }
 
-        /* Style for the clickable title links */
+        /* Style for the clickable title links - fixed at 2 rows regardless of screen size */
         td a {
             color: #3498db;
             text-decoration: none;
             transition: color 0.3s ease;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.2em;
+            height: 2.4em; /* Exactly 2 lines (2 × line-height) */
+            margin: 0;
+            width: 100%;
+            word-break: break-word;
         }
 
         td a:hover {
@@ -471,15 +559,76 @@
         .clickable-header:hover i {
             opacity: 1;
         }
-    </style>
 
-    
+        /* Year filter in counter styles */
+        .year-filter-container {
+            margin: auto 10px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .year-filter-select {
+            padding: 10px 16px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            background-color: #3498db;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: calc(100% - 8px) center;
+            padding-right: 28px;
+            font-size: 14px;
+        }
+        
+        .year-filter-select:hover {
+            background-color: #2980b9;
+            transform: translateY(-1px);
+        }
+        
+        .year-filter-select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52,152,219,0.4);
+        }
+
+        /* Add the returned status style */
+        .status-returned {
+            background-color: #ffffaa !important;
+            color: black !important;
+            text-align: center !important;
+        }
+    </style>
 </head>
 <body>
-    <h1>MS SECTION INCIDENT MONITORING</h1>
-    
+    <div class="header-container">
+        <h1>MS SECTION INCIDENT MONITORING</h1>
+        
+        <div class="nav-tabs-container">
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link active" id="list-tab" href="Incident Monitoring.html">
+                        <i class="bi bi-table"></i> Incident List
+                    </a>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <a class="nav-link" href="summary.html">
+                        <i class="bi bi-bar-chart-fill"></i> Summary Dashboard
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
     <!-- Add the counter div with initial structure -->
     <div class="counter" id="incidentCounter">
+        <div class="year-filter-container">
+            <select id="yearFilter" class="year-filter-select"></select>
+        </div>
         <div class="counter-item total-incidents">
             <span class="counter-label">Total Incidents</span>
             <span class="counter-value">0</span>
@@ -624,8 +773,30 @@
                 select.addEventListener('change', applyFilters);
             }
 
+            // Initialize year filter based on incident dates
+            const yearFilter = document.getElementById('yearFilter');
+            const years = [...new Set(incidents
+                .filter(incident => incident.date) // Filter out incidents without dates
+                .map(incident => new Date(incident.date).getFullYear()))] // Extract years
+                .sort((a, b) => b - a); // Sort descending (newest first)
+            
+            // Set default year to 2025
+            const defaultYear = "2025";
+            
+            yearFilter.innerHTML = '<option value="">All Years</option>' + 
+                years.map(year => `<option value="${year}" ${year == defaultYear ? 'selected' : ''}>${year}</option>`).join('');
+            yearFilter.addEventListener('change', applyFilters);
+            
+            // Set default year filter to 2025 if it exists in the data
+            if (years.includes(parseInt(defaultYear))) {
+                yearFilter.value = defaultYear;
+            }
+
             // Initialize title search
             document.getElementById('titleFilter').addEventListener('input', applyFilters);
+            
+            // Apply filters initially to respect the default year selection
+            applyFilters();
         }
 
         function updateIncidentCounter() {
@@ -633,8 +804,27 @@
             const openCount = filteredIncidents.filter(incident => incident.status?.toLowerCase() === 'open').length;
             const closedCount = filteredIncidents.filter(incident => incident.status?.toLowerCase() === 'closed').length;
             const inReviewCount = filteredIncidents.filter(incident => incident.status?.toLowerCase() === 'in-review').length;
+            const returnedCount = filteredIncidents.filter(incident => incident.status?.toLowerCase() === 'returned').length;
 
+            // Save the current year filter value
+            const yearFilterValue = document.getElementById('yearFilter').value;
+            
+            // Create the year filter HTML
+            const years = [...new Set(incidents
+                .filter(incident => incident.date)
+                .map(incident => new Date(incident.date).getFullYear()))]
+                .sort((a, b) => b - a);
+            
+            // Set default year to 2025
+            const defaultYear = "2025";
+            
             document.getElementById('incidentCounter').innerHTML = `
+                <div class="year-filter-container">
+                    <select id="yearFilter" class="year-filter-select">
+                        <option value="">All Years</option>
+                        ${years.map(year => `<option value="${year}" ${yearFilterValue == year ? 'selected' : ''}>${year}</option>`).join('')}
+                    </select>
+                </div>
                 <div class="counter-item total-incidents">
                     <span class="counter-label">Total Incidents</span>
                     <span class="counter-value">${totalIncidents}</span>
@@ -651,7 +841,17 @@
                     <span class="counter-label">In Review</span>
                     <span class="counter-value">${inReviewCount}</span>
                 </div>
+                <div class="counter-item" style="background-color: #ffffaa; color: black;">
+                    <span class="counter-label">Returned</span>
+                    <span class="counter-value">${returnedCount}</span>
+                </div>
             `;
+            
+            // Re-attach the event listener to the year filter
+            document.getElementById('yearFilter').addEventListener('change', applyFilters);
+            
+            // Restore the selected value
+            document.getElementById('yearFilter').value = yearFilterValue;
         }
 
         function formatDate(dateStr) {
@@ -674,14 +874,33 @@
                 under: document.getElementById('underFilter').value
             };
             const titleSearch = document.getElementById('titleFilter').value.toLowerCase();
+            const yearFilter = document.getElementById('yearFilter').value;
 
             filteredIncidents = incidents.filter(incident => {
+                // Check all dropdown filters
                 const matchesFilters = Object.entries(filters).every(([key, value]) => {
                     return !value || incident[key] === value;
                 });
+                
+                // Check title search
                 const matchesTitle = !titleSearch || 
                     incident.title.toLowerCase().includes(titleSearch);
-                return matchesFilters && matchesTitle;
+                
+                // Check year filter
+                let matchesYear = true;
+                if (yearFilter && incident.date) {
+                    const incidentYear = new Date(incident.date).getFullYear();
+                    matchesYear = incidentYear.toString() === yearFilter;
+                }
+                
+                return matchesFilters && matchesTitle && matchesYear;
+            });
+
+            // Sort the incidents by date in descending order (newest first)
+            filteredIncidents.sort((a, b) => {
+                if (!a.date) return 1;  // Items without dates go to the end
+                if (!b.date) return -1;
+                return new Date(b.date) - new Date(a.date);
             });
 
             renderTable(filteredIncidents);
@@ -697,9 +916,12 @@
                 return;
             }
             
-            incidents.forEach(incident => {
+            incidents.forEach((incident, index) => {
                 const row = document.createElement('tr');
                 const getValue = (value) => value || '';
+                
+                // Reverse the numbering order so newest incidents have highest numbers
+                const rowNumber = incidents.length - index;
                 
                 const daysLapsedClass = parseInt(incident.days_lapsed) < 0 ? 'days-lapsed-green' : 
                                         parseInt(incident.days_lapsed) > 0 ? 'days-lapsed-red' : '';
@@ -710,19 +932,29 @@
                     fileLink = 'file://' + fileLink.replace(/\\/g, '/');
                 }
                 
-                // Create title cell with network path link and PDF icon
+                // Create title cell with network path link without PDF icon
                 const titleCell = incident.finalreport ? 
                     `<td>
                         <a href="#" 
                            onclick="event.preventDefault(); openNetworkFile('${incident.finalreport.replace(/\\/g, '\\\\')}');" 
                            style="color: #3498db; text-decoration: none; cursor: pointer;">
-                            <i class="bi bi-file-pdf-fill"></i> ${getValue(incident.title)}
+                            ${getValue(incident.title)}
                         </a>
                     </td>` :
                     `<td>${getValue(incident.title)}</td>`;
                 
+                // Determine status class
+                let statusClass = '';
+                if (incident.status) {
+                    const status = incident.status.toLowerCase();
+                    if (status === 'open') statusClass = 'status-open';
+                    else if (status === 'closed') statusClass = 'status-closed';
+                    else if (status === 'in-review') statusClass = 'status-in-review';
+                    else if (status === 'returned') statusClass = 'status-returned';
+                }
+                
                 const cells = [
-                    `<td>${getValue(incident.no)}</td>`,
+                    `<td>${rowNumber}</td>`,
                     `<td>${formatDate(incident.date)}</td>`,
                     `<td class="center-align">${getValue(incident.record)}</td>`,
                     `<td>${getValue(incident.area)}</td>`,
@@ -731,7 +963,7 @@
                     `<td>${getValue(incident.classification)}</td>`,
                     `<td class="osh-${incident.osh_record?.toLowerCase()} center-align">${getValue(incident.osh_record)}</td>`,
                     titleCell,
-                    `<td class="report-status ${incident.status?.toLowerCase() === 'closed' ? 'status-closed' : incident.status?.toLowerCase() === 'open' ? 'status-open' : incident.status?.toLowerCase() === 'in-review' ? 'status-in-review' : ''}">${getValue(incident.status)}</td>`,
+                    `<td class="report-status ${statusClass}">${getValue(incident.status)}</td>`,
                     `<td class="under">${getValue(incident.under)}</td>`,
                     `<td>${getValue(incident.pic)}</td>`,
                     `<td>${isNaN(new Date(incident.date_submitted)) ? getValue(incident.date_submitted) : formatDate(incident.date_submitted)}</td>`,
@@ -767,6 +999,7 @@
             
             // Clear all dropdowns
             const filterIds = [
+                'yearFilter',
                 'recordFilter', 
                 'areaFilter', 
                 'typeFilter', 
@@ -787,7 +1020,40 @@
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', () => {
             initializeFilters();
-            filteredIncidents = [...incidents];
+            
+            // Set default year to 2025 before applying initial filters
+            const yearFilter = document.getElementById('yearFilter');
+            const defaultYear = "2025";
+            
+            // Check if 2025 exists in the data
+            const years = [...new Set(incidents
+                .filter(incident => incident.date)
+                .map(incident => new Date(incident.date).getFullYear()))];
+                
+            if (years.includes(parseInt(defaultYear))) {
+                yearFilter.value = defaultYear;
+            }
+            
+            // Sort the incidents by date in descending order (newest first) 
+            // BEFORE applying any filters
+            incidents.sort((a, b) => {
+                if (!a.date) return 1;  // Items without dates go to the end
+                if (!b.date) return -1;
+                return new Date(b.date) - new Date(a.date);
+            });
+            
+            // Apply initial filters with the default year
+            applyFilters();
+            
+            // Update the filtered incidents and render the table
+            filteredIncidents = [...incidents].filter(incident => {
+                if (yearFilter.value && incident.date) {
+                    const incidentYear = new Date(incident.date).getFullYear();
+                    return incidentYear.toString() === yearFilter.value;
+                }
+                return true;
+            });
+            
             renderTable(filteredIncidents);
             updateIncidentCounter();
         });
